@@ -1,0 +1,3084 @@
+{
+"questions": [
+{
+"id": "s0",
+"topic": "1A",
+"level": 1,
+"q": "Which planet is closest to the Sun?",
+"opts": [
+{
+"L": "A",
+"text": "Venus"
+},
+{
+"L": "B",
+"text": "Mercury"
+},
+{
+"L": "C",
+"text": "Mars"
+},
+{
+"L": "D",
+"text": "Earth"
+}
+],
+"ans": "B",
+"exp": "Mercury has the smallest orbit of all the planets."
+},
+{
+"id": "s1",
+"topic": "1B",
+"level": 1,
+"q": "Which organ pumps blood around the body?",
+"opts": [
+{
+"L": "A",
+"text": "Lungs"
+},
+{
+"L": "B",
+"text": "Liver"
+},
+{
+"L": "C",
+"text": "Heart"
+},
+{
+"L": "D",
+"text": "Kidneys"
+}
+],
+"ans": "C",
+"exp": "The heart pumps blood through the arteries and veins."
+},
+{
+"id": "s2",
+"topic": "2A",
+"level": 1,
+"q": "What is the capital city of Wales?",
+"opts": [
+{
+"L": "A",
+"text": "Swansea"
+},
+{
+"L": "B",
+"text": "Cardiff"
+},
+{
+"L": "C",
+"text": "Newport"
+},
+{
+"L": "D",
+"text": "Bangor"
+}
+],
+"ans": "B",
+"exp": "Cardiff has been the capital of Wales since 1955."
+},
+{
+"id": "s3",
+"topic": "2B",
+"level": 1,
+"q": "What is the longest river in the UK?",
+"opts": [
+{
+"L": "A",
+"text": "Thames"
+},
+{
+"L": "B",
+"text": "Severn"
+},
+{
+"L": "C",
+"text": "Trent"
+},
+{
+"L": "D",
+"text": "Tyne"
+}
+],
+"ans": "B",
+"exp": "The Severn runs about 220 miles from Wales into the Bristol Channel."
+},
+{
+"id": "s4",
+"topic": "2C",
+"level": 1,
+"q": "What is the capital of Australia?",
+"opts": [
+{
+"L": "A",
+"text": "Sydney"
+},
+{
+"L": "B",
+"text": "Melbourne"
+},
+{
+"L": "C",
+"text": "Canberra"
+},
+{
+"L": "D",
+"text": "Perth"
+}
+],
+"ans": "C",
+"exp": "Canberra was purpose-built as the capital."
+},
+{
+"id": "s5",
+"topic": "3A",
+"level": 1,
+"q": "How many wives did Henry VIII have?",
+"opts": [
+{
+"L": "A",
+"text": "4"
+},
+{
+"L": "B",
+"text": "5"
+},
+{
+"L": "C",
+"text": "6"
+},
+{
+"L": "D",
+"text": "8"
+}
+],
+"ans": "C",
+"exp": "Henry VIII married six times."
+},
+{
+"id": "s6",
+"topic": "3B",
+"level": 1,
+"q": "In which year did the Second World War end?",
+"opts": [
+{
+"L": "A",
+"text": "1918"
+},
+{
+"L": "B",
+"text": "1939"
+},
+{
+"L": "C",
+"text": "1945"
+},
+{
+"L": "D",
+"text": "1950"
+}
+],
+"ans": "C",
+"exp": "The war ended in 1945."
+},
+{
+"id": "s7",
+"topic": "3C",
+"level": 1,
+"q": "Which invention powered many factories in the Industrial Revolution?",
+"opts": [
+{
+"L": "A",
+"text": "Steam engine"
+},
+{
+"L": "B",
+"text": "Electric motor"
+},
+{
+"L": "C",
+"text": "Petrol engine"
+},
+{
+"L": "D",
+"text": "Solar panel"
+}
+],
+"ans": "A",
+"exp": "Steam engines drove machines in mills and factories."
+},
+{
+"id": "s8",
+"topic": "4A",
+"level": 1,
+"q": "Which of these makes the strongest password?",
+"opts": [
+{
+"L": "A",
+"text": "Your pet's name"
+},
+{
+"L": "B",
+"text": "A long mix of words, numbers and symbols"
+},
+{
+"L": "C",
+"text": "Your birthday"
+},
+{
+"L": "D",
+"text": "password123"
+}
+],
+"ans": "B",
+"exp": "Long, random combinations are much harder to guess or crack."
+},
+{
+"id": "s9",
+"topic": "4B",
+"level": 1,
+"q": "What does CPU stand for?",
+"opts": [
+{
+"L": "A",
+"text": "Central Processing Unit"
+},
+{
+"L": "B",
+"text": "Computer Power Unit"
+},
+{
+"L": "C",
+"text": "Central Program Utility"
+},
+{
+"L": "D",
+"text": "Core Processing Upload"
+}
+],
+"ans": "A",
+"exp": "The CPU carries out a computer's instructions."
+},
+{
+"id": "s10",
+"topic": "4C",
+"level": 1,
+"q": "What does 'www' stand for in a web address?",
+"opts": [
+{
+"L": "A",
+"text": "World Wide Web"
+},
+{
+"L": "B",
+"text": "Wide World Web"
+},
+{
+"L": "C",
+"text": "Web World Wide"
+},
+{
+"L": "D",
+"text": "World Web Window"
+}
+],
+"ans": "A",
+"exp": "The World Wide Web was invented by Tim Berners-Lee."
+},
+{
+"id": "s11",
+"topic": "5A",
+"level": 1,
+"q": "How many portions of fruit and veg a day does the NHS recommend?",
+"opts": [
+{
+"L": "A",
+"text": "At least 3"
+},
+{
+"L": "B",
+"text": "At least 5"
+},
+{
+"L": "C",
+"text": "At least 7"
+},
+{
+"L": "D",
+"text": "At least 10"
+}
+],
+"ans": "B",
+"exp": "The NHS '5 A Day' guidance."
+},
+{
+"id": "s12",
+"topic": "5B",
+"level": 1,
+"q": "Which number do you call in a UK emergency?",
+"opts": [
+{
+"L": "A",
+"text": "101"
+},
+{
+"L": "B",
+"text": "111"
+},
+{
+"L": "C",
+"text": "999"
+},
+{
+"L": "D",
+"text": "911"
+}
+],
+"ans": "C",
+"exp": "999 (or 112) for emergencies; 111 is non-urgent medical help, 101 is non-emergency police."
+},
+{
+"id": "s13",
+"topic": "5C",
+"level": 1,
+"q": "How much moderate activity should adults aim for each week (NHS)?",
+"opts": [
+{
+"L": "A",
+"text": "30 minutes"
+},
+{
+"L": "B",
+"text": "75 minutes"
+},
+{
+"L": "C",
+"text": "150 minutes"
+},
+{
+"L": "D",
+"text": "300 minutes"
+}
+],
+"ans": "C",
+"exp": "At least 150 minutes of moderate activity, or 75 minutes vigorous."
+},
+{
+"id": "s14",
+"topic": "6A",
+"level": 1,
+"q": "What is a budget?",
+"opts": [
+{
+"L": "A",
+"text": "A plan for your income and spending"
+},
+{
+"L": "B",
+"text": "A type of bank account"
+},
+{
+"L": "C",
+"text": "A loan"
+},
+{
+"L": "D",
+"text": "A tax"
+}
+],
+"ans": "A",
+"exp": "A budget helps you see where your money goes."
+},
+{
+"id": "s15",
+"topic": "6B",
+"level": 1,
+"q": "On a UK payslip, what does 'NI' stand for?",
+"opts": [
+{
+"L": "A",
+"text": "National Income"
+},
+{
+"L": "B",
+"text": "National Insurance"
+},
+{
+"L": "C",
+"text": "Net Income"
+},
+{
+"L": "D",
+"text": "New Investment"
+}
+],
+"ans": "B",
+"exp": "National Insurance contributions are taken from your pay."
+},
+{
+"id": "s16",
+"topic": "6C",
+"level": 1,
+"q": "What is 'interest' on a savings account?",
+"opts": [
+{
+"L": "A",
+"text": "A fee you pay the bank"
+},
+{
+"L": "B",
+"text": "Money the bank pays you for saving"
+},
+{
+"L": "C",
+"text": "A type of tax"
+},
+{
+"L": "D",
+"text": "Your account number"
+}
+],
+"ans": "B",
+"exp": "Banks pay interest as a reward for keeping your money with them."
+},
+{
+"id": "s17",
+"topic": "7A",
+"level": 1,
+"q": "Which of these can usually go in household recycling?",
+"opts": [
+{
+"L": "A",
+"text": "Clean glass bottles"
+},
+{
+"L": "B",
+"text": "Nappies"
+},
+{
+"L": "C",
+"text": "Crisp packets"
+},
+{
+"L": "D",
+"text": "Used tissues"
+}
+],
+"ans": "A",
+"exp": "Clean glass bottles and jars are widely recycled."
+},
+{
+"id": "s18",
+"topic": "7B",
+"level": 1,
+"q": "Which of these is a renewable energy source?",
+"opts": [
+{
+"L": "A",
+"text": "Coal"
+},
+{
+"L": "B",
+"text": "Wind"
+},
+{
+"L": "C",
+"text": "Natural gas"
+},
+{
+"L": "D",
+"text": "Oil"
+}
+],
+"ans": "B",
+"exp": "Wind won't run out, unlike fossil fuels."
+},
+{
+"id": "s19",
+"topic": "7C",
+"level": 1,
+"q": "Which gas contributes most to human-caused climate change?",
+"opts": [
+{
+"L": "A",
+"text": "Oxygen"
+},
+{
+"L": "B",
+"text": "Nitrogen"
+},
+{
+"L": "C",
+"text": "Carbon dioxide"
+},
+{
+"L": "D",
+"text": "Helium"
+}
+],
+"ans": "C",
+"exp": "Burning fossil fuels releases carbon dioxide."
+},
+{
+"id": "s20",
+"topic": "8A",
+"level": 1,
+"q": "What should a CV include?",
+"opts": [
+{
+"L": "A",
+"text": "Your bank details"
+},
+{
+"L": "B",
+"text": "Your skills and experience"
+},
+{
+"L": "C",
+"text": "Your passwords"
+},
+{
+"L": "D",
+"text": "Your favourite film"
+}
+],
+"ans": "B",
+"exp": "A CV shows employers what you can offer."
+},
+{
+"id": "s21",
+"topic": "8B",
+"level": 1,
+"q": "What's a good thing to do at the end of an interview?",
+"opts": [
+{
+"L": "A",
+"text": "Ask a question about the role"
+},
+{
+"L": "B",
+"text": "Check your phone"
+},
+{
+"L": "C",
+"text": "Ask when you can book a holiday"
+},
+{
+"L": "D",
+"text": "Say nothing"
+}
+],
+"ans": "A",
+"exp": "Asking a question shows genuine interest."
+},
+{
+"id": "s22",
+"topic": "U1",
+"level": 2,
+"q": "Which gas do plants take in for photosynthesis?",
+"opts": [
+{
+"L": "A",
+"text": "Oxygen"
+},
+{
+"L": "B",
+"text": "Carbon dioxide"
+},
+{
+"L": "C",
+"text": "Nitrogen"
+},
+{
+"L": "D",
+"text": "Hydrogen"
+}
+],
+"ans": "B",
+"exp": "Plants use carbon dioxide, water and light to make glucose."
+},
+{
+"id": "s23",
+"topic": "U1",
+"level": 2,
+"q": "Which blood cells help fight infection?",
+"opts": [
+{
+"L": "A",
+"text": "Red blood cells"
+},
+{
+"L": "B",
+"text": "White blood cells"
+},
+{
+"L": "C",
+"text": "Platelets"
+},
+{
+"L": "D",
+"text": "Plasma"
+}
+],
+"ans": "B",
+"exp": "White blood cells are part of the immune system."
+},
+{
+"id": "s24",
+"topic": "U1",
+"level": 3,
+"q": "Why does Earth have seasons?",
+"opts": [
+{
+"L": "A",
+"text": "Its distance from the Sun changes"
+},
+{
+"L": "B",
+"text": "Its axis is tilted"
+},
+{
+"L": "C",
+"text": "The Moon's gravity"
+},
+{
+"L": "D",
+"text": "The Sun gets hotter in summer"
+}
+],
+"ans": "B",
+"exp": "The tilt changes how directly sunlight hits each half of the planet."
+},
+{
+"id": "s25",
+"topic": "U2",
+"level": 2,
+"q": "Which is the largest ocean?",
+"opts": [
+{
+"L": "A",
+"text": "Atlantic"
+},
+{
+"L": "B",
+"text": "Indian"
+},
+{
+"L": "C",
+"text": "Pacific"
+},
+{
+"L": "D",
+"text": "Arctic"
+}
+],
+"ans": "C",
+"exp": "The Pacific covers about a third of Earth's surface."
+},
+{
+"id": "s26",
+"topic": "U2",
+"level": 2,
+"q": "What is the highest mountain in the UK?",
+"opts": [
+{
+"L": "A",
+"text": "Yr Wyddfa (Snowdon)"
+},
+{
+"L": "B",
+"text": "Ben Nevis"
+},
+{
+"L": "C",
+"text": "Scafell Pike"
+},
+{
+"L": "D",
+"text": "Slieve Donard"
+}
+],
+"ans": "B",
+"exp": "Ben Nevis in Scotland is 1,345 m high."
+},
+{
+"id": "s27",
+"topic": "U2",
+"level": 3,
+"q": "Why were many cities built next to rivers?",
+"opts": [
+{
+"L": "A",
+"text": "Rivers are quieter"
+},
+{
+"L": "B",
+"text": "For water, trade and transport"
+},
+{
+"L": "C",
+"text": "Rivers stop flooding"
+},
+{
+"L": "D",
+"text": "It was the law"
+}
+],
+"ans": "B",
+"exp": "Rivers supplied water and were the main trade routes."
+},
+{
+"id": "s28",
+"topic": "U3",
+"level": 2,
+"q": "Who was the last Tudor monarch?",
+"opts": [
+{
+"L": "A",
+"text": "Henry VIII"
+},
+{
+"L": "B",
+"text": "Edward VI"
+},
+{
+"L": "C",
+"text": "Mary I"
+},
+{
+"L": "D",
+"text": "Elizabeth I"
+}
+],
+"ans": "D",
+"exp": "Elizabeth I died in 1603, ending the Tudor line."
+},
+{
+"id": "s29",
+"topic": "U3",
+"level": 2,
+"q": "In which year did the First World War begin?",
+"opts": [
+{
+"L": "A",
+"text": "1905"
+},
+{
+"L": "B",
+"text": "1914"
+},
+{
+"L": "C",
+"text": "1918"
+},
+{
+"L": "D",
+"text": "1939"
+}
+],
+"ans": "B",
+"exp": "The war began in 1914."
+},
+{
+"id": "s30",
+"topic": "U3",
+"level": 3,
+"q": "Why did many people move to towns during the Industrial Revolution?",
+"opts": [
+{
+"L": "A",
+"text": "To find work in factories"
+},
+{
+"L": "B",
+"text": "Farming was banned"
+},
+{
+"L": "C",
+"text": "Towns were cleaner"
+},
+{
+"L": "D",
+"text": "To avoid tax"
+}
+],
+"ans": "A",
+"exp": "New factories created jobs while farm work declined."
+},
+{
+"id": "s31",
+"topic": "U4",
+"level": 2,
+"q": "What is phishing?",
+"opts": [
+{
+"L": "A",
+"text": "A fake message trying to trick you into giving information"
+},
+{
+"L": "B",
+"text": "A type of computer fan"
+},
+{
+"L": "C",
+"text": "A fast internet connection"
+},
+{
+"L": "D",
+"text": "A way to back up files"
+}
+],
+"ans": "A",
+"exp": "Phishing messages pretend to be trusted organisations."
+},
+{
+"id": "s32",
+"topic": "U4",
+"level": 2,
+"q": "Which of these is an input device?",
+"opts": [
+{
+"L": "A",
+"text": "Monitor"
+},
+{
+"L": "B",
+"text": "Printer"
+},
+{
+"L": "C",
+"text": "Keyboard"
+},
+{
+"L": "D",
+"text": "Speaker"
+}
+],
+"ans": "C",
+"exp": "Input devices send data into the computer."
+},
+{
+"id": "s33",
+"topic": "U4",
+"level": 3,
+"q": "Why should you install software updates?",
+"opts": [
+{
+"L": "A",
+"text": "They make the screen brighter"
+},
+{
+"L": "B",
+"text": "They fix security weaknesses"
+},
+{
+"L": "C",
+"text": "They delete old files"
+},
+{
+"L": "D",
+"text": "They slow down hackers' internet"
+}
+],
+"ans": "B",
+"exp": "Updates patch known vulnerabilities."
+},
+{
+"id": "s34",
+"topic": "U5",
+"level": 2,
+"q": "What does CPR stand for?",
+"opts": [
+{
+"L": "A",
+"text": "Cardiopulmonary resuscitation"
+},
+{
+"L": "B",
+"text": "Central pulse recovery"
+},
+{
+"L": "C",
+"text": "Chest pressure routine"
+},
+{
+"L": "D",
+"text": "Cardiac pressure relief"
+}
+],
+"ans": "A",
+"exp": "CPR keeps blood and oxygen moving until help arrives."
+},
+{
+"id": "s35",
+"topic": "U5",
+"level": 2,
+"q": "Which nutrient is the body's main source of energy?",
+"opts": [
+{
+"L": "A",
+"text": "Carbohydrates"
+},
+{
+"L": "B",
+"text": "Vitamins"
+},
+{
+"L": "C",
+"text": "Minerals"
+},
+{
+"L": "D",
+"text": "Fibre"
+}
+],
+"ans": "A",
+"exp": "Carbohydrates are broken down into glucose for energy."
+},
+{
+"id": "s36",
+"topic": "U5",
+"level": 3,
+"q": "Why is warming up before exercise important?",
+"opts": [
+{
+"L": "A",
+"text": "It burns more calories"
+},
+{
+"L": "B",
+"text": "It prepares muscles and reduces injury risk"
+},
+{
+"L": "C",
+"text": "It makes you taller"
+},
+{
+"L": "D",
+"text": "It isn't important"
+}
+],
+"ans": "B",
+"exp": "Warm muscles are more flexible and less likely to strain."
+},
+{
+"id": "s37",
+"topic": "U6",
+"level": 2,
+"q": "What is the difference between gross and net pay?",
+"opts": [
+{
+"L": "A",
+"text": "Gross is after deductions"
+},
+{
+"L": "B",
+"text": "Net is after deductions"
+},
+{
+"L": "C",
+"text": "They're the same"
+},
+{
+"L": "D",
+"text": "Net includes bonuses"
+}
+],
+"ans": "B",
+"exp": "Net pay is what actually reaches your bank account."
+},
+{
+"id": "s38",
+"topic": "U6",
+"level": 2,
+"q": "What does APR show you?",
+"opts": [
+{
+"L": "A",
+"text": "The yearly cost of borrowing"
+},
+{
+"L": "B",
+"text": "Your account number"
+},
+{
+"L": "C",
+"text": "Your credit score"
+},
+{
+"L": "D",
+"text": "Your monthly salary"
+}
+],
+"ans": "A",
+"exp": "APR helps you compare loans and credit cards."
+},
+{
+"id": "s39",
+"topic": "U6",
+"level": 3,
+"q": "Why is an emergency fund useful?",
+"opts": [
+{
+"L": "A",
+"text": "It covers unexpected costs without borrowing"
+},
+{
+"L": "B",
+"text": "It earns the highest interest"
+},
+{
+"L": "C",
+"text": "It improves your payslip"
+},
+{
+"L": "D",
+"text": "It replaces insurance"
+}
+],
+"ans": "A",
+"exp": "Savings for emergencies stop surprise bills becoming debt."
+},
+{
+"id": "s40",
+"topic": "U7",
+"level": 2,
+"q": "What does 'carbon footprint' mean?",
+"opts": [
+{
+"L": "A",
+"text": "Total greenhouse gases caused by a person or activity"
+},
+{
+"L": "B",
+"text": "The size of your shoes"
+},
+{
+"L": "C",
+"text": "The amount of coal in the UK"
+},
+{
+"L": "D",
+"text": "A type of tree"
+}
+],
+"ans": "A",
+"exp": "It measures the climate impact of what we do."
+},
+{
+"id": "s41",
+"topic": "U7",
+"level": 2,
+"q": "Which light bulb uses the least energy?",
+"opts": [
+{
+"L": "A",
+"text": "Incandescent"
+},
+{
+"L": "B",
+"text": "Halogen"
+},
+{
+"L": "C",
+"text": "LED"
+},
+{
+"L": "D",
+"text": "Candle"
+}
+],
+"ans": "C",
+"exp": "LEDs use a fraction of the energy of older bulbs."
+},
+{
+"id": "s42",
+"topic": "U7",
+"level": 3,
+"q": "Why does reducing food waste help the environment?",
+"opts": [
+{
+"L": "A",
+"text": "It saves the energy, water and emissions used to produce food"
+},
+{
+"L": "B",
+"text": "Food waste is radioactive"
+},
+{
+"L": "C",
+"text": "It makes bins lighter"
+},
+{
+"L": "D",
+"text": "It doesn't help"
+}
+],
+"ans": "A",
+"exp": "Wasted food wastes everything that went into growing and transporting it."
+},
+{
+"id": "s43",
+"topic": "U8",
+"level": 2,
+"q": "What is a cover letter for?",
+"opts": [
+{
+"L": "A",
+"text": "Explaining why you're right for a specific job"
+},
+{
+"L": "B",
+"text": "Listing your hobbies only"
+},
+{
+"L": "C",
+"text": "Asking for a pay rise"
+},
+{
+"L": "D",
+"text": "Replacing your CV"
+}
+],
+"ans": "A",
+"exp": "A cover letter tailors your application to the role."
+},
+{
+"id": "s44",
+"topic": "U8",
+"level": 2,
+"q": "What does the STAR method help you do in an interview?",
+"opts": [
+{
+"L": "A",
+"text": "Answer with Situation, Task, Action, Result"
+},
+{
+"L": "B",
+"text": "Rate the interviewer"
+},
+{
+"L": "C",
+"text": "Remember names"
+},
+{
+"L": "D",
+"text": "Choose an outfit"
+}
+],
+"ans": "A",
+"exp": "STAR gives structure to examples of your skills."
+},
+{
+"id": "s45",
+"topic": "U8",
+"level": 3,
+"q": "Why should you research a company before an interview?",
+"opts": [
+{
+"L": "A",
+"text": "To show interest and tailor your answers"
+},
+{
+"L": "B",
+"text": "To find the manager's address"
+},
+{
+"L": "C",
+"text": "It isn't necessary"
+},
+{
+"L": "D",
+"text": "To ask for a higher salary"
+}
+],
+"ans": "A",
+"exp": "Research helps you link your skills to what they need."
+},
+{
+"id": "s46",
+"topic": "HUB1",
+"level": 1,
+"q": "A team member is struggling to finish their part. What's the best response?",
+"opts": [
+{
+"L": "A",
+"text": "Ignore it"
+},
+{
+"L": "B",
+"text": "Offer help or flag it early"
+},
+{
+"L": "C",
+"text": "Redo their work without telling them"
+},
+{
+"L": "D",
+"text": "Complain to others"
+}
+],
+"ans": "B",
+"exp": "Good teams support each other and raise problems early."
+},
+{
+"id": "s47",
+"topic": "HUB2",
+"level": 1,
+"q": "Which is an example of active listening?",
+"opts": [
+{
+"L": "A",
+"text": "Interrupting with your own story"
+},
+{
+"L": "B",
+"text": "Nodding and summarising what they said"
+},
+{
+"L": "C",
+"text": "Looking at your phone"
+},
+{
+"L": "D",
+"text": "Planning your reply while they talk"
+}
+],
+"ans": "B",
+"exp": "Summarising shows you've understood."
+},
+{
+"id": "s48",
+"topic": "HUB3",
+"level": 1,
+"q": "What's the first step in solving a problem?",
+"opts": [
+{
+"L": "A",
+"text": "Pick the quickest fix"
+},
+{
+"L": "B",
+"text": "Understand the problem clearly"
+},
+{
+"L": "C",
+"text": "Find someone to blame"
+},
+{
+"L": "D",
+"text": "Give up"
+}
+],
+"ans": "B",
+"exp": "You can't fix what you don't understand."
+},
+{
+"id": "s49",
+"topic": "HUB4",
+"level": 1,
+"q": "A customer is angry about a late order. What should you do first?",
+"opts": [
+{
+"L": "A",
+"text": "Argue back"
+},
+{
+"L": "B",
+"text": "Listen and acknowledge their frustration"
+},
+{
+"L": "C",
+"text": "Hang up"
+},
+{
+"L": "D",
+"text": "Blame the courier"
+}
+],
+"ans": "B",
+"exp": "Listening calms the situation before you solve it."
+},
+{
+"id": "s50",
+"topic": "MATHS",
+"level": 1,
+"q": "What is 15% of £80?",
+"opts": [
+{
+"L": "A",
+"text": "£8"
+},
+{
+"L": "B",
+"text": "£12"
+},
+{
+"L": "C",
+"text": "£15"
+},
+{
+"L": "D",
+"text": "£10"
+}
+],
+"ans": "B",
+"exp": "10% is £8, 5% is £4, so 15% is £12."
+},
+{
+"id": "s51",
+"topic": "MATHS",
+"level": 1,
+"q": "A train leaves at 14:45. The journey takes 1 hour 50 minutes. When does it arrive?",
+"opts": [
+{
+"L": "A",
+"text": "16:25"
+},
+{
+"L": "B",
+"text": "16:35"
+},
+{
+"L": "C",
+"text": "16:45"
+},
+{
+"L": "D",
+"text": "15:35"
+}
+],
+"ans": "B",
+"exp": "14:45 + 1 h = 15:45, + 50 min = 16:35."
+},
+{
+"id": "s52",
+"topic": "MATHS",
+"level": 1,
+"q": "What is 3/4 as a percentage?",
+"opts": [
+{
+"L": "A",
+"text": "34%"
+},
+{
+"L": "B",
+"text": "60%"
+},
+{
+"L": "C",
+"text": "75%"
+},
+{
+"L": "D",
+"text": "80%"
+}
+],
+"ans": "C",
+"exp": "3 ÷ 4 = 0.75 = 75%."
+},
+{
+"id": "s53",
+"topic": "MATHS",
+"level": 1,
+"q": "A room is 6 m by 4 m. What is its area?",
+"opts": [
+{
+"L": "A",
+"text": "10 m²"
+},
+{
+"L": "B",
+"text": "20 m²"
+},
+{
+"L": "C",
+"text": "24 m²"
+},
+{
+"L": "D",
+"text": "48 m²"
+}
+],
+"ans": "C",
+"exp": "Area = length × width = 24 m²."
+},
+{
+"id": "s54",
+"topic": "ENGLISH",
+"level": 1,
+"q": "Which word is spelled correctly?",
+"opts": [
+{
+"L": "A",
+"text": "Recieve"
+},
+{
+"L": "B",
+"text": "Receive"
+},
+{
+"L": "C",
+"text": "Receeve"
+},
+{
+"L": "D",
+"text": "Riceive"
+}
+],
+"ans": "B",
+"exp": "'I before e except after c'."
+},
+{
+"id": "s55",
+"topic": "ENGLISH",
+"level": 1,
+"q": "Fill the gap: '___ going to be late.'",
+"opts": [
+{
+"L": "A",
+"text": "Their"
+},
+{
+"L": "B",
+"text": "There"
+},
+{
+"L": "C",
+"text": "They're"
+},
+{
+"L": "D",
+"text": "Thier"
+}
+],
+"ans": "C",
+"exp": "They're = they are."
+},
+{
+"id": "s56",
+"topic": "ENGLISH",
+"level": 1,
+"q": "Which is the best greeting for a formal email to someone you don't know?",
+"opts": [
+{
+"L": "A",
+"text": "Hiya"
+},
+{
+"L": "B",
+"text": "Dear Sir or Madam"
+},
+{
+"L": "C",
+"text": "Yo"
+},
+{
+"L": "D",
+"text": "Alright?"
+}
+],
+"ans": "B",
+"exp": "Formal emails need a formal greeting."
+},
+{
+"id": "s57",
+"topic": "ENGLISH",
+"level": 1,
+"q": "Which punctuation mark ends a question?",
+"opts": [
+{
+"L": "A",
+"text": "Full stop"
+},
+{
+"L": "B",
+"text": "Exclamation mark"
+},
+{
+"L": "C",
+"text": "Question mark"
+},
+{
+"L": "D",
+"text": "Comma"
+}
+],
+"ans": "C",
+"exp": "Questions end with a question mark."
+},
+{
+"id": "s58",
+"topic": "POPQUIZ",
+"level": 1,
+"q": "True or false: the Great Wall of China is easily visible from the Moon.",
+"opts": [
+{
+"L": "A",
+"text": "True"
+},
+{
+"L": "B",
+"text": "False"
+}
+],
+"ans": "B",
+"exp": "It's far too narrow to see from the Moon."
+},
+{
+"id": "s59",
+"topic": "POPQUIZ",
+"level": 1,
+"q": "True or false: lightning can strike the same place twice.",
+"opts": [
+{
+"L": "A",
+"text": "True"
+},
+{
+"L": "B",
+"text": "False"
+}
+],
+"ans": "A",
+"exp": "Tall buildings are struck many times a year."
+},
+{
+"id": "s60",
+"topic": "POPQUIZ",
+"level": 1,
+"q": "True or false: bats are blind.",
+"opts": [
+{
+"L": "A",
+"text": "True"
+},
+{
+"L": "B",
+"text": "False"
+}
+],
+"ans": "B",
+"exp": "Bats can see; many also use echolocation."
+},
+{
+"id": "s61",
+"topic": "POPQUIZ",
+"level": 1,
+"q": "True or false: botanically, a tomato is a fruit.",
+"opts": [
+{
+"L": "A",
+"text": "True"
+},
+{
+"L": "B",
+"text": "False"
+}
+],
+"ans": "A",
+"exp": "It develops from the flower and contains seeds."
+},
+{
+"id": "s62",
+"topic": "POPQUIZ",
+"level": 1,
+"q": "True or false: goldfish only have a three-second memory.",
+"opts": [
+{
+"L": "A",
+"text": "True"
+},
+{
+"L": "B",
+"text": "False"
+}
+],
+"ans": "B",
+"exp": "Studies show goldfish can remember things for months."
+},
+{
+"id": "s63",
+"topic": "REALWORLD",
+"level": 1,
+"q": "You're running 10 minutes late for work. What should you do?",
+"opts": [
+{
+"L": "A",
+"text": "Say nothing"
+},
+{
+"L": "B",
+"text": "Let your manager know as soon as possible"
+},
+{
+"L": "C",
+"text": "Go home"
+},
+{
+"L": "D",
+"text": "Post about it online"
+}
+],
+"ans": "B",
+"exp": "Telling your manager early shows reliability."
+},
+{
+"id": "s64",
+"topic": "REALWORLD",
+"level": 1,
+"q": "A colleague offers you their login to 'save time'. What should you do?",
+"opts": [
+{
+"L": "A",
+"text": "Use it"
+},
+{
+"L": "B",
+"text": "Politely refuse and use your own login"
+},
+{
+"L": "C",
+"text": "Share it with others"
+},
+{
+"L": "D",
+"text": "Write it on a sticky note"
+}
+],
+"ans": "B",
+"exp": "Sharing logins breaks security policies."
+},
+{
+"id": "s65",
+"topic": "REALWORLD",
+"level": 1,
+"q": "You make a mistake that affects a customer. What's the best approach?",
+"opts": [
+{
+"L": "A",
+"text": "Hide it"
+},
+{
+"L": "B",
+"text": "Own it, apologise and fix it"
+},
+{
+"L": "C",
+"text": "Blame a colleague"
+},
+{
+"L": "D",
+"text": "Wait to see if they notice"
+}
+],
+"ans": "B",
+"exp": "Owning mistakes builds trust."
+},
+{
+"id": "s66",
+"topic": "REALWORLD",
+"level": 1,
+"q": "An email from 'IT' urgently asks for your password. What do you do?",
+"opts": [
+{
+"L": "A",
+"text": "Reply with it"
+},
+{
+"L": "B",
+"text": "Report it as phishing"
+},
+{
+"L": "C",
+"text": "Forward it to friends"
+},
+{
+"L": "D",
+"text": "Ignore all IT emails forever"
+}
+],
+"ans": "B",
+"exp": "Real IT teams never ask for your password."
+},
+{
+"id": "s67",
+"topic": "REALWORLD",
+"level": 1,
+"q": "Your manager gives feedback you disagree with. Best response?",
+"opts": [
+{
+"L": "A",
+"text": "Walk out"
+},
+{
+"L": "B",
+"text": "Listen, ask questions and discuss calmly"
+},
+{
+"L": "C",
+"text": "Ignore it"
+},
+{
+"L": "D",
+"text": "Complain online"
+}
+],
+"ans": "B",
+"exp": "Calm discussion helps you understand and improve."
+},
+{
+"id": "s68",
+"topic": "REVISION",
+"level": 1,
+"q": "What is 7 × 8?",
+"opts": [
+{
+"L": "A",
+"text": "54"
+},
+{
+"L": "B",
+"text": "56"
+},
+{
+"L": "C",
+"text": "64"
+},
+{
+"L": "D",
+"text": "48"
+}
+],
+"ans": "B",
+"exp": "7 × 8 = 56."
+},
+{
+"id": "s69",
+"topic": "REVISION",
+"level": 1,
+"q": "What is the capital of Scotland?",
+"opts": [
+{
+"L": "A",
+"text": "Glasgow"
+},
+{
+"L": "B",
+"text": "Edinburgh"
+},
+{
+"L": "C",
+"text": "Aberdeen"
+},
+{
+"L": "D",
+"text": "Dundee"
+}
+],
+"ans": "B",
+"exp": "Edinburgh is Scotland's capital."
+},
+{
+"id": "s70",
+"topic": "REVISION",
+"level": 1,
+"q": "How many minutes are in 2.5 hours?",
+"opts": [
+{
+"L": "A",
+"text": "120"
+},
+{
+"L": "B",
+"text": "130"
+},
+{
+"L": "C",
+"text": "150"
+},
+{
+"L": "D",
+"text": "250"
+}
+],
+"ans": "C",
+"exp": "2 × 60 + 30 = 150."
+},
+{
+"id": "s71",
+"topic": "REVISION",
+"level": 1,
+"q": "What is the plural of 'child'?",
+"opts": [
+{
+"L": "A",
+"text": "Childs"
+},
+{
+"L": "B",
+"text": "Children"
+},
+{
+"L": "C",
+"text": "Childes"
+},
+{
+"L": "D",
+"text": "Childrens"
+}
+],
+"ans": "B",
+"exp": "'Children' is an irregular plural."
+},
+{
+"id": "s72",
+"topic": "BONUS",
+"level": 1,
+"q": "What is the largest planet in the Solar System?",
+"opts": [
+{
+"L": "A",
+"text": "Saturn"
+},
+{
+"L": "B",
+"text": "Jupiter"
+},
+{
+"L": "C",
+"text": "Neptune"
+},
+{
+"L": "D",
+"text": "Earth"
+}
+],
+"ans": "B",
+"exp": "Jupiter is more than twice as massive as all the other planets combined."
+},
+{
+"id": "s73",
+"topic": "BONUS",
+"level": 1,
+"q": "How many sides does a hexagon have?",
+"opts": [
+{
+"L": "A",
+"text": "5"
+},
+{
+"L": "B",
+"text": "6"
+},
+{
+"L": "C",
+"text": "7"
+},
+{
+"L": "D",
+"text": "8"
+}
+],
+"ans": "B",
+"exp": "Hex means six."
+},
+{
+"id": "s74",
+"topic": "BONUS",
+"level": 1,
+"q": "Which city hosted the 2012 Olympic Games?",
+"opts": [
+{
+"L": "A",
+"text": "Beijing"
+},
+{
+"L": "B",
+"text": "London"
+},
+{
+"L": "C",
+"text": "Rio de Janeiro"
+},
+{
+"L": "D",
+"text": "Athens"
+}
+],
+"ans": "B",
+"exp": "London hosted the 2012 Summer Olympics."
+},
+{
+"id": "s75",
+"topic": "BONUS",
+"level": 1,
+"q": "What is H2O more commonly called?",
+"opts": [
+{
+"L": "A",
+"text": "Water"
+},
+{
+"L": "B",
+"text": "Salt"
+},
+{
+"L": "C",
+"text": "Hydrogen peroxide"
+},
+{
+"L": "D",
+"text": "Oxygen"
+}
+],
+"ans": "A",
+"exp": "Two hydrogen atoms and one oxygen atom make water."
+},
+{
+"id": "s76",
+"topic": "1A",
+"level": 1,
+"q": "Which planet is known as the Red Planet?",
+"opts": [
+{
+"L": "A",
+"text": "Venus"
+},
+{
+"L": "B",
+"text": "Mars"
+},
+{
+"L": "C",
+"text": "Jupiter"
+},
+{
+"L": "D",
+"text": "Saturn"
+}
+],
+"ans": "B",
+"exp": "Iron oxide (rust) on its surface makes Mars look red."
+},
+{
+"id": "s77",
+"topic": "1A",
+"level": 1,
+"q": "What is at the centre of our Solar System?",
+"opts": [
+{
+"L": "A",
+"text": "The Earth"
+},
+{
+"L": "B",
+"text": "The Moon"
+},
+{
+"L": "C",
+"text": "The Sun"
+},
+{
+"L": "D",
+"text": "Jupiter"
+}
+],
+"ans": "C",
+"exp": "All the planets orbit the Sun."
+},
+{
+"id": "s78",
+"topic": "1B",
+"level": 1,
+"q": "How many bones are in the adult human body?",
+"opts": [
+{
+"L": "A",
+"text": "106"
+},
+{
+"L": "B",
+"text": "206"
+},
+{
+"L": "C",
+"text": "306"
+},
+{
+"L": "D",
+"text": "406"
+}
+],
+"ans": "B",
+"exp": "Adults have 206 bones."
+},
+{
+"id": "s79",
+"topic": "1B",
+"level": 1,
+"q": "Which organ do we use to breathe?",
+"opts": [
+{
+"L": "A",
+"text": "Lungs"
+},
+{
+"L": "B",
+"text": "Stomach"
+},
+{
+"L": "C",
+"text": "Heart"
+},
+{
+"L": "D",
+"text": "Liver"
+}
+],
+"ans": "A",
+"exp": "The lungs take in oxygen and remove carbon dioxide."
+},
+{
+"id": "s80",
+"topic": "2A",
+"level": 1,
+"q": "Which city is the capital of Northern Ireland?",
+"opts": [
+{
+"L": "A",
+"text": "Derry"
+},
+{
+"L": "B",
+"text": "Belfast"
+},
+{
+"L": "C",
+"text": "Newry"
+},
+{
+"L": "D",
+"text": "Armagh"
+}
+],
+"ans": "B",
+"exp": "Belfast is the capital of Northern Ireland."
+},
+{
+"id": "s81",
+"topic": "2A",
+"level": 1,
+"q": "Which UK city is known for the Beatles?",
+"opts": [
+{
+"L": "A",
+"text": "Leeds"
+},
+{
+"L": "B",
+"text": "Liverpool"
+},
+{
+"L": "C",
+"text": "Birmingham"
+},
+{
+"L": "D",
+"text": "Bristol"
+}
+],
+"ans": "B",
+"exp": "The Beatles formed in Liverpool."
+},
+{
+"id": "s82",
+"topic": "2B",
+"level": 1,
+"q": "Which river flows through London?",
+"opts": [
+{
+"L": "A",
+"text": "Severn"
+},
+{
+"L": "B",
+"text": "Thames"
+},
+{
+"L": "C",
+"text": "Mersey"
+},
+{
+"L": "D",
+"text": "Tyne"
+}
+],
+"ans": "B",
+"exp": "The Thames flows through London."
+},
+{
+"id": "s83",
+"topic": "2B",
+"level": 1,
+"q": "Which ocean lies between Europe and North America?",
+"opts": [
+{
+"L": "A",
+"text": "Pacific"
+},
+{
+"L": "B",
+"text": "Indian"
+},
+{
+"L": "C",
+"text": "Atlantic"
+},
+{
+"L": "D",
+"text": "Arctic"
+}
+],
+"ans": "C",
+"exp": "The Atlantic separates them."
+},
+{
+"id": "s84",
+"topic": "2C",
+"level": 1,
+"q": "What is the capital of France?",
+"opts": [
+{
+"L": "A",
+"text": "Lyon"
+},
+{
+"L": "B",
+"text": "Paris"
+},
+{
+"L": "C",
+"text": "Marseille"
+},
+{
+"L": "D",
+"text": "Nice"
+}
+],
+"ans": "B",
+"exp": "Paris is the capital of France."
+},
+{
+"id": "s85",
+"topic": "2C",
+"level": 1,
+"q": "What is the capital of Japan?",
+"opts": [
+{
+"L": "A",
+"text": "Osaka"
+},
+{
+"L": "B",
+"text": "Kyoto"
+},
+{
+"L": "C",
+"text": "Tokyo"
+},
+{
+"L": "D",
+"text": "Hiroshima"
+}
+],
+"ans": "C",
+"exp": "Tokyo is Japan's capital."
+},
+{
+"id": "s86",
+"topic": "3A",
+"level": 1,
+"q": "Which Tudor queen was known as the Virgin Queen?",
+"opts": [
+{
+"L": "A",
+"text": "Mary I"
+},
+{
+"L": "B",
+"text": "Elizabeth I"
+},
+{
+"L": "C",
+"text": "Anne Boleyn"
+},
+{
+"L": "D",
+"text": "Jane Grey"
+}
+],
+"ans": "B",
+"exp": "Elizabeth I never married."
+},
+{
+"id": "s87",
+"topic": "3A",
+"level": 1,
+"q": "Which Tudor king founded the Church of England?",
+"opts": [
+{
+"L": "A",
+"text": "Henry VII"
+},
+{
+"L": "B",
+"text": "Henry VIII"
+},
+{
+"L": "C",
+"text": "Edward VI"
+},
+{
+"L": "D",
+"text": "Richard III"
+}
+],
+"ans": "B",
+"exp": "Henry VIII broke from Rome in the 1530s."
+},
+{
+"id": "s88",
+"topic": "3B",
+"level": 1,
+"q": "Who was the UK Prime Minister for most of World War II?",
+"opts": [
+{
+"L": "A",
+"text": "Neville Chamberlain"
+},
+{
+"L": "B",
+"text": "Winston Churchill"
+},
+{
+"L": "C",
+"text": "Clement Attlee"
+},
+{
+"L": "D",
+"text": "David Lloyd George"
+}
+],
+"ans": "B",
+"exp": "Churchill led the UK from 1940 to 1945."
+},
+{
+"id": "s89",
+"topic": "3B",
+"level": 1,
+"q": "In which year did the First World War end?",
+"opts": [
+{
+"L": "A",
+"text": "1914"
+},
+{
+"L": "B",
+"text": "1916"
+},
+{
+"L": "C",
+"text": "1918"
+},
+{
+"L": "D",
+"text": "1920"
+}
+],
+"ans": "C",
+"exp": "The Armistice was signed in November 1918."
+},
+{
+"id": "s90",
+"topic": "3C",
+"level": 1,
+"q": "Which industry boomed in Lancashire during the Industrial Revolution?",
+"opts": [
+{
+"L": "A",
+"text": "Cotton"
+},
+{
+"L": "B",
+"text": "Gold mining"
+},
+{
+"L": "C",
+"text": "Car making"
+},
+{
+"L": "D",
+"text": "Oil"
+}
+],
+"ans": "A",
+"exp": "Lancashire's mills made cotton cloth."
+},
+{
+"id": "s91",
+"topic": "3C",
+"level": 1,
+"q": "Who is known for improving the steam engine?",
+"opts": [
+{
+"L": "A",
+"text": "Isaac Newton"
+},
+{
+"L": "B",
+"text": "James Watt"
+},
+{
+"L": "C",
+"text": "Charles Darwin"
+},
+{
+"L": "D",
+"text": "Alexander Bell"
+}
+],
+"ans": "B",
+"exp": "James Watt's improvements made steam power practical."
+},
+{
+"id": "s92",
+"topic": "4A",
+"level": 1,
+"q": "What should you do if a stranger online asks for personal details?",
+"opts": [
+{
+"L": "A",
+"text": "Share them"
+},
+{
+"L": "B",
+"text": "Don't share and report it"
+},
+{
+"L": "C",
+"text": "Send a photo"
+},
+{
+"L": "D",
+"text": "Ask a friend to reply"
+}
+],
+"ans": "B",
+"exp": "Never share personal details with strangers online."
+},
+{
+"id": "s93",
+"topic": "4A",
+"level": 1,
+"q": "What is two-factor authentication?",
+"opts": [
+{
+"L": "A",
+"text": "Two passwords that are the same"
+},
+{
+"L": "B",
+"text": "A second step to prove it's you"
+},
+{
+"L": "C",
+"text": "Logging in twice a day"
+},
+{
+"L": "D",
+"text": "A type of virus"
+}
+],
+"ans": "B",
+"exp": "A code or app check adds a second layer of security."
+},
+{
+"id": "s94",
+"topic": "4B",
+"level": 1,
+"q": "What does RAM stand for?",
+"opts": [
+{
+"L": "A",
+"text": "Random Access Memory"
+},
+{
+"L": "B",
+"text": "Read Any Memory"
+},
+{
+"L": "C",
+"text": "Run All Machines"
+},
+{
+"L": "D",
+"text": "Rapid Access Mode"
+}
+],
+"ans": "A",
+"exp": "RAM is short-term working memory."
+},
+{
+"id": "s95",
+"topic": "4B",
+"level": 1,
+"q": "Which part stores files permanently?",
+"opts": [
+{
+"L": "A",
+"text": "RAM"
+},
+{
+"L": "B",
+"text": "CPU"
+},
+{
+"L": "C",
+"text": "Hard drive / SSD"
+},
+{
+"L": "D",
+"text": "Monitor"
+}
+],
+"ans": "C",
+"exp": "Hard drives and SSDs keep data when the power is off."
+},
+{
+"id": "s96",
+"topic": "4C",
+"level": 1,
+"q": "What does a web browser do?",
+"opts": [
+{
+"L": "A",
+"text": "Displays web pages"
+},
+{
+"L": "B",
+"text": "Prints documents"
+},
+{
+"L": "C",
+"text": "Cools the computer"
+},
+{
+"L": "D",
+"text": "Stores electricity"
+}
+],
+"ans": "A",
+"exp": "Browsers like Chrome display websites."
+},
+{
+"id": "s97",
+"topic": "4C",
+"level": 1,
+"q": "What does 'URL' mean?",
+"opts": [
+{
+"L": "A",
+"text": "Universal Resource Locator (a web address)"
+},
+{
+"L": "B",
+"text": "User Request Line"
+},
+{
+"L": "C",
+"text": "Unified Router Link"
+},
+{
+"L": "D",
+"text": "Upload Rate Limit"
+}
+],
+"ans": "A",
+"exp": "A URL is the address of a web page."
+},
+{
+"id": "s98",
+"topic": "5A",
+"level": 1,
+"q": "Which food group mainly helps build muscle?",
+"opts": [
+{
+"L": "A",
+"text": "Protein"
+},
+{
+"L": "B",
+"text": "Sugar"
+},
+{
+"L": "C",
+"text": "Fat"
+},
+{
+"L": "D",
+"text": "Salt"
+}
+],
+"ans": "A",
+"exp": "Protein helps the body build and repair muscle."
+},
+{
+"id": "s99",
+"topic": "5A",
+"level": 1,
+"q": "How much water should adults aim to drink a day (NHS)?",
+"opts": [
+{
+"L": "A",
+"text": "1–2 glasses"
+},
+{
+"L": "B",
+"text": "6–8 glasses"
+},
+{
+"L": "C",
+"text": "15 glasses"
+},
+{
+"L": "D",
+"text": "20 glasses"
+}
+],
+"ans": "B",
+"exp": "The NHS suggests 6 to 8 glasses a day."
+},
+{
+"id": "s100",
+"topic": "5B",
+"level": 1,
+"q": "What position should an unconscious, breathing person be put in?",
+"opts": [
+{
+"L": "A",
+"text": "Sitting up"
+},
+{
+"L": "B",
+"text": "Recovery position"
+},
+{
+"L": "C",
+"text": "Standing"
+},
+{
+"L": "D",
+"text": "Face down"
+}
+],
+"ans": "B",
+"exp": "The recovery position keeps the airway open."
+},
+{
+"id": "s101",
+"topic": "5B",
+"level": 1,
+"q": "What should you do first for a minor burn?",
+"opts": [
+{
+"L": "A",
+"text": "Apply butter"
+},
+{
+"L": "B",
+"text": "Cool it under running water"
+},
+{
+"L": "C",
+"text": "Pop any blisters"
+},
+{
+"L": "D",
+"text": "Cover with ice"
+}
+],
+"ans": "B",
+"exp": "Cool running water for 20 minutes."
+},
+{
+"id": "s102",
+"topic": "5C",
+"level": 1,
+"q": "What does 'cardio' exercise mainly improve?",
+"opts": [
+{
+"L": "A",
+"text": "Heart and lungs"
+},
+{
+"L": "B",
+"text": "Hair growth"
+},
+{
+"L": "C",
+"text": "Eyesight"
+},
+{
+"L": "D",
+"text": "Memory only"
+}
+],
+"ans": "A",
+"exp": "Cardio strengthens the heart and lungs."
+},
+{
+"id": "s103",
+"topic": "5C",
+"level": 1,
+"q": "Why is rest important after exercise?",
+"opts": [
+{
+"L": "A",
+"text": "Muscles repair and grow"
+},
+{
+"L": "B",
+"text": "It isn't"
+},
+{
+"L": "C",
+"text": "To lose fitness"
+},
+{
+"L": "D",
+"text": "To burn more calories"
+}
+],
+"ans": "A",
+"exp": "Recovery lets muscles repair."
+},
+{
+"id": "s104",
+"topic": "6A",
+"level": 1,
+"q": "If you earn £1,200 a month and spend £1,350, what happens?",
+"opts": [
+{
+"L": "A",
+"text": "You save £150"
+},
+{
+"L": "B",
+"text": "You're £150 short"
+},
+{
+"L": "C",
+"text": "You break even"
+},
+{
+"L": "D",
+"text": "You get a bonus"
+}
+],
+"ans": "B",
+"exp": "Spending more than you earn means a shortfall."
+},
+{
+"id": "s105",
+"topic": "6A",
+"level": 1,
+"q": "Which is a 'need' rather than a 'want'?",
+"opts": [
+{
+"L": "A",
+"text": "New trainers"
+},
+{
+"L": "B",
+"text": "Rent"
+},
+{
+"L": "C",
+"text": "Concert tickets"
+},
+{
+"L": "D",
+"text": "Takeaway"
+}
+],
+"ans": "B",
+"exp": "Housing is an essential need."
+},
+{
+"id": "s106",
+"topic": "6B",
+"level": 1,
+"q": "What is income tax?",
+"opts": [
+{
+"L": "A",
+"text": "Tax on what you earn"
+},
+{
+"L": "B",
+"text": "Tax on food"
+},
+{
+"L": "C",
+"text": "A savings account"
+},
+{
+"L": "D",
+"text": "A loan"
+}
+],
+"ans": "A",
+"exp": "Income tax is taken from your earnings."
+},
+{
+"id": "s107",
+"topic": "6B",
+"level": 1,
+"q": "What is a P60?",
+"opts": [
+{
+"L": "A",
+"text": "A summary of your yearly pay and tax"
+},
+{
+"L": "B",
+"text": "A bank card"
+},
+{
+"L": "C",
+"text": "A job advert"
+},
+{
+"L": "D",
+"text": "A type of loan"
+}
+],
+"ans": "A",
+"exp": "Employers give you a P60 each tax year."
+},
+{
+"id": "s108",
+"topic": "6C",
+"level": 1,
+"q": "Which account usually pays the most interest?",
+"opts": [
+{
+"L": "A",
+"text": "Current account"
+},
+{
+"L": "B",
+"text": "Savings account"
+},
+{
+"L": "C",
+"text": "Overdraft"
+},
+{
+"L": "D",
+"text": "Credit card"
+}
+],
+"ans": "B",
+"exp": "Savings accounts reward you for keeping money in them."
+},
+{
+"id": "s109",
+"topic": "6C",
+"level": 1,
+"q": "What is an overdraft?",
+"opts": [
+{
+"L": "A",
+"text": "Extra savings"
+},
+{
+"L": "B",
+"text": "Borrowing from your bank account below £0"
+},
+{
+"L": "C",
+"text": "A pay rise"
+},
+{
+"L": "D",
+"text": "A tax refund"
+}
+],
+"ans": "B",
+"exp": "An overdraft lets you spend money you don't have, often with fees."
+},
+{
+"id": "s110",
+"topic": "7A",
+"level": 1,
+"q": "What does the recycling symbol with three arrows mean?",
+"opts": [
+{
+"L": "A",
+"text": "Reduce, reuse, recycle"
+},
+{
+"L": "B",
+"text": "Stop, look, listen"
+},
+{
+"L": "C",
+"text": "Buy, sell, trade"
+},
+{
+"L": "D",
+"text": "Hot, warm, cold"
+}
+],
+"ans": "A",
+"exp": "The three arrows show the recycling loop."
+},
+{
+"id": "s111",
+"topic": "7A",
+"level": 1,
+"q": "Which of these takes longest to break down?",
+"opts": [
+{
+"L": "A",
+"text": "Banana peel"
+},
+{
+"L": "B",
+"text": "Paper"
+},
+{
+"L": "C",
+"text": "Plastic bottle"
+},
+{
+"L": "D",
+"text": "Apple core"
+}
+],
+"ans": "C",
+"exp": "Plastic can take hundreds of years."
+},
+{
+"id": "s112",
+"topic": "7B",
+"level": 1,
+"q": "Which of these produces electricity from sunlight?",
+"opts": [
+{
+"L": "A",
+"text": "Wind turbine"
+},
+{
+"L": "B",
+"text": "Solar panel"
+},
+{
+"L": "C",
+"text": "Dam"
+},
+{
+"L": "D",
+"text": "Coal plant"
+}
+],
+"ans": "B",
+"exp": "Solar panels convert sunlight to electricity."
+},
+{
+"id": "s113",
+"topic": "7B",
+"level": 1,
+"q": "Which uses the least energy to dry clothes?",
+"opts": [
+{
+"L": "A",
+"text": "Tumble dryer"
+},
+{
+"L": "B",
+"text": "Washing line"
+},
+{
+"L": "C",
+"text": "Radiator"
+},
+{
+"L": "D",
+"text": "Hairdryer"
+}
+],
+"ans": "B",
+"exp": "Air drying on a line uses no electricity."
+},
+{
+"id": "s114",
+"topic": "7C",
+"level": 1,
+"q": "What is global warming?",
+"opts": [
+{
+"L": "A",
+"text": "Earth's average temperature rising"
+},
+{
+"L": "B",
+"text": "Summer getting longer"
+},
+{
+"L": "C",
+"text": "The Sun moving closer"
+},
+{
+"L": "D",
+"text": "More rain in winter only"
+}
+],
+"ans": "A",
+"exp": "Greenhouse gases trap heat."
+},
+{
+"id": "s115",
+"topic": "7C",
+"level": 1,
+"q": "Which helps reduce carbon emissions?",
+"opts": [
+{
+"L": "A",
+"text": "Driving more"
+},
+{
+"L": "B",
+"text": "Using public transport"
+},
+{
+"L": "C",
+"text": "Leaving lights on"
+},
+{
+"L": "D",
+"text": "Flying more"
+}
+],
+"ans": "B",
+"exp": "Shared transport cuts emissions per person."
+},
+{
+"id": "s116",
+"topic": "8A",
+"level": 1,
+"q": "How long should a CV usually be?",
+"opts": [
+{
+"L": "A",
+"text": "1–2 pages"
+},
+{
+"L": "B",
+"text": "5 pages"
+},
+{
+"L": "C",
+"text": "10 pages"
+},
+{
+"L": "D",
+"text": "Half a line"
+}
+],
+"ans": "A",
+"exp": "Most employers prefer one or two pages."
+},
+{
+"id": "s117",
+"topic": "8A",
+"level": 1,
+"q": "Which email address looks most professional on a CV?",
+"opts": [
+{
+"L": "A",
+"text": "partyking99@mail.com"
+},
+{
+"L": "B",
+"text": "j.smith@mail.com"
+},
+{
+"L": "C",
+"text": "coolkid@mail.com"
+},
+{
+"L": "D",
+"text": "xXgamerXx@mail.com"
+}
+],
+"ans": "B",
+"exp": "Use a simple name-based address."
+},
+{
+"id": "s118",
+"topic": "8B",
+"level": 1,
+"q": "What should you do before an interview?",
+"opts": [
+{
+"L": "A",
+"text": "Research the company"
+},
+{
+"L": "B",
+"text": "Arrive late"
+},
+{
+"L": "C",
+"text": "Wear anything"
+},
+{
+"L": "D",
+"text": "Forget your CV"
+}
+],
+"ans": "A",
+"exp": "Preparation shows you're serious."
+},
+{
+"id": "s119",
+"topic": "8B",
+"level": 1,
+"q": "What does good body language in an interview include?",
+"opts": [
+{
+"L": "A",
+"text": "Eye contact and sitting up"
+},
+{
+"L": "B",
+"text": "Folding arms"
+},
+{
+"L": "C",
+"text": "Looking at your phone"
+},
+{
+"L": "D",
+"text": "Slouching"
+}
+],
+"ans": "A",
+"exp": "Positive body language shows confidence."
+}
+]
+}
