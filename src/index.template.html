@@ -36,7 +36,11 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Inte
 .house.shield{border-color:var(--silver);box-shadow:0 0 0 6px var(--silver),0 0 80px rgba(215,222,232,.45)}
 .house.empty{opacity:.12}
 .badge{display:inline-block;font:800 30px Inter,Arial;padding:6px 16px;border-radius:12px;margin:4px}
-.badge.sh{background:var(--silver);color:#111}.badge.gh{background:#2a2433;color:#d9d2ff;border:2px solid #6c5f8a}
+.badge.sh{background:var(--silver);color:#111}.badge.po{background:#3a1a40;color:#f0c8ff;border:2px solid #9a5fb0}
+.house.ghost .crest{filter:grayscale(1);opacity:.45}
+.house .rec i{font-style:normal}.house .rec i.y,.evt i.y{color:#9FE3B8}.house .rec i.n,.evt i.n{color:#FF9AA2}
+.evt{display:flex;flex-direction:column;gap:6px;margin-top:6px}.evt div{display:flex;align-items:center;gap:20px;font:600 36px Inter,Arial;padding:2px 16px;border-radius:12px;background:rgba(255,255,255,.04)}.evt div.gh{opacity:.5}
+.evt .mini{width:50px;height:56px}.evt .mini svg{width:100%;height:100%}.evt b{width:200px}.evt .marks{width:260px;font-size:44px;letter-spacing:8px}.evt i{font-style:normal}.evt .tot{width:260px;color:var(--muted)}.evt .tag{color:var(--gold2)}.badge.gh{background:#2a2433;color:#d9d2ff;border:2px solid #6c5f8a}
 /* front */
 #card{left:3476px;top:200px;width:2767px;height:660px;border-color:var(--gold);padding:36px 50px}
 #card.flip{animation:flip .55s cubic-bezier(.2,.9,.3,1.15)}
@@ -64,8 +68,8 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Inte
 .btn.sm{font-size:32px;height:76px;padding:0 24px;border-radius:12px}
 .btn .mini{width:60px;height:66px;display:inline-block;vertical-align:middle;margin-right:10px}
 .btn .mini svg{width:100%;height:100%}
-.starters{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:34px}
-.starters div{font:600 50px Inter,Arial;padding:16px 22px;border-radius:16px;border:3px dashed var(--line);color:var(--gold2)}
+.starters{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.starters div{font:600 40px Inter,Arial;padding:10px 20px;border-radius:16px;border:3px dashed var(--line);color:var(--gold2)}
 .ev{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin-top:10px}
 .ev div{font:700 40px Inter,Arial;padding:10px 20px;border-radius:14px;background:rgba(255,255,255,.06);display:flex;align-items:center;gap:12px}
 .ev .mini{width:56px;height:62px}.ev svg{width:100%;height:100%}
@@ -190,8 +194,8 @@ function crest(id){const h=hById(id),E=h.e,C=h.color;let g='';
 
 /* ---------- state ---------- */
 let BANK=JSON.parse(JSON.stringify(SAMPLE)),BANKSRC='Built-in sample questions';
-const S={phase:'setup',picked:['moon','tower','key','crown','rose'],minutes:45,traitorsStart:2,teams:[],round:1,rounds:3,pot:0,traitors:2,bannedT:0,bannedF:0,murdered:0,shield:-1,
-  used:new Set(),log:[],chron:[],mq:0,order:[],q:null,qLeft:0,revealed:false,chosen:null,qTeam:-1,actA:[],actB:[],disc:0,discOn:false,paused:false,elapsed:0,final:false,recruited:false,step:'',review:false,winner:null};
+const S={phase:'setup',picked:['moon','tower','key','crown','rose'],minutes:45,traitorsStart:1,teams:[],round:1,rounds:3,pot:0,traitors:1,daggers:1,bannedT:0,bannedF:0,murdered:0,shield:-1,poisoned:-1,
+  used:new Set(),log:[],chron:[],mq:0,q:null,qLeft:0,revealed:false,wrong:new Set(),actA:[],actB:[],disc:0,discOn:false,paused:false,elapsed:0,final:false,step:'',winner:null,votes:{},vq:[],vi:0,revote:false,voteAmong:null,nightTarget:-1,nightType:'poison',lastRight:0};
 const ANSWER_SECS=60;
 const $=id=>document.getElementById(id);
 const rnd=n=>Math.floor(Math.random()*n);
@@ -200,7 +204,7 @@ const money=v=>'£'+Math.round(v).toLocaleString('en-GB');
 const act=(label,fn,cls='')=>({label,fn,cls});
 function setActs(a,b){S.actA=a||[];S.actB=b||[]}
 function chron(t){S.chron.unshift(t);S.chron=S.chron.slice(0,14)}
-const potStep=()=>+BANK.settings.pot||1000;
+const potStep=()=>+BANK.settings.pot||500;
 const roundsFor=m=>Math.max(1,Math.round((m-6)/12));
 
 /* ---------- sound: ElevenLabs clips in assets/audio, with built-in fallbacks ---------- */
@@ -209,8 +213,8 @@ const V=(b,n)=>[b].concat(Array.from({length:n-1},(_,i)=>b+'_'+(i+2)));
 const HOST={close:['host_close_eyes'],choosing:['host_choosing'],topen:['host_traitors_open'],tclose:['host_traitors_close'],allopen:['host_all_open'],
   mission:V('host_mission',2),correct:V('host_correct',3),wrong:V('host_wrong',3),shield:['host_shield'],roundtable:V('host_roundtable',2),vote:['host_vote'],
   stand:['host_stand'],wastraitor:V('host_was_traitor',2),wasfaithful:V('host_was_faithful',2),night:['host_night'],nighttraitors:['host_night_traitors'],nightclose:['host_night_close'],
-  recruit:['host_recruit'],breakfast:['host_breakfast'],murdered:V('host_murdered',2),nomurder:['host_no_murder'],finalrt:['host_final_rt'],endvote:['host_endvote'],
-  revealyou:['host_reveal_yourselves'],faithfulwin:['host_faithful_win'],traitorwin:['host_traitor_win'],allfound:['host_all_found']};
+  breakfast:['host_breakfast'],murdered:V('host_murdered',2),nomurder:['host_no_murder'],finalrt:['host_final_rt'],endvote:['host_endvote'],
+  revealyou:['host_reveal_yourselves'],poisoned:V('host_poisoned',2),tie:['host_tie'],lockin:['host_lockin'],faithfulwin:['host_faithful_win'],traitorwin:['host_traitor_win'],allfound:['host_all_found']};
 const AUD={},OK={};let muted=false,hostNow=null,loopNow={},actx=null;
 const INTRO=Array.from({length:11},(_,i)=>'intro_'+(i+1));
 [...SFX,...Object.values(HOST).flat(),...INTRO].forEach(k=>{const a=new Audio();a.preload='auto';a.oncanplaythrough=()=>OK[k]=1;a.onerror=()=>OK[k]=0;a.src=`assets/audio/${k}.mp3`;AUD[k]=a});
@@ -228,7 +232,7 @@ function loop(k,on,vol=.35){if(on){if(loopNow[k]||muted)return;if(OK[k]!==1){if(
 function stopLoops(){Object.keys(loopNow).forEach(k=>loop(k,false))}
 /* the host never talks over himself: lines queue; big moments first; stale small comments are dropped */
 const RECENT=[],HQ=[];let hostGap=false;
-const PRIO={wastraitor:3,wasfaithful:3,faithfulwin:4,traitorwin:4,allfound:4,murdered:3,close:3,topen:3,tclose:3,allopen:3,night:3,nighttraitors:3,nightclose:3,breakfast:3,stand:3,vote:3,point:3,endvote:3,revealyou:3,recruit:3,shield:2,roundtable:2,finalrt:3,mission:2,correct:2,wrong:2};
+const PRIO={wastraitor:3,wasfaithful:3,faithfulwin:4,traitorwin:4,allfound:4,murdered:3,close:3,topen:3,tclose:3,allopen:3,night:3,nighttraitors:3,nightclose:3,breakfast:3,stand:3,vote:3,point:3,endvote:3,revealyou:3,recruit:3,shield:2,roundtable:2,finalrt:3,mission:2,correct:2,wrong:2,poisoned:3,tie:3,lockin:3};
 function host(ev,delay=0,chance=1){const list=HOST[ev];if(!list||Math.random()>chance)return;
   setTimeout(()=>{if(muted)return;if(talking()){HQ.push({ev,p:PRIO[ev]||1,t:Date.now()});HQ.sort((a,b)=>b.p-a.p||a.t-b.t);if(HQ.length>3)HQ.length=3;return}sayNow(ev)},delay)}
 function sayNow(ev){const list=HOST[ev];let pool=list.filter(k=>OK[k]&&!RECENT.includes(k));if(!pool.length)pool=list.filter(k=>OK[k]);if(!pool.length){nextHost();return}
@@ -282,8 +286,6 @@ const fc=$('floorcv').getContext('2d');
     fc.restore();
     if(night){fc.fillStyle='rgba(200,215,255,.85)';fc.beginPath();fc.arc(cx,cy,120,0,6.283);fc.fill();fc.fillStyle='#0b0d1a';fc.beginPath();fc.arc(cx+50,cy-30,110,0,6.283);fc.fill()}}
   requestAnimationFrame(floorLoop)})();
-function crestRing(){if(S.phase==='setup'||!S.teams.length)return '';const n=S.teams.length;
-  return '<div data-ring style="position:absolute;inset:0">'+S.teams.map((t,k)=>{const a=k/n*6.283-1.5708,x=1423+Math.cos(a)*1180,y=1718+Math.sin(a)*1180;return `<div style="position:absolute;left:${x-190}px;top:${y-215}px;width:380px;height:430px;${t.ghosts?'':''}">${crest(t.id)}<div style="font:800 64px Cinzel,Georgia,serif;text-align:center;margin-top:-6px">${t.ghosts?'👻'.repeat(Math.min(t.ghosts,4)):''}${S.shield===k?'🛡':''}</div></div>`}).join('')+'</div>'}
 function floorBig(html){$('fbig').innerHTML=html||'';$('fbig').style.background=html&&!html.includes('data-ring')?'rgba(5,4,7,.72)':'transparent'}
 function setDark(on){$('dark').classList.toggle('on',!!on);$('stage').classList.toggle('night',!!on);FL.mode=on?'night':FL.mode==='night'?'table':FL.mode}
 function banner(t){$('banner').innerHTML=`<div>${t}</div>`;setTimeout(()=>{$('banner').innerHTML=''},2700)}
@@ -306,18 +308,18 @@ async function playIntro(){ac();startMusic();hush();stopLoops();S.replay=S.phase
   const ids=(S.phase==='setup'?S.picked:S.teams.map(t=>t.id));
   play('sfx_bell',{vol:.7});await wait(1600);if(!on())return;
   await seq('intro_1',[[0,T('SOMEWHERE IN<br>THIS CASTLE…')],[2600,T('A SECRET<br>IS BEING KEPT','gold')]]);if(!on())return;
-  await seq('intro_2',[[0,T('MOST OF YOU ARE…')],[1400,T('🛡 FAITHFUL','faithful'),T('FAITHFUL','faithful'),()=>play('sfx_faithful',{vol:.6})],[1600,T('🛡 FAITHFUL','faithful')+sub('loyal · honest · here to win')]]);if(!on())return;
-  await seq('intro_3',[[0,T('BUT SOME OF YOU…'),''],[2300,T('🗡 TRAITORS','traitor'),T('TRAITORS','traitor'),()=>{play('sfx_traitor',{vol:.8});play('sfx_gasp',{vol:.5})}]]);if(!on())return;
+  await seq('intro_2',[[0,T('MOST HOUSES ARE…')],[1400,T('🛡 FAITHFUL','faithful'),T('FAITHFUL','faithful'),()=>play('sfx_faithful',{vol:.6})],[1600,T('🛡 FAITHFUL','faithful')+sub('loyal · honest · here to win')]]);if(!on())return;
+  await seq('intro_3',[[0,T('BUT ONE HOUSE<br>AMONG YOU…'),''],[2300,T('IS NOT WHAT<br>IT SEEMS')],[1900,T('🗡 TRAITORS','traitor'),T('TRAITORS','traitor'),()=>{play('sfx_traitor',{vol:.8});play('sfx_gasp',{vol:.5})}]]);if(!on())return;
   mood('day');IF('');
   await seq('intro_4',[[0,T('THE GREAT HOUSES<br>GATHER'),`<div class="icrests" style="flex-wrap:wrap;width:2400px">${ids.map((id,n)=>`<span style="animation-delay:${n*.35}s">${crest(id)}</span>`).join('')}</div>`,()=>play('sfx_gong',{vol:.6})],
     [2200,`<div class="icrests">${ids.map((id,n)=>`<span style="width:240px;height:270px;animation-delay:${n*.2}s">${crest(id)}</span>`).join('')}</div>`+T('ONE PRIZE POT','gold')],[2000,T('ONLY ONE SIDE<br>TAKES IT HOME')]]);if(!on())return;
   await seq('intro_5',[[0,T('BY DAY…'),''],[1200,T('MISSIONS','gold')],[1300,T('✓ RIGHT ANSWER')+sub('the prize pot grows'),T('<span id="ipot">£0</span>','gold'),()=>{let v=0;const iv=setInterval(()=>{v+=250;document.querySelectorAll('#ipot').forEach(e=>e.textContent=money(v));if(v>=5000||!S.introOn)clearInterval(iv)},60);play('sfx_correct',{vol:.6})}]]);if(!on())return;
   await seq('intro_6',[[0,T('BUT THE TRAITORS<br>WANT YOU TO FAIL','traitor'),''],[2700,T('A WRONG ANSWER<br>HERE…')],[1600,T('A BAD SUGGESTION<br>THERE…')],[1800,T('WATCH THEM<br>CLOSELY','gold')]]);if(!on())return;
-  await seq('intro_7',[[0,T('THE ROUND TABLE','gold'),T('THE ROUND<br>TABLE','gold')],[1700,T('ARGUE.')],[1000,T('ACCUSE.')],[1000,T('USE THE<br>EVIDENCE.','gold')],[1700,T('VOTE SOMEONE<br>OUT','traitor'),undefined,()=>play('sfx_gong',{vol:.7})]]);if(!on())return;
+  await seq('intro_7',[[0,T('THE ROUND TABLE','gold'),T('THE ROUND<br>TABLE','gold')],[1700,T('ARGUE.')],[1000,T('ACCUSE.')],[1000,T('USE THE<br>EVIDENCE.','gold')],[1600,T('EACH HOUSE<br>VOTES…')],[1400,T('BANISH A<br>HOUSE','traitor'),undefined,()=>play('sfx_gong',{vol:.7})]]);if(!on())return;
   mood('night');
-  await seq('intro_8',[[0,T('WHEN NIGHT<br>FALLS…'),'<div class="it" style="font-size:600px">☾</div>',()=>play('sfx_wolf',{vol:.6})],[2200,T('THE TRAITORS<br>STRIKE','traitor'),undefined,()=>play('sfx_traitor',{vol:.6})]]);if(!on())return;
+  await seq('intro_8',[[0,T('WHEN NIGHT<br>FALLS…'),'<div class="it" style="font-size:600px">☾</div>',()=>play('sfx_wolf',{vol:.6})],[2100,T('THE TRAITORS<br>STRIKE','traitor'),undefined,()=>play('sfx_traitor',{vol:.5})],[1700,T('☠ POISON')+sub('your house can\'t vote<br>at the next Round Table'),'<div class="it" style="font-size:600px">☠</div>'],[2500,T('🗡 DAGGER','traitor')+sub('your house is gone for good'),'<div class="it" style="font-size:600px">🗡</div>']]);if(!on())return;
   mood('day');
-  await seq('intro_9',[[0,T('BANISHED<br>OR MURDERED?'),''],[1900,T('👻 YOU BECOME<br>A GHOST'),'<div class="it" style="font-size:600px">👻</div>'],[2000,T('👻 A GHOST')+sub('✓ still answer questions with your house<br>✗ can\'t vote')]]);if(!on())return;
+  await seq('intro_9',[[0,T('BANISHED<br>OR MURDERED?'),''],[1900,T('👻 YOUR HOUSE<br>BECOMES GHOSTS'),'<div class="it" style="font-size:600px">👻</div>'],[2200,T('👻 GHOSTS')+sub('✓ still answer the questions<br>✗ never vote again')]]);if(!on())return;
   await seq('intro_10',[[0,T('FIND EVERY<br>TRAITOR…'),''],[1400,T('🛡 THE FAITHFUL<br>WIN THE PRIZE','faithful')],[1900,T('MISS JUST ONE…')],[1300,T('🗡 THE TRAITORS<br>TAKE IT ALL','traitor'),T('TRAITORS<br>TAKE IT ALL','traitor'),()=>play('sfx_traitor',{vol:.6})]]);if(!on())return;
   await seq('intro_11',[[0,T('TRUST NO ONE','gold'),T('TRUST<br>NO ONE','gold')],[2300,T('LET THE GAME<br>BEGIN'),undefined,()=>play('sfx_gong',{vol:.9})]]);
   if(on())endIntro(true)}
@@ -333,11 +335,17 @@ function pickQ(){const pref=Math.min(3,S.round);const qs=BANK.questions;
   S.used.clear();const q=qs[rnd(qs.length)];if(q)S.used.add(q.id);return q}
 
 /* ---------- setup ---------- */
-function togglePick(id){const i=S.picked.indexOf(id);if(i>=0){if(S.picked.length>3)S.picked.splice(i,1)}else S.picked.push(id);render()}
+function togglePick(id){const i=S.picked.indexOf(id);if(i>=0){if(S.picked.length>3)S.picked.splice(i,1)}else S.picked.push(id);if(S.picked.length<5)S.traitorsStart=1;render()}
+const QSECS=()=>+BANK.settings.secs||45,QPER=()=>+BANK.settings.qper||3;
+const roundsCap=n=>Math.max(1,Math.min(roundsFor(S.minutes),n-2));
+const living=()=>S.teams.map((t,k)=>k).filter(k=>!S.teams[k].ghost);
+const tLeft=()=>S.traitors-S.bannedT;
+const voters=()=>living().filter(k=>k!==S.poisoned);
+function traitorsControl(){const L=living().length,T=tLeft();return T>0&&T>=L-T}
 function startGame(){ac();startMusic();hush();
-  S.teams=S.picked.map(id=>({...hById(id),ghosts:0,rec:[],ok:0,att:0}));S.rounds=roundsFor(S.minutes);S.round=1;S.pot=0;S.traitors=S.traitorsStart;S.bannedT=0;S.bannedF=0;S.murdered=0;S.shield=-1;
-  S.used=new Set();S.log=[];S.chron=[];S.elapsed=0;S.final=false;S.paused=false;S.winner=null;S.review=false;
-  $('setup').classList.add('hide');chron(`The game begins: ${S.teams.length} houses, ${S.traitors} Traitors hidden among you.`);choosing()}
+  S.teams=S.picked.map(id=>({...hById(id),ghost:false,out:null,role:null,rec:[],ok:0,att:0}));S.rounds=roundsCap(S.teams.length);S.round=1;S.pot=0;S.traitors=S.traitorsStart;S.daggers=S.traitorsStart;
+  S.bannedT=0;S.bannedF=0;S.murdered=0;S.shield=-1;S.poisoned=-1;S.used=new Set();S.log=[];S.chron=[];S.elapsed=0;S.final=false;S.paused=false;S.winner=null;S.votes={};S.revote=false;S.voteAmong=null;
+  $('setup').classList.add('hide');chron(`The game begins: ${S.teams.length} houses. ${S.traitors===1?'One house is':'Two houses are'} secretly the Traitors.`);choosing()}
 
 /* ---------- scripted sequences (eyes-closed moments) ---------- */
 let stepTimer=0;
@@ -347,144 +355,163 @@ function scene({title,card,floor,say,dark,mood:md,auto,next,btns,loops}){clearTi
   setActs(btns||(next?[act(next.label,next.fn,next.cls||'')]:[]),[]);render();
   if(auto)stepTimer=setTimeout(function w(){if(S.paused){stepTimer=setTimeout(w,500);return}auto.fn()},auto.ms)}
 function flipCard(){const c=$('card');c.classList.remove('flip');void c.offsetWidth;c.classList.add('flip')}
-const tutor=t=>`<div class="sub" style="color:var(--gold2);font-size:40px;margin-top:30px">TUTOR: ${t}</div>`;
+const tutor=t=>`<div class="sub" style="color:var(--gold2);font-size:40px;margin-top:24px">TUTOR: ${t}</div>`;
+const hb=k=>`<span class="mini">${crest(S.teams[k].id)}</span>${S.teams[k].short}`;
 
 function choosing(){S.phase='choosing';
   scene({title:'THE CHOOSING',card:`<div class="big">Close your eyes.</div><div class="mid" style="margin-top:30px">Everyone. Heads down. No peeking.</div>`,floor:`<div class="big">EYES<br>CLOSED</div>`,
     say:'close',dark:true,mood:'night',loops:['sfx_heartbeat'],next:{label:'Next ›',fn:choose2}})}
-function choose2(){scene({title:'THE CHOOSING',card:`<div class="big" style="font-size:96px">The Traitors are being chosen…</div><div class="mid" style="margin-top:20px">Stay still. Keep your eyes closed.</div>${tutor(`walk around the room and tap <b>${S.traitors}</b> people on the shoulder. They are the Traitors. Remember who they are.`)}`,
-  say:'choosing',dark:true,loops:['sfx_heartbeat'],next:{label:`Done – ${S.traitors} tapped ›`,fn:choose3}})}
+function choose2(){const two=S.traitors>1;
+  scene({title:'THE CHOOSING',card:`<div class="big" style="font-size:96px">The Traitors are being chosen…</div><div class="mid" style="margin-top:20px">Stay still. Keep your eyes closed.</div>${tutor(`choose <b>${two?'TWO houses':'ONE house'}</b> and tap every member of ${two?'them':'it'} on the shoulder. ${two?'They are':'That house is'} the Traitors. Remember which.`)}`,
+    say:'choosing',dark:true,loops:['sfx_heartbeat'],next:{label:'Done ›',fn:choose3}})}
 function choose3(){let n=10;const tick=()=>{if(!S.step.startsWith('THE CHOOSING'))return;$('ccount')&&($('ccount').textContent=n);if(n-->0)setTimeout(tick,1000)};
-  scene({title:'THE CHOOSING',card:`<div class="big" style="color:#ff6b75">Traitors… open your eyes.</div><div class="mid" style="margin-top:20px">Look around. These are your fellow Traitors.</div><div class="big" id="ccount" style="margin-top:20px">10</div>`,
+  scene({title:'THE CHOOSING',card:`<div class="big" style="color:#ff6b75">Traitors… open your eyes.</div><div class="mid" style="margin-top:20px">${S.traitors>1?'Look around. Find the other Traitor house.':'Look at your housemates. You are the Traitors.'}</div><div class="big" id="ccount" style="margin-top:20px">10</div>`,
     say:'topen',dark:true,auto:{ms:11000,fn:choose4},next:{label:'Skip ›',fn:choose4,cls:'alt'}});tick()}
 function choose4(){scene({title:'THE CHOOSING',card:`<div class="big">Traitors, close your eyes.</div>`,say:'tclose',dark:true,auto:{ms:5000,fn:choose5},next:{label:'Skip ›',fn:choose5,cls:'alt'}})}
-function choose5(){play('sfx_gong',{vol:.8});
-  scene({title:'THE CHOOSING',card:`<div class="big">Everyone… open your eyes.</div><div class="mid" style="margin-top:30px;color:#ff6b75">${S.traitors} Traitors are among you.</div><div class="sub">Every right answer in a mission grows the prize pot. Find the Traitors before the end – or they steal it all.</div>`,
-    floor:'',say:'allopen',dark:false,mood:'day',next:{label:'Begin the first mission ›',fn:startMission,cls:'go'}});banner(`${S.traitors} TRAITORS<br>AMONG YOU`)}
+function choose5(){play('sfx_gong',{vol:.8});const two=S.traitors>1;
+  scene({title:'THE CHOOSING',card:`<div class="big">Everyone… open your eyes.</div><div class="mid" style="margin-top:30px;color:#ff6b75">${two?'Two houses':'One house'} among you ${two?'are':'is'} the Traitors.</div><div class="sub">Every right answer grows the prize pot. Banish the Traitors before the end – or they steal it all.</div>`,
+    floor:'',say:'allopen',dark:false,mood:'day',next:{label:'Begin the first mission ›',fn:startMission,cls:'go'}});banner(two?'TWO HOUSES<br>ARE LYING':'ONE HOUSE<br>IS LYING')}
 
-/* ---------- missions ---------- */
-function startMission(){S.phase='mission';S.mq=0;S.shield=-1;S.final=S.round>=S.rounds;const n=S.teams.length,st=(S.round-1)%n;S.order=S.teams.map((_,k)=>(k+st)%n);
-  scene({title:`MISSION · ROUND ${S.round}${S.final?' (FINAL)':''}`,card:`<div class="big" style="font-size:100px">Mission ${S.round}</div><div class="mid" style="margin-top:24px">Each house answers one question.</div>
-    <div class="sub">✓ Right answer = <b style="color:var(--gold2)">${money(potStep())} into the prize pot</b><br>Fastest right answer wins the 🛡 <b>shield</b> – that house is safe tonight.<br>Careful… a Traitor in your house may want you to get it wrong.</div>`,
-    say:'mission',mood:'day',next:{label:'First question ›',fn:askMission,cls:'go'}})}
-function askMission(){const k=S.order[S.mq],t=S.teams[k];S.qTeam=k;S.q=pickQ()||{id:'none',q:'No questions loaded. Tutor: ask one out loud.',opts:[],ans:'',exp:''};
-  S.qLeft=ANSWER_SECS;S.revealed=false;S.chosen=null;S.phase='question';S.step='q';FL.mode='zones';floorBig('');
-  $('ftitle').innerHTML=`MISSION · ROUND ${S.round}`;play('sfx_scroll',{vol:.6});mood('tense');
-  const b=[act('✓ Correct',()=>judgeM(true),'go'),act('✗ Wrong',()=>judgeM(false),'no')];if(!S.q.opts.length&&S.q.ans)b.unshift(act('Show answer',()=>{S.revealed=true;renderQ()},'alt'));
-  setActs([],b);render();flipCard()}
-function chooseOpt(L){if(S.phase!=='question')return;S.chosen=L;judgeM(L===S.q.ans)}
-function judgeM(ok){if(S.phase!=='question')return;const k=S.qTeam,t=S.teams[k],secs=ANSWER_SECS-S.qLeft;S.phase='mresult';S.revealed=true;
-  t.att++;if(ok)t.ok++;t.rec.push({r:S.round,ok,secs});
-  S.log.push({time:new Date().toLocaleTimeString('en-GB'),round:S.round,house:t.name,question:S.q.q,correct:ok?'Yes':'No',secs,qid:S.q.id});
-  if(ok){S.pot+=potStep();play('sfx_correct',{vol:.7});host('correct',500,.7);bumpPot();chron(`${t.short}: right answer (${secs}s). +${money(potStep())} to the pot.`)}
-  else{play('sfx_wrong',{vol:.6});host('wrong',500,.75);chron(`${t.short}: wrong answer.${S.timedOut?' Out of time.':''}`)}
-  S.timedOut=false;mood('day');S.mq++;
-  setActs([S.mq<S.order.length?act('Next question ›',askMission,'go'):act('Finish the mission ›',endMission,'go')],[]);render()}
+/* ---------- missions: every house answers every question, standing on a floor zone ---------- */
+function startMission(){S.phase='mission';S.mq=0;S.shield=-1;S.final=S.round>=S.rounds;
+  scene({title:`MISSION · ROUND ${S.round}${S.final?' (FINAL)':''}`,card:`<div class="big" style="font-size:100px">Mission ${S.round}</div><div class="mid" style="margin-top:20px">${QPER()} questions. <b>Every house answers every question</b> by standing on its answer.</div>
+    <div class="sub">✓ Each house that's right adds <b style="color:var(--gold2)">${money(potStep())}</b> to the pot.<br>Most right answers wins the 🛡 <b>shield</b> – safe from the Traitors tonight.<br>Watch who leads you to the wrong answer…</div>`,say:'mission',mood:'day',next:{label:'First question ›',fn:askMission,cls:'go'}})}
+function askMission(){S.q=pickQ()||{id:'none',q:'No questions loaded. Tutor: ask one out loud.',opts:[],ans:'',exp:''};S.qLeft=QSECS();S.revealed=false;S.wrong=new Set();S.phase='question';S.step='q';floorBig('');
+  $('ftitle').innerHTML=`MISSION · ROUND ${S.round}`;play('sfx_scroll',{vol:.6});mood('tense');setActs([],[act('Lock in now ›',lockIn,'go')]);render();flipCard()}
+function lockIn(){if(S.phase!=='question')return;S.phase='lock';let n=3;const voiced=OK.host_lockin===1&&!muted;if(voiced)sayNow('lockin');setActs([],[]);render();
+  setTimeout(function t(){if(S.phase!=='lock')return;if(n>0){floorBig(`<div class="count">${n}</div>`);play('sfx_tick',{vol:.6});n--;setTimeout(t,voiced?1050:1000)}else{floorBig('<div class="big">STAND<br>STILL!</div>');setTimeout(()=>{floorBig('');revealQ()},voiced?1300:700)}},voiced?1900:0)}
+function revealQ(){S.phase='mark';S.revealed=true;play('sfx_gong',{vol:.6});markActs();render()}
+function markActs(){setActs(S.teams.map((t,k)=>act(`${S.wrong.has(k)?'✗':'✓'} ${hb(k)}`,()=>{S.wrong.has(k)?S.wrong.delete(k):S.wrong.add(k);markActs();render()},S.wrong.has(k)?'no':'go')),[act('Confirm ›',confirmMark,'')])}
+function confirmMark(){if(S.phase!=='mark')return;let right=0;const qn=S.mq+1;
+  S.teams.forEach((t,k)=>{const ok=!S.wrong.has(k);t.att++;if(ok){t.ok++;right++}t.rec.push({r:S.round,q:qn,ok});S.log.push({time:new Date().toLocaleTimeString('en-GB'),round:S.round,question:S.q.q,house:t.name,correct:ok?'Yes':'No',qid:S.q.id})});
+  const add=right*potStep();S.pot+=add;if(add){play('sfx_correct',{vol:.7});bumpPot()}else play('sfx_wrong',{vol:.6});
+  host(right>=S.teams.length/2?'correct':'wrong',300,.8);
+  const wrongNames=S.teams.filter((t,k)=>S.wrong.has(k)).map(t=>t.short);
+  chron(`Q${qn}: ${right} of ${S.teams.length} houses right (+${money(add)})${wrongNames.length?'. Wrong: '+wrongNames.join(', '):''}.`);
+  S.lastRight=right;S.phase='mresult';S.mq++;mood('day');
+  setActs([S.mq<QPER()?act('Next question ›',askMission,'go'):act('Finish the mission ›',endMission,'go')],[]);render()}
 function bumpPot(){const a=document.querySelector('#pot .amt');if(a){a.classList.remove('bump');void a.offsetWidth;a.classList.add('bump')}}
-function endMission(){const rights=S.teams.map((t,k)=>({k,r:t.rec.filter(x=>x.r===S.round&&x.ok)})).filter(x=>x.r.length);
-  const won=S.log.filter(l=>l.round===S.round&&l.correct==='Yes').length*potStep(),max=S.teams.length*potStep();
-  let sh='';if(rights.length){rights.sort((a,b)=>a.r[0].secs-b.r[0].secs);S.shield=rights[0].k;const t=S.teams[S.shield];sh=`<div class="mid" style="margin-top:20px">🛡 The shield goes to <b>${esc(t.name)}</b> – fastest right answer. They are safe tonight.</div>`;chron(`🛡 Shield: ${t.short}.`);host('shield',800)}
-  else sh=`<div class="mid" style="margin-top:20px">Nobody got one right. No shield tonight.</div>`;
-  FL.mode='table';floorBig(crestRing());
-  scene({title:'MISSION COMPLETE',card:`<div class="big" style="font-size:96px">${money(won)} of ${money(max)} won</div>${sh}<div class="sub">Lost money means wrong answers. Were they honest mistakes… or sabotage?</div>`,floor:crestRing(),mood:'day',
+function endMission(){const L=living(),score=k=>S.teams[k].rec.filter(x=>x.r===S.round&&x.ok).length;
+  const won=S.log.filter(l=>l.round===S.round&&l.correct==='Yes').length*potStep(),max=S.teams.length*QPER()*potStep();
+  let sh;const best=L.length?Math.max(...L.map(score)):0;
+  if(best>0){const top=L.filter(k=>score(k)===best);S.shield=top[rnd(top.length)];const t=S.teams[S.shield];sh=`🛡 The shield goes to <b>${esc(t.name)}</b> – ${best} right${top.length>1?' (drawn from the tied houses)':''}. The Traitors can't touch them tonight.`;chron(`🛡 Shield: ${t.short}.`);host('shield',800)}
+  else sh='Nobody got one right. No shield tonight.';
+  FL.mode='table';
+  scene({title:'MISSION COMPLETE',card:`<div class="big" style="font-size:96px">${money(won)} of ${money(max)} won</div><div class="mid" style="margin-top:20px">${sh}</div><div class="sub">Every wrong answer cost the pot. Honest mistakes… or sabotage?</div>`,floor:crestRing(),mood:'day',
     next:{label:S.final?'The final Round Table ›':'Go to the Round Table ›',fn:()=>startRT(),cls:'go'}})}
 
-/* ---------- round table ---------- */
-function evidence(){return `<div class="ev">${S.teams.map(t=>{const r=t.rec.filter(x=>x.r===S.round)[0];return `<div><span class="mini">${crest(t.id)}</span>${esc(t.short)}: ${r?(r.ok?'✓ right':'✗ wrong'):'–'}${t.att?` · ${t.ok}/${t.att} overall`:''}</div>`}).join('')}</div>`}
+/* ---------- round table and the house vote ---------- */
+function evidence(){return `<div class="evt">${S.teams.map((t,k)=>{const r=t.rec.filter(x=>x.r===S.round);
+  return `<div class="${t.ghost?'gh':''}"><span class="mini">${crest(t.id)}</span><b>${esc(t.short)}</b><span class="marks">${r.map(x=>x.ok?'<i class="y">✓</i>':'<i class="n">✗</i>').join('')||'–'}</span><span class="tot">${t.att?Math.round(t.ok/t.att*100)+'% overall':''}</span><span class="tag">${t.ghost?(t.out==='murdered'?'👻 murdered':`👻 banished${t.role==='traitor'?' · TRAITORS':' · faithful'}`):k===S.poisoned?'☠ no vote today':''}</span></div>`}).join('')}</div>`}
 function startRT(again){S.phase='roundtable';S.disc=again?60:(+BANK.settings.discuss||3)*60;S.discOn=true;
-  scene({title:S.final?'THE FINAL ROUND TABLE':'THE ROUND TABLE',card:`<div class="qh">Discuss · who do you suspect? <span class="qclock" id="dclock"></span></div>${evidence()}
-    <div class="starters"><div>“I suspect ___ because…”</div><div>“In the mission, ___ argued for the wrong answer.”</div><div>“I trust ___ because…”</div><div>“The evidence shows…”</div></div>`,
-    floor:crestRing(),say:S.final&&!again?'finalrt':'roundtable',mood:'tense',btns:[act('Pause',toggleDisc,'alt'),act('+1 min',()=>{S.disc+=60;renderClock()},'alt'),act('Time to vote ›',startVote,'go')]});renderDisc()}
+  scene({title:S.final?'THE FINAL ROUND TABLE':'THE ROUND TABLE',card:`<div class="qh">Discuss · which house is lying? <span class="qclock" id="dclock"></span></div>${evidence()}
+    <div class="starters"><div>“I suspect House ___ because…”</div><div>“House ___ led us to the wrong answer.”</div><div>“I trust House ___ because…”</div><div>“The evidence shows…”</div></div>`,
+    floor:crestRing(),say:S.final&&!again?'finalrt':'roundtable',mood:'tense',btns:[act('Pause',toggleDisc,'alt'),act('+1 min',()=>{S.disc+=60;renderDisc()},'alt'),act('Time to vote ›',startVote,'go')]});renderDisc()}
 function toggleDisc(){S.discOn=!S.discOn;S.actA[0].label=S.discOn?'Pause':'Resume';render()}
 function renderDisc(){const d=$('dclock');if(d){const m=Math.floor(S.disc/60),s=S.disc%60;d.textContent=`${m}:${String(s).padStart(2,'0')}`;d.classList.toggle('low',S.disc<=15)}}
-function startVote(){S.discOn=false;S.phase='vote';let n=3;
-  scene({title:'THE VOTE',card:`<div class="mid">On the count of three, everyone points at the person they want to <b style="color:#ff6b75">banish</b>.</div><div class="sub">👻 Ghosts can't vote. Tutor counts the most fingers.</div><div class="count" id="vcount" style="text-align:center;font-size:300px"></div>`,
-    say:'vote',mood:'tense',loops:['sfx_drumroll']});
-  setTimeout(function t(){const el=$('vcount');if(!el||S.phase!=='vote')return;if(n>0){el.textContent=n;floorBig(`<div class="count">${n}</div>`);play('sfx_tick',{vol:.8});n--;setTimeout(t,1100)}
-    else{el.textContent='POINT!';floorBig(`<div class="big">POINT!</div>`);loop('sfx_drumroll',false);play('sfx_gong',{vol:.8});
-      setActs(S.teams.map((t,k)=>act(`<span class="mini">${crest(t.id)}</span>${t.short}`,()=>banish(k),'')).concat([act('Tie – nobody',noBanish,'alt')]),[]);
-      $('card').insertAdjacentHTML('beforeend',tutor('tap the house of the person with the most votes.'));render()}},2600)}
-function noBanish(){chron('A tie. Nobody was banished.');
-  scene({title:'THE VOTE',card:`<div class="big" style="font-size:100px">A tie.</div><div class="mid">Nobody is banished this time.</div>`,mood:'day',next:afterBanishNext()})}
+const candidates=()=>S.voteAmong||living();
+function tallyHTML(){return `<div class="ev" style="margin-top:18px">${candidates().map(k=>`<div><span class="mini">${crest(S.teams[k].id)}</span>${esc(S.teams[k].short)}: <b style="color:var(--gold2);font-size:52px">${S.votes[k]||0}</b></div>`).join('')}</div>`}
+function startVote(){S.discOn=false;S.phase='vote';S.votes={};S.vq=voters();S.vi=0;host('vote');mood('tense');nextVoter()}
+function nextVoter(){if(S.vi>=S.vq.length){tallyVotes();return}const v=S.vq[S.vi],t=S.teams[v],opts=candidates().filter(k=>k!==v);
+  scene({title:S.revote?'THE REVOTE':'THE VOTE',card:`<div class="mid"><span class="mini" style="width:100px;height:112px;display:inline-block;vertical-align:middle">${crest(t.id)}</span> <b>${esc(t.name)}</b>: who do you vote to banish?</div><div class="sub">Agree as a house, then say it out loud.${S.poisoned>=0?` ☠ ${esc(S.teams[S.poisoned].short)} is poisoned and can't vote today.`:''}</div>${tallyHTML()}${tutor(`vote ${S.vi+1} of ${S.vq.length} – tap their choice.`)}`,
+    floor:crestRing(),mood:'tense',btns:opts.map(k=>act(hb(k),()=>castVote(v,k),'')).concat([act('Abstain',()=>castVote(v,-1),'alt')])})}
+function castVote(v,k){if(k>=0)S.votes[k]=(S.votes[k]||0)+1;play('sfx_bell',{vol:.35});chron(k>=0?`${S.teams[v].short} votes for ${S.teams[k].short}.`:`${S.teams[v].short} abstains.`);S.vi++;setActs([],[]);
+  $('card').innerHTML=`<div class="mid"><b>${esc(S.teams[v].name)}</b> votes for…</div><div class="big" style="margin-top:20px">${k>=0?esc(S.teams[k].name):'nobody'}</div>${tallyHTML()}`;flipCard();floorBig(crestRing());render();setTimeout(nextVoter,2300)}
+function tallyVotes(){const c=candidates(),max=Math.max(0,...c.map(k=>S.votes[k]||0));
+  if(!max){S.revote=false;S.voteAmong=null;noBanish();return}
+  const top=c.filter(k=>(S.votes[k]||0)===max);
+  if(top.length===1){S.revote=false;S.voteAmong=null;banish(top[0]);return}
+  if(!S.revote){S.revote=true;S.voteAmong=top;
+    scene({title:'A TIE',card:`<div class="big" style="font-size:100px">A tie.</div><div class="mid" style="margin-top:20px">Between ${top.map(k=>esc(S.teams[k].name)).join(' and ')}.</div><div class="sub">Vote again – this time only for one of them.</div>`,floor:crestRing(),say:'tie',next:{label:'Revote ›',fn:startVote,cls:'go'}})}
+  else{S.revote=false;S.voteAmong=null;noBanish()}}
+function noBanish(){S.poisoned=-1;chron('No house was banished.');
+  scene({title:'THE VOTE',card:`<div class="big" style="font-size:100px">No decision.</div><div class="mid">Nobody is banished this time.</div>`,mood:'day',floor:crestRing(),next:afterBanishNext()})}
 function banish(k){S.banK=k;const t=S.teams[k];
-  scene({title:'BANISHED',card:`<div class="mid">The banished player from <b>${esc(t.name)}</b>:</div><div class="big" style="font-size:96px;margin-top:20px">Stand in the centre.</div><div class="mid" style="margin-top:20px">Tell everyone… are you a <span style="color:#ff6b75">Traitor</span>… or <span style="color:#f4f7ff">Faithful</span>?</div>${tutor('when they have said it, tap the answer. You know the truth.')}`,
-    floor:`<div class="crestbig">${crest(t.id)}</div>`,say:'stand',mood:'tense',loops:['sfx_drumroll'],btns:[act('🗡 They were a TRAITOR',()=>reveal(true),'no'),act('🛡 They were FAITHFUL',()=>reveal(false),'sil')]})}
-function reveal(isT){const t=S.teams[S.banK];stopLoops();t.ghosts++;
-  if(isT){S.bannedT++;play('sfx_traitor',{vol:.9});play('sfx_gasp',{vol:.6});host('wastraitor',600);revealAll('🗡 TRAITOR','traitor');chron(`Banished from ${t.short}: a TRAITOR.`)}
-  else{S.bannedF++;play('sfx_faithful',{vol:.9});play('sfx_gasp',{vol:.6});host('wasfaithful',600);revealAll('🛡 FAITHFUL','faithful');chron(`Banished from ${t.short}: FAITHFUL.`)}
-  const left=S.traitors-S.bannedT;
-  scene({title:isT?'A TRAITOR!':'FAITHFUL…',card:`<div class="big ${isT?'traitor':'faithful'}">${isT?'🗡 TRAITOR':'🛡 FAITHFUL'}</div><div class="mid" style="margin-top:20px">${isT?`Well done, Faithful. ${left?`${left} Traitor${left>1?'s':''} still hide among you.`:'That was the last one!'}`:'You have banished one of your own. The Traitors are still out there.'}</div><div class="sub">The banished player becomes a 👻 ghost: they still answer mission questions with their house, but can't vote.</div>`,
-    floor:`<div class="big ${isT?'traitor':'faithful'}">${isT?'TRAITOR':'FAITHFUL'}</div>`,mood:'day',next:left<=0?{label:'The Traitors are gone ›',fn:()=>endGame(true),cls:'go'}:afterBanishNext()})}
+  scene({title:'BANISHED',card:`<div class="mid"><b>${esc(t.name)}</b>, you have been banished.</div><div class="big" style="font-size:96px;margin-top:20px">Stand together.</div><div class="mid" style="margin-top:20px">Tell everyone… are you <span style="color:#ff6b75">Traitors</span>… or <span style="color:#f4f7ff">Faithful</span>?</div>${tutor('when they have said it, tap the truth.')}`,
+    floor:`<div class="crestbig">${crest(t.id)}</div>`,say:'stand',mood:'tense',loops:['sfx_drumroll'],btns:[act('🗡 They are TRAITORS',()=>reveal(true),'no'),act('🛡 They are FAITHFUL',()=>reveal(false),'sil')]})}
+function reveal(isT){const k=S.banK,t=S.teams[k];stopLoops();t.ghost=true;t.out='banished';t.role=isT?'traitor':'faithful';S.poisoned=-1;if(S.shield===k)S.shield=-1;
+  if(isT){S.bannedT++;play('sfx_traitor',{vol:.9});play('sfx_gasp',{vol:.6});host('wastraitor',600);revealAll('🗡 TRAITORS','traitor');chron(`Banished: ${t.short} – TRAITORS!`)}
+  else{S.bannedF++;play('sfx_faithful',{vol:.9});play('sfx_gasp',{vol:.6});host('wasfaithful',600);revealAll('🛡 FAITHFUL','faithful');chron(`Banished: ${t.short} – Faithful.`)}
+  const left=tLeft();
+  scene({title:isT?'TRAITORS!':'FAITHFUL…',card:`<div class="big ${isT?'traitor':'faithful'}">${isT?'🗡 TRAITORS':'🛡 FAITHFUL'}</div><div class="mid" style="margin-top:20px">${isT?`Well done, Faithful. ${left?`${left} Traitor house still hides among you.`:'That was the last Traitor house!'}`:'You have banished an innocent house. The Traitors are still out there.'}</div><div class="sub">${esc(t.name)} are now 👻 ghosts: they still answer mission questions, but can never vote.</div>`,
+    floor:`<div class="big ${isT?'traitor':'faithful'}">${isT?'TRAITORS':'FAITHFUL'}</div>`,mood:'day',
+    next:left<=0?{label:'The Traitors are gone ›',fn:()=>winners(true),cls:'go'}:traitorsControl()?{label:'Next ›',fn:()=>winners(false,'control'),cls:'no'}:afterBanishNext()})}
 function afterBanishNext(){return S.final?{label:'Next ›',fn:endVote,cls:'go'}:{label:'Night falls ›',fn:night1,cls:'alt'}}
 
-/* ---------- night and breakfast ---------- */
+/* ---------- night: poison (one Round Table without a vote) or the dagger (murder, one per Traitor house) ---------- */
 function night1(){S.phase='night';play('sfx_bell',{vol:.7});setTimeout(()=>play('sfx_wolf',{vol:.5}),2500);
   scene({title:'NIGHT',card:`<div class="big">Night falls on the castle.</div><div class="mid" style="margin-top:20px">Everyone, close your eyes.</div>`,say:'night',dark:true,mood:'night',next:{label:'Next ›',fn:night2}})}
-function night2(){const sh=S.shield>=0?S.teams[S.shield]:null,canRecruit=S.bannedT>0;
-  scene({title:'NIGHT',card:`<div class="big" style="color:#ff6b75;font-size:100px">Traitors… open your eyes.</div><div class="mid" style="margin-top:16px">Silently choose your victim. Point at them.</div>
-    <div class="sub">${sh?`Not ${esc(sh.name)} – they have the 🛡 shield. `:''}Not another Traitor.</div>${tutor(`remember who they point at.${canRecruit?' Or, as a Traitor has been banished, they may <b>recruit</b> a Faithful instead.':''}`)}`,
-    say:'nighttraitors',dark:true,loops:['sfx_heartbeat'],btns:[act('Victim chosen ›',()=>night3(false),'no')].concat(canRecruit?[act('Recruit instead',recruit,'alt')]:[])})}
-function recruit(){scene({title:'NIGHT',card:`<div class="mid">${tutor('tap the chosen Faithful on the shoulder and whisper: <b>“You are now a Traitor.”</b>')}</div><div class="mid" style="margin-top:20px">New recruit: open your eyes and see your fellow Traitors.</div>`,
-  say:'recruit',dark:true,loops:['sfx_heartbeat'],next:{label:'Done ›',fn:()=>{S.traitors++;S.recruited=true;chron('Something happened in the night…');night3(true)}}})}
-function night3(rec){S.recruitedTonight=rec;scene({title:'NIGHT',card:`<div class="big">Traitors, close your eyes.</div><div class="mid" style="margin-top:20px">Sleep well… if you can.</div>`,say:'nightclose',dark:true,auto:{ms:5000,fn:breakfast},next:{label:'Morning ›',fn:breakfast,cls:'alt'}})}
+function night2(){const sh=S.shield>=0?S.teams[S.shield]:null,targets=living().filter(k=>k!==S.shield);
+  scene({title:'NIGHT',card:`<div class="big" style="color:#ff6b75;font-size:90px">Traitors… open your eyes.</div><div class="mid" style="margin-top:10px">Point at the house you want to attack.</div>
+    <div class="sub">☠ <b>Poison</b> (hold up 1 finger): that house can't vote at the next Round Table.<br>${S.daggers>0?`🗡 <b>Dagger</b> (make a fist): that house is murdered – ghosts for good. Daggers left: ${S.daggers}.`:'No daggers left – poison only.'}${sh?`<br>Not ${esc(sh.name)} – they have the 🛡 shield.`:''}</div>${tutor('tap the house they point at.')}`,
+    say:'nighttraitors',dark:true,loops:['sfx_heartbeat'],btns:targets.map(k=>act(hb(k),()=>nightType(k),''))})}
+function nightType(k){S.nightTarget=k;
+  scene({title:'NIGHT',card:`<div class="mid">Target: <b>${esc(S.teams[k].name)}</b></div>${tutor(S.daggers>0?'poison (1 finger) or dagger (fist)?':'poison it is – no daggers left.')}`,dark:true,loops:['sfx_heartbeat'],
+    btns:[act('☠ Poison',()=>{S.nightType='poison';night3()},'alt')].concat(S.daggers>0?[act('🗡 Dagger',()=>{S.nightType='murder';night3()},'no')]:[]).concat([act('Back',night2,'')])})}
+function night3(){scene({title:'NIGHT',card:`<div class="big">Traitors, close your eyes.</div><div class="mid" style="margin-top:20px">Sleep well… if you can.</div>`,say:'nightclose',dark:true,auto:{ms:5000,fn:breakfast},next:{label:'Morning ›',fn:breakfast,cls:'alt'}})}
 function breakfast(){S.phase='breakfast';play('sfx_door',{vol:.7});
-  const opts=S.teams.map((t,k)=>k===S.shield?null:act(`<span class="mini">${crest(t.id)}</span>${t.short}`,()=>murder(k),'')).filter(Boolean);
-  scene({title:'BREAKFAST',card:`<div class="big">Good morning.</div><div class="mid" style="margin-top:20px">Everyone, open your eyes. Breakfast is served…</div><div class="mid" style="color:#ff6b75">but someone is missing.</div>${tutor(S.recruitedTonight?'nobody was murdered tonight (the Traitors recruited) – tap “Nobody”.':'tap the house of the person the Traitors pointed at.')}`,
-    say:'breakfast',dark:false,mood:'day',btns:opts.concat([act('Nobody',noMurder,'alt')])})}
-function murder(k){const t=S.teams[k];t.ghosts++;S.murdered++;play('sfx_gasp',{vol:.8});host('murdered',400);chron(`Murdered in the night: a member of ${t.short}.`);
-  revealAll('MURDERED','traitor');
-  scene({title:'MURDERED',card:`<div class="mid"><b>${esc(t.name)}</b> has lost someone.</div><div class="big traitor" style="font-size:110px;margin-top:20px">They were murdered in the night.</div><div class="sub">They are now a 👻 ghost: they still answer mission questions with their house, but can't vote.</div>`,
-    floor:`<div class="crestbig">${crest(t.id)}</div>`,next:{label:'Next mission ›',fn:nextRound,cls:'go'}})}
-function noMurder(){host('nomurder');chron('Nobody was murdered. Suspicious…');
-  scene({title:'BREAKFAST',card:`<div class="big" style="font-size:100px">Everyone survived the night.</div><div class="mid" style="margin-top:20px">So why would the Traitors spare you…?</div>`,next:{label:'Next mission ›',fn:nextRound,cls:'go'}})}
+  scene({title:'BREAKFAST',card:`<div class="big">Good morning.</div><div class="mid" style="margin-top:20px">Everyone, open your eyes. Breakfast is served…</div><div class="mid" style="color:#ff6b75">but one house looks very pale.</div>`,say:'breakfast',dark:false,mood:'day',next:{label:'Reveal the victim ›',fn:nightReveal,cls:'go'}})}
+function nightReveal(){const k=S.nightTarget,t=S.teams[k];
+  if(S.nightType==='murder'){t.ghost=true;t.out='murdered';S.daggers--;S.murdered++;play('sfx_gasp',{vol:.8});host('murdered',300);revealAll('🗡 MURDERED','traitor');chron(`Murdered in the night: ${t.short}.`);
+    scene({title:'MURDERED',card:`<div class="big traitor" style="font-size:110px">${esc(t.name)}</div><div class="mid" style="margin-top:14px">was murdered in the night.</div><div class="sub">They are now 👻 ghosts: they still answer mission questions, but can never vote.</div>`,floor:`<div class="crestbig" style="filter:grayscale(1)">${crest(t.id)}</div>`,
+      next:traitorsControl()?{label:'Next ›',fn:()=>winners(false,'control'),cls:'no'}:{label:'Next mission ›',fn:nextRound,cls:'go'}})}
+  else{S.poisoned=k;play('sfx_gasp',{vol:.6});host('poisoned',300);revealAll('☠ POISONED','traitor');chron(`Poisoned in the night: ${t.short} – no vote at the next Round Table.`);
+    scene({title:'POISONED',card:`<div class="big" style="font-size:110px">${esc(t.name)}</div><div class="mid" style="margin-top:10px">has been <b style="color:#ff6b75">poisoned</b>.</div><div class="sub">They still answer questions and can talk at the Round Table – but they can't vote today.</div>`,floor:`<div class="crestbig">${crest(t.id)}</div>`,next:{label:'Next mission ›',fn:nextRound,cls:'go'}})}}
 function nextRound(){S.round++;startMission()}
 
 /* ---------- the end ---------- */
 function endVote(){S.phase='endvote';
-  scene({title:'THE END?',card:`<div class="mid">Do you believe every Traitor is gone?</div><div class="sub" style="font-size:52px;color:var(--txt)">Hands up to <b style="color:var(--gold2)">END THE GAME</b>…<br>or hands up to <b style="color:#ff6b75">BANISH AGAIN</b>.</div>${tutor('count the hands. Everyone must agree to end – one hand for “banish again” means another vote.')}`,
-    floor:crestRing(),say:'endvote',mood:'tense',btns:[act('End the game ›',()=>endGame(false),'go'),act('Banish again',()=>startRT(true),'no')]})}
-function endGame(allFound){S.phase='finale';stopLoops();
-  scene({title:'THE REVEAL',card:`<div class="big">Traitors…</div><div class="mid" style="margin-top:20px">${allFound?'Every Traitor has been found.':'If you are still hiding… stand up now.'}</div>`,say:allFound?'allfound':'revealyou',mood:'tense',loops:['sfx_drumroll'],
-    next:{label:'Reveal the winners ›',fn:()=>winners(S.traitors-S.bannedT<=0),cls:'go'}})}
-function winners(faithful){stopLoops();S.phase='end';S.winner=faithful?'faithful':'traitor';const left=S.traitors-S.bannedT;
+  scene({title:'THE END?',card:`<div class="mid">Do you believe every Traitor house is gone?</div><div class="sub" style="font-size:52px;color:var(--txt)">Each house: hands up to <b style="color:var(--gold2)">END THE GAME</b>…<br>or to <b style="color:#ff6b75">BANISH AGAIN</b>.</div>${tutor('every voting house must agree to end – one house for “banish again” means another vote.')}`,
+    floor:crestRing(),say:'endvote',mood:'tense',btns:[act('End the game ›',endGame,'go'),act('Banish again',()=>startRT(true),'no')]})}
+function endGame(){S.phase='finale';stopLoops();const all=tLeft()<=0;
+  scene({title:'THE REVEAL',card:`<div class="big">Traitors…</div><div class="mid" style="margin-top:20px">${all?'Every Traitor house has been found.':'If your house is still hiding… stand up now.'}</div>`,say:all?'allfound':'revealyou',mood:'tense',loops:['sfx_drumroll'],
+    next:{label:'Reveal the winners ›',fn:()=>winners(tLeft()<=0),cls:'go'}})}
+function winners(faithful,reason){stopLoops();setDark(false);S.phase='end';S.winner=faithful?'faithful':'traitor';const left=tLeft();
   play(faithful?'sfx_faithful':'sfx_traitor',{vol:.9});play('sfx_gong',{vol:.8});host(faithful?'faithfulwin':'traitorwin',700);
   revealAll(faithful?'THE FAITHFUL WIN':'THE TRAITORS WIN',faithful?'faithful':'traitor');
-  chron(faithful?`The Faithful win ${money(S.pot)}.`:`${left} Traitor${left>1?'s':''} survived and steal ${money(S.pot)}.`);
+  chron(faithful?`The Faithful win ${money(S.pot)}.`:`The Traitors steal ${money(S.pot)}.`);
+  const why=faithful?'Every Traitor house was found. The pot is shared by the Faithful houses.':reason==='control'?'The Traitors now have as many votes as the Faithful – nobody can banish them. They take the pot.':`${left} Traitor house${left>1?'s':''} stayed hidden to the end and steal the whole pot.`;
   scene({title:faithful?'THE FAITHFUL WIN':'THE TRAITORS WIN',card:`<div class="big ${faithful?'faithful':'traitor'}" style="font-size:110px">${faithful?'🛡 The Faithful win':'🗡 The Traitors win'}</div><div class="big" style="color:var(--gold2);font-size:150px">${money(S.pot)}</div>
-    <div class="sub">${faithful?'Every Traitor was found. The pot is shared by the Faithful.':`${left} Traitor${left>1?'s':''} stayed hidden to the end and steal the whole pot.`}<br>Mission answers: ${S.log.filter(l=>l.correct==='Yes').length} right out of ${S.log.length}.</div>`,
+    <div class="sub">${why}<br>Mission answers: ${S.log.filter(l=>l.correct==='Yes').length} right out of ${S.log.length}.</div>`,
     floor:`<div class="big ${faithful?'faithful':'traitor'}" style="font-size:260px">${faithful?'FAITHFUL':'TRAITORS'}<br>WIN</div>`,mood:'day',
     btns:[act('Most-missed questions',toggleReview,'alt'),act('Export results',exportCSV,'alt'),act('New game',newGame,'')]})}
 function missedList(){const n={};S.log.forEach(r=>{if(r.correct==='No'&&r.qid!=='none')n[r.qid]=(n[r.qid]||0)+1});
   return Object.entries(n).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([id,c])=>({q:BANK.questions.find(x=>x.id===id),c})).filter(r=>r.q)}
 function toggleReview(){const L=missedList();
-  $('card').innerHTML=`<div class="qh">Class debrief · questions the houses got wrong</div>`+(L.length?L.map((r,n)=>{const a=r.q.opts.find(o=>o.L===r.q.ans);return `<div style="font-size:38px;line-height:1.25;margin:16px 0"><b style="color:#ff9aa2">${n+1}.</b> ${esc(r.q.q)}<br><span style="color:#9FE3B8">✓ ${esc(a?a.L+': '+a.text:r.q.ans)}</span></div>`}).join(''):'<div class="mid">No wrong answers. Impressive… or very good Traitors.</div>')}
+  $('card').innerHTML=`<div class="qh">Class debrief · questions houses got wrong</div>`+(L.length?L.map((r,n)=>{const a=r.q.opts.find(o=>o.L===r.q.ans);return `<div style="font-size:38px;line-height:1.25;margin:16px 0"><b style="color:#ff9aa2">${n+1}. (${r.c} house${r.c>1?'s':''} wrong)</b> ${esc(r.q.q)}<br><span style="color:#9FE3B8">✓ ${esc(a?a.L+': '+a.text:r.q.ans)}</span></div>`}).join(''):'<div class="mid">No wrong answers. Impressive… or very good Traitors.</div>')}
 function newGame(){hush();stopLoops();setDark(false);floorBig('');FL.mode='table';S.phase='setup';$('setup').classList.remove('hide');$('ftitle').innerHTML=esc(BANK.settings.name||'THE BETRAYAL').toUpperCase();setActs([],[]);render()}
-function exportCSV(){const cols=['time','round','house','question','correct','secs'];
+function exportCSV(){const cols=['time','round','house','question','correct'];
   const csv=[cols.join(',')].concat(S.log.map(r=>cols.map(c=>`"${String(r[c]).replace(/"/g,'""')}"`).join(','))).join('\r\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`betrayal-results-${new Date().toISOString().slice(0,10)}.csv`;a.click()}
 function endNow(){if(S.phase==='setup'||S.phase==='end'||S.phase==='finale')return;hush();stopLoops();setDark(false);S.final=true;S.rounds=S.round;startRT()}
 
 /* ---------- timers ---------- */
 setInterval(()=>{if(S.paused||S.phase==='setup'||S.phase==='end')return;S.elapsed++;
-  if(S.phase==='question'&&S.qLeft>0){S.qLeft--;const c=$('qclock');if(c){c.textContent=S.qLeft+'s';c.classList.toggle('low',S.qLeft<=10)}if(S.qLeft<=10&&S.qLeft>0)play('sfx_tick',{vol:.5});if(S.qLeft===0){S.timedOut=true;judgeM(false)}}
+  if(S.phase==='question'&&S.qLeft>0){S.qLeft--;const c=$('qclock');if(c){c.textContent=S.qLeft+'s';c.classList.toggle('low',S.qLeft<=10)}if(S.qLeft<=5&&S.qLeft>0)play('sfx_tick',{vol:.5});if(S.qLeft===0)lockIn()}
   if(S.phase==='roundtable'&&S.discOn&&S.disc>0){S.disc--;renderDisc();if(S.disc===0){play('sfx_gong',{vol:.8});banner('TIME TO VOTE')}}
   renderClock()},1000);
 
 /* ---------- rendering ---------- */
+const QPH=['question','lock','mark','mresult'];
+function crestRing(){if(S.phase==='setup'||!S.teams.length)return '';const n=S.teams.length,voting=S.phase==='vote';
+  return '<div data-ring style="position:absolute;inset:0">'+S.teams.map((t,k)=>{const a=k/n*6.283-1.5708,x=1423+Math.cos(a)*1180,y=1718+Math.sin(a)*1180;
+    const tag=t.ghost?'👻':k===S.poisoned?'☠':S.shield===k?'🛡':'';const v=voting&&S.votes[k]?`<div style="position:absolute;right:-40px;top:-30px;width:150px;height:150px;border-radius:50%;background:#B3202F;color:#fff;font:900 100px/150px Cinzel,Georgia,serif;text-align:center">${S.votes[k]}</div>`:'';
+    return `<div style="position:absolute;left:${x-190}px;top:${y-215}px;width:380px;height:430px;${t.ghost?'filter:grayscale(1);opacity:.45':''}">${crest(t.id)}<div style="font:800 80px Cinzel,Georgia,serif;text-align:center;margin-top:-10px">${tag}</div>${v}</div>`}).join('')+'</div>'}
 function renderHouses(){let h='';for(let k=0;k<6;k++){const t=S.teams[k],x=40+k*560;
   if(S.phase==='setup'){const id=S.picked[k];if(!id){h+=`<div class="panel house empty" style="left:${x}px"></div>`;continue}const c=hById(id);
     h+=`<div class="panel house" style="left:${x}px"><div class="crest">${crest(id)}</div><div class="hn">${esc(c.name)}</div><div class="st">Ready</div></div>`;continue}
   if(!t){h+=`<div class="panel house empty" style="left:${x}px"></div>`;continue}
-  const cls=(S.phase==='question'||S.phase==='mresult')&&S.qTeam===k?' active':S.shield===k?' shield':'';
-  h+=`<div class="panel house${cls}" style="left:${x}px"><div class="crest">${crest(t.id)}</div><div class="hn">${esc(t.name)}</div>
-    <div class="st">${S.shield===k?'<span class="badge sh">🛡 Shield</span>':''}${t.ghosts?`<span class="badge gh">👻 ${t.ghosts} ghost${t.ghosts>1?'s':''}</span>`:''}</div>
-    <div class="rec">${t.rec.map(r=>`<div class="${r.ok?'y':'n'}"><span>Round ${r.r}</span><span>${r.ok?'✓ right':'✗ wrong'}</span></div>`).join('')}</div></div>`}
+  const cls=S.shield===k&&!t.ghost?' shield':'';
+  const st=t.ghost?`<span class="badge gh">👻 ${t.out==='murdered'?'Murdered':'Banished'}${t.role?` · ${t.role==='traitor'?'🗡 TRAITORS':'🛡 Faithful'}`:''}</span>`:(S.shield===k?'<span class="badge sh">🛡 Shield</span>':'')+(S.poisoned===k?'<span class="badge po">☠ No vote today</span>':'');
+  const rounds=[...new Set(t.rec.map(r=>r.r))];
+  h+=`<div class="panel house${cls}${t.ghost?' ghost':''}" style="left:${x}px"><div class="crest">${crest(t.id)}</div><div class="hn">${esc(t.name)}</div><div class="st">${st}</div>
+    <div class="rec">${rounds.map(r=>`<div><span>Round ${r}</span><span>${t.rec.filter(x=>x.r===r).map(x=>x.ok?'<i class="y">✓</i>':'<i class="n">✗</i>').join(' ')}</span></div>`).join('')}</div></div>`}
   $('houses').innerHTML=h}
-function renderPot(){$('pot').innerHTML=`<h2>Prize pot</h2><div class="amt">${money(S.pot)}</div><div class="sub" style="font-size:46px">Every right mission answer adds <b style="color:var(--gold2)">${money(potStep())}</b>.<br>At the end, if every Traitor is found, the Faithful win it.<br>If any Traitor survives… <b style="color:#ff6b75">they steal it all.</b></div>`}
-function renderStatus(){const steps=['Mission','Round Table','Night','Breakfast'],cur={mission:0,question:0,mresult:0,roundtable:1,vote:1,banish:1,night:2,breakfast:3,endvote:1,finale:1,end:-1}[S.phase];
-  if(S.phase==='setup'){$('status').innerHTML=`<h2>The game</h2><div class="stat">1. <b>The Choosing</b> – eyes closed, Traitors are picked.</div><div class="stat">2. <b>Mission</b> – answer questions, grow the pot.</div><div class="stat">3. <b>Round Table</b> – argue, then vote someone out.</div><div class="stat">4. <b>Night</b> – the Traitors strike.</div><div class="stat">5. Repeat… then the <b>final reveal</b>.</div>`;return}
+function renderPot(){$('pot').innerHTML=`<h2>Prize pot</h2><div class="amt">${money(S.pot)}</div><div class="sub" style="font-size:46px">Each house that answers right adds <b style="color:var(--gold2)">${money(potStep())}</b>.<br>Banish every Traitor house and the Faithful win it.<br>Fail… and <b style="color:#ff6b75">the Traitors steal it all.</b></div>`}
+function renderStatus(){const steps=['Mission','Round Table','Night','Breakfast'],cur={mission:0,question:0,lock:0,mark:0,mresult:0,roundtable:1,vote:1,endvote:1,finale:1,night:2,breakfast:3}[S.phase];
+  if(S.phase==='setup'){$('status').innerHTML=`<h2>The game</h2><div class="stat">1. <b>The Choosing</b> – eyes closed, a Traitor house is picked.</div><div class="stat">2. <b>Mission</b> – every house answers, the pot grows.</div><div class="stat">3. <b>Round Table</b> – argue, then each house votes.</div><div class="stat">4. <b>Night</b> – poison or dagger.</div><div class="stat">5. Repeat… then the <b>final reveal</b>.</div>`;return}
   $('status').innerHTML=`<h2>Round ${Math.min(S.round,S.rounds)} of ${S.rounds}${S.final?' · FINAL':''}</h2><div class="steps">${steps.map((s,i)=>`<div class="${i===cur?'on':''}">${s}</div>`).join('')}</div>
-    <div class="stat">🗡 Traitors banished: <b>${S.bannedT} of ${S.traitors}</b></div><div class="stat">🛡 Faithful banished: <b>${S.bannedF}</b></div><div class="stat">☠ Murdered: <b>${S.murdered}</b></div>`}
+    <div class="stat">🗡 Traitor houses found: <b>${S.bannedT} of ${S.traitors}</b></div><div class="stat">🛡 Faithful houses banished: <b>${S.bannedF}</b></div><div class="stat">🗡 Traitor daggers left: <b>${S.daggers}</b></div><div class="stat">🗳 Houses voting: <b>${voters().length}</b></div>`}
 function renderClock(){const m=Math.floor(S.elapsed/60),s=S.elapsed%60;
   $('clock').innerHTML=`<div style="display:flex;gap:30px;align-items:center"><div><h2 style="margin:0">Time played</h2><div class="t">${m}:${String(s).padStart(2,'0')}</div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-left:auto">
@@ -492,39 +519,41 @@ function renderClock(){const m=Math.floor(S.elapsed/60),s=S.elapsed%60;
     <button class="btn sm alt" onclick="toggleSound()">${muted?'Sound: off':'Sound: on'}</button><button class="btn sm alt" onclick="toggleMusic()">${MUS.on?'Music: on':'Music: off'}</button>
     <button class="btn sm" onclick="exportCSV()">Export</button>${S.phase==='setup'||S.phase==='end'?'':'<button class="btn sm alt" onclick="playIntro()">Replay intro</button>'}</div></div>`}
 function renderChron(){$('chron').innerHTML='<h2>The chronicle</h2>'+S.chron.slice(0,8).map(c=>`<div>${esc(c)}</div>`).join('')}
-function renderRules(){$('rules').innerHTML=`<h2>How to play</h2><p><b>Faithful:</b> answer questions right to grow the pot. Find the Traitors and vote them out.</p><p><b>Traitors:</b> blend in. Quietly steer your house to wrong answers. Each night, choose someone to murder.</p><p><b>Round Table:</b> use evidence. Who pushed for the wrong answer? Whose story doesn't add up?</p><p><b>👻 Ghosts</b> (banished or murdered) still answer questions with their house, but can't vote.</p><p><b>🛡 Shield:</b> fastest right answer in a mission. That house is safe tonight.</p>`}
-function renderQ(){if(!S.q||(S.phase!=='question'&&S.phase!=='mresult'))return;const q=S.q,t=S.teams[S.qTeam];
-  const opts=q.opts.length?`<div class="opts">${q.opts.map(o=>{let c='opt',mark='';if(S.revealed&&o.L===q.ans){c+=' right';mark=' ✓'}else if(S.revealed&&o.L===S.chosen){c+=' wrong';mark=' ✗'}return `<div class="${c}" data-l="${o.L}"><b>${o.L}</b><span>${esc(o.text)}${mark}</span></div>`}).join('')}</div>`:'';
+function renderRules(){$('rules').innerHTML=`<h2>How to play</h2><p><b>Houses play as one.</b> One house${S.traitors>1?' (two in this game)':''} is secretly the Traitors.</p><p><b>Missions:</b> every house answers every question by standing on its answer. Each house that's right grows the pot.</p><p><b>Traitors:</b> lead other houses to wrong answers – without getting caught.</p><p><b>Round Table:</b> use evidence. Each house casts one vote. Most votes is banished.</p><p><b>Night:</b> ☠ poison = no vote next time. 🗡 dagger = murdered.</p><p><b>👻 Ghost houses</b> still answer questions, but never vote.</p>`}
+function renderQ(){if(!S.q||!QPH.includes(S.phase))return;const q=S.q;
+  const opts=q.opts.length?`<div class="opts">${q.opts.map(o=>{let c='opt',mark='';if(S.revealed&&o.L===q.ans){c+=' right';mark=' ✓'}return `<div class="${c}"><b>${o.L}</b><span>${esc(o.text)}${mark}</span></div>`}).join('')}</div>`:'';
   const ans=S.revealed&&!q.opts.length&&q.ans?`<div class="exp"><b>Answer:</b> ${esc(q.ans)}</div>`:'';const exp=S.revealed&&q.exp?`<div class="exp">${esc(q.exp)}</div>`:'';
-  const oc=S.revealed?'':`<div class="oc"><span style="border-color:#9FE3B8;color:#9FE3B8">✓ ${money(potStep())} into the pot</span><span style="border-color:#FF9AA2;color:#FF9AA2">✗ Nothing added</span></div>`;
-  $('card').innerHTML=`<div class="qh">${S.revealed?'':`<span class="qclock${S.qLeft<=10?' low':''}" id="qclock">${S.qLeft}s</span>`}${esc(t.name)} · question ${S.mq+(S.revealed?0:1)} of ${S.order.length}</div>${oc}<div class="qq" id="qq">${esc(q.q)}</div>${opts}${ans}${exp}`;
-  $('card').querySelectorAll('.opt').forEach(o=>o.onclick=()=>chooseOpt(o.dataset.l));
+  const top=S.phase==='question'?`<div class="oc"><span style="border-color:#9FE3B8;color:#9FE3B8">✓ Each house that's right: +${money(potStep())}</span><span style="border-color:var(--gold);color:var(--gold2)">Stand on your answer before the clock hits 0</span></div>`
+    :S.phase==='lock'?`<div class="oc"><span style="border-color:var(--gold);color:var(--gold2)">🔒 Locking in… stand still!</span></div>`
+    :S.phase==='mark'?`<div class="oc"><span style="border-color:var(--gold);color:var(--gold2)">TUTOR: tap the houses on a WRONG answer (they turn red), then Confirm</span></div>`
+    :`<div class="oc"><span style="border-color:#9FE3B8;color:#9FE3B8">${S.lastRight} of ${S.teams.length} houses right · +${money(S.lastRight*potStep())}</span></div>`;
+  $('card').innerHTML=`<div class="qh">${S.phase==='question'?`<span class="qclock${S.qLeft<=10?' low':''}" id="qclock">${S.qLeft}s</span>`:''}Question ${Math.min(S.mq+1,QPER())} of ${QPER()} · every house answers</div>${top}<div class="qq" id="qq">${esc(q.q)}</div>${opts}${ans}${exp}`;
   const el=$('card'),qq=$('qq');let f=64;qq.style.fontSize=f+'px';while(el.scrollHeight>el.clientHeight&&f>36){f-=3;qq.style.fontSize=f+'px'}}
 const ZONE=[['#0072B2','●',''],['#E69F00','▲','dark'],['#CC79A7','■','dark'],['#56B4E9','★','dark']];
-function renderFloorQ(){const el=$('fzones'),q=S.q,on=FLOORQ&&q&&q.opts&&q.opts.length&&(S.phase==='question'||S.phase==='mresult');
+function renderFloorQ(){const el=$('fzones'),q=S.q,on=FLOORQ&&q&&q.opts&&q.opts.length&&QPH.includes(S.phase);
   if(!on){el.className='hide';el.innerHTML='';if(FL.mode==='zones')FL.mode='table';return}FL.mode='zones';
   const n=q.opts.length;el.className='';el.style.gridTemplateColumns=n===4?'1fr 1fr':`repeat(${n},1fr)`;el.style.gridTemplateRows=n===4?'1fr 1fr':'1fr';
-  el.innerHTML=q.opts.map((o,k)=>{const [c,sh,d]=ZONE[k%4];let cls='fz '+d,v='';if(S.revealed){if(o.L===q.ans){cls+=' right';v='<div class="fv">✓ CORRECT</div>'}else if(o.L===S.chosen){cls+=' picked';v='<div class="fv">✗ WRONG</div>'}else cls+=' dim'}
-    return `<div class="${cls}" style="background:${c}" data-l="${o.L}"><div class="fl"><i>${sh}</i>${o.L}</div><div class="ft">${esc(o.text)}</div>${v}</div>`}).join('');
-  el.querySelectorAll('.fz').forEach(z=>{z.onclick=()=>chooseOpt(z.dataset.l);const t=z.querySelector('.ft');let f=130;t.style.fontSize=f+'px';while(t.scrollHeight>t.clientHeight+2&&f>60){f-=8;t.style.fontSize=f+'px'}})}
+  el.innerHTML=q.opts.map((o,k)=>{const [c,sh,d]=ZONE[k%4];let cls='fz '+d,v='';if(S.revealed){if(o.L===q.ans){cls+=' right';v='<div class="fv">✓ CORRECT</div>'}else cls+=' dim'}
+    return `<div class="${cls}" style="background:${c}"><div class="fl"><i>${sh}</i>${o.L}</div><div class="ft">${esc(o.text)}</div>${v}</div>`}).join('');
+  el.querySelectorAll('.fz').forEach(z=>{const t=z.querySelector('.ft');let f=130;t.style.fontSize=f+'px';while(t.scrollHeight>t.clientHeight+2&&f>60){f-=8;t.style.fontSize=f+'px'}})}
 let FLOORQ=true;try{FLOORQ=localStorage.getItem('floorq')!=='0'}catch(e){}
 function renderDock(id,acts){const el=$(id);el.classList.toggle('many',acts.length>3);
   el.innerHTML=acts.map((a,n)=>`<button class="btn ${a.cls}" data-n="${n}">${a.label}</button>`).join('');
   el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const a=acts[+b.dataset.n];if(a&&a.fn){play('sfx_whoosh',{vol:.25});a.fn()}})}
-function renderSetup(){if(S.phase!=='setup')return;const r=roundsFor(S.minutes);
+function renderSetup(){if(S.phase!=='setup')return;const n=S.picked.length,r=roundsCap(n);
   $('setup').innerHTML=`<h2 style="font-size:60px">${esc(BANK.settings.name||'The Betrayal')} · setup</h2>
-   <div class="setrow">Tap the houses playing (3–6). Each team is one house.</div>
+   <div class="setrow">Tap the houses playing (3–6). Each house plays as one team.</div>
    <div class="pick">${HOUSES.map(h=>`<div class="co${S.picked.includes(h.id)?' on':''}" onclick="togglePick('${h.id}')"><span class="mini">${crest(h.id)}</span><b>${h.short}</b></div>`).join('')}</div>
-   <div style="display:flex;gap:80px"><div><div class="setrow">How many Traitors?</div><div class="chooser">${[1,2,3].map(n=>`<button class="btn sm ${n===S.traitorsStart?'go':''}" style="width:130px;height:100px;font-size:50px" onclick="S.traitorsStart=${n};render()">${n}</button>`).join('')}</div><div style="font-size:30px;color:var(--muted);margin-top:8px">About 1 per 7 students: 2 for up to 15, 3 for more.</div></div>
-   <div><div class="setrow">Game length (minutes) → <b style="color:var(--gold2)">${r} round${r>1?'s':''}</b></div><div class="chooser">${[20,30,45,60].map(n=>`<button class="btn sm ${n===S.minutes?'go':''}" style="width:150px;height:100px;font-size:46px" onclick="S.minutes=${n};render()">${n}</button>`).join('')}</div></div></div>
+   <div style="display:flex;gap:80px"><div><div class="setrow">Traitor houses</div><div class="chooser">${[1,2].map(k=>`<button class="btn sm ${k===S.traitorsStart?'go':''}" style="width:130px;height:100px;font-size:50px;${k===2&&n<5?'opacity:.3':''}" onclick="if(${k}===1||S.picked.length>=5){S.traitorsStart=${k};render()}">${k}</button>`).join('')}</div><div style="font-size:30px;color:var(--muted);margin-top:8px">1 for 3–4 houses · 2 for 5–6 houses</div></div>
+   <div><div class="setrow">Game length (minutes) → <b style="color:var(--gold2)">${r} round${r>1?'s':''}</b></div><div class="chooser">${[20,30,45,60].map(m=>`<button class="btn sm ${m===S.minutes?'go':''}" style="width:150px;height:100px;font-size:46px" onclick="S.minutes=${m};render()">${m}</button>`).join('')}</div>${r<roundsFor(S.minutes)?`<div style="font-size:30px;color:var(--muted);margin-top:8px">Capped at ${r} – add houses for longer games</div>`:''}</div></div>
    <div style="display:flex;gap:20px;margin-top:26px;align-items:center"><button class="btn alt" style="height:130px;font-size:54px" onclick="playIntro()">▶ Play intro</button><button class="btn go" style="height:130px;font-size:54px" onclick="startGame()">Skip to The Choosing</button>
    <button class="btn alt sm" style="height:100px" onclick="$('file').click()">Load Excel questions</button>
    <button class="btn sm ${FLOORQ?'':'alt'}" style="height:100px" onclick="FLOORQ=!FLOORQ;try{localStorage.setItem('floorq',FLOORQ?'1':'0')}catch(e){};render()">${FLOORQ?'✓ ':''}Answers on floor</button></div>
    <div style="font-size:30px;color:var(--muted);margin-top:12px">${esc(BANKSRC)} · ${BANK.questions.length} questions</div>
-   <div style="position:absolute;right:30px;bottom:20px;font-size:26px;color:var(--muted)">Version 1.1 (intro)</div>`}
+   <div style="position:absolute;right:30px;bottom:20px;font-size:26px;color:var(--muted)">Version 2 (houses play as one)</div>`}
 function render(){renderSetup();renderHouses();renderPot();renderStatus();renderClock();renderChron();renderRules();renderFloorQ();
-  if(S.phase==='question'||S.phase==='mresult')renderQ();
-  if(S.phase!=='setup'&&S.phase!=='question'&&S.phase!=='mresult'&&FL.mode!=='night'&&!$('fbig').innerHTML&&S.teams.length)floorBig(crestRing());
+  if(QPH.includes(S.phase))renderQ();
+  if(S.phase!=='setup'&&!QPH.includes(S.phase)&&FL.mode!=='night'&&!$('fbig').innerHTML&&S.teams.length)floorBig(crestRing());
   renderDock('dockA',S.actA);renderDock('dockB',S.actB);['card','dockA','dockB'].forEach(id=>$(id).classList.toggle('hide',S.phase==='setup'))}
 function toggleSound(){muted=!muted;if(muted){hush();stopLoops();stopMusic()}else startMusic();render()}
 function toggleMusic(){MUS.on=!MUS.on;if(MUS.on)startMusic();else stopMusic();render()}
@@ -548,7 +577,7 @@ async function readXlsx(buf){const get=await unzip(buf),X=t=>new DOMParser().par
     const head=(grid[0]||[]).map(h=>String(h||'').trim());out[sh.getAttribute('name').trim().toLowerCase()]=grid.slice(1).filter(Boolean).map(r=>{const o={};head.forEach((h,i)=>{if(h)o[h]=r[i]==null?'':r[i]});return o})}
   return out}
 function parseWorkbook(sheets){const get=n=>sheets[n]||[];const out=JSON.parse(JSON.stringify(SAMPLE));
-  get('settings').forEach(r=>{const k=String(r.Setting||'').trim().toLowerCase(),v=r.Value;if(k==='game name'&&String(v).trim())out.settings.name=String(v).trim();if(k==='pot per correct answer')out.settings.pot=+v||1000;if(k==='discussion minutes')out.settings.discuss=+v||3});
+  get('settings').forEach(r=>{const k=String(r.Setting||'').trim().toLowerCase(),v=r.Value;if(k==='game name'&&String(v).trim())out.settings.name=String(v).trim();if(k==='pot per correct answer')out.settings.pot=+v||500;if(k==='discussion minutes')out.settings.discuss=+v||3;if(k==='questions per mission')out.settings.qper=+v||3;if(k==='seconds per question')out.settings.secs=+v||45});
   const qs=get('questions').filter(r=>String(r.Question||'').trim()).map((r,n)=>{const opts=['A','B','C','D'].map(L=>({L,text:String(r['Option '+L]||'').trim()})).filter(o=>o.text);
     let ans=String(r.Answer||'').trim();if(opts.length&&/^[a-d]$/i.test(ans))ans=ans.toUpperCase();return {id:'x'+n,topic:String(r.Topic||'ANY').trim().toUpperCase()||'ANY',level:parseInt(r.Level)||1,q:String(r.Question).trim(),opts,ans,exp:String(r.Explanation||'').trim()}});
   if(qs.length)out.questions=qs;return out}

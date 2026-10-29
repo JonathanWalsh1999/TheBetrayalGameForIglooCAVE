@@ -7,7 +7,7 @@ from openpyxl.styles import Font, PatternFill, Alignment
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
-SETTINGS = {"name": "The Betrayal", "pot": 1000, "discuss": 3}
+SETTINGS = {"name": "The Betrayal", "pot": 500, "discuss": 3, "qper": 3, "secs": 45}
 
 data = json.load(open(os.path.join(HERE, "sample_questions.json")))
 data["settings"] = SETTINGS
@@ -29,7 +29,7 @@ rows = [
     ["Explanation: shown after the answer – keep it to one sentence."],
     [""],
     ["Settings sheet: change the numbers in the Value column."],
-    ["How many questions? Each round asks one per house. 5 houses x 4 rounds = 20, so 30+ means no repeats; 60+ is ideal."],
+    ["How many questions? Each mission asks 3 (every house answers each). 4 rounds = 12 questions, so 20+ means no repeats; 40+ is ideal."],
 ]
 for r in rows: help_.append(r)
 help_["A1"].font = Font(bold=True, size=14); help_.column_dimensions["A"].width = 120
@@ -50,7 +50,9 @@ for row in ws.iter_rows(min_row=2):
 st = wb.create_sheet("Settings")
 st.append(["Setting", "Value", "What it does"])
 st.append(["Game name", SETTINGS["name"], "Shown on the walls"])
-st.append(["Pot per correct answer", SETTINGS["pot"], "Pounds added to the prize pot for each right mission answer"])
+st.append(["Pot per correct answer", SETTINGS["pot"], "Pounds added to the prize pot for each house that answers a mission question right"])
+st.append(["Questions per mission", SETTINGS["qper"], "How many questions each mission has (every house answers each one)"])
+st.append(["Seconds per question", SETTINGS["secs"], "Thinking time before houses lock in their answer"])
 st.append(["Discussion minutes", SETTINGS["discuss"], "Length of each Round Table discussion"])
 for c in st[1]: c.font = Font(bold=True)
 st.column_dimensions["A"].width = 26; st.column_dimensions["B"].width = 16; st.column_dimensions["C"].width = 70
