@@ -68,6 +68,15 @@ A Traitors-*inspired* educational game for **further-education college students*
    - Buttons: Most-missed questions (debrief), Export CSV, New game.
 - **End now** on the back wall jumps to the final Round Table.
 
+## 3b. Intro (v1.1)
+
+- `playIntro()`: 11 clips (`intro_1`–`intro_11`, Dominic voice), about 90 s.
+- Covers: secret → Faithful → Traitors → houses → missions/pot → sabotage → Round Table → night → ghosts → win/lose → "Trust no one".
+- Timing:
+  - Pause-aware `wait()`.
+  - Pace 1.25×, playback rate 0.95, 1.3 s gap between segments (lessons from the Monopoly intro being too fast).
+- Controls: Pause/Skip buttons and the space bar. **Replay intro** on the back wall sets `S.paused` during playback, then restores the game.
+
 ## 4. Files and build
 
 - **Source:**

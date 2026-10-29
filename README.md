@@ -25,6 +25,14 @@ It's an original game *inspired by* the reality show format. It doesn't use the 
   - **Pot per correct answer** (default £1,000).
   - **Discussion minutes** (default 3).
 
+## The intro
+
+Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-style opening. It explains Faithful and Traitors, missions, the Round Table, nights, ghosts and how to win, then goes straight into The Choosing.
+
+- **❚❚ Pause** (or the space bar) freezes it.
+- **Skip intro ›** jumps ahead.
+- **Replay intro** on the back wall plays it again mid-game. The game picks up where it left off afterwards.
+
 ## How a game runs
 
 1. **Setup:** choose the houses taking part (3–6), the number of Traitors (1–3), and the game length.
