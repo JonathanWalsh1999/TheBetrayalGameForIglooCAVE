@@ -33,35 +33,41 @@ Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-styl
 - **Skip intro ›** jumps ahead.
 - **Replay intro** on the back wall plays it again mid-game. The game picks up where it left off afterwards.
 
-## How a game runs (Version 2: houses play as one)
+## How a game runs (Version 3)
 
-1. **Setup:** choose the houses taking part and the game length.
-   - **Houses:** 3–6. Each house is one team, playing as one.
-   - **Traitor houses:** 1 for 3–4 houses, 2 for 5–6.
-   - **Game length:** 20, 30, 45 or 60 minutes. This gives 1–4 rounds, capped at the number of houses minus 2.
-2. **The Choosing:** everyone closes their eyes and the tutor taps every member of the Traitor house. The Traitors open their eyes and see each other. The game never knows which house it is; only the tutor does.
-3. **Mission:** 3 questions (you can change this in the Settings sheet). **Every house answers every question** by standing on a floor zone.
-   - When the clock runs out (or the tutor presses **Lock in now**), there's a 3-2-1 countdown, then the right answer lights up.
-   - The tutor taps the houses that stood on a **wrong** answer, then **Confirm**.
+1. **Setup:** choose the houses (3–6), how many Traitors (1–3, about 1 per 7 students), and the game length.
+
+   | Game length | Rounds, plus the finale |
+   |---|---|
+   | 20 min | 1 |
+   | 30 min | 2 |
+   | 45 min | 3 |
+   | 60 min | 4 |
+
+2. **The Choosing:** everyone closes their eyes and the tutor taps the Traitors on the shoulder, ideally in different houses. The Traitors open their eyes and see each other. The game never knows who they are; only the tutor does.
+3. **Mission:** 3 questions, and **every house answers every question** by standing on a floor zone.
+   - After a 3-2-1 lock-in the right answer lights up.
+   - The tutor taps the houses that were **wrong**, then **Confirm**.
    - Each right house adds £500 to the pot.
-   - The house with the most right answers wins the **🛡 shield**: the Traitors can't attack it tonight.
-   - The Traitors' job is to lead other houses to the wrong zone without being caught.
-4. **Round Table:** a timed discussion. The walls show each house's ✓/✗ answers, which is the evidence, plus sentence starters.
-5. **The vote:** each house that can vote agrees on one house to banish. Votes are revealed one by one with a running tally.
-   - A tie means a revote between the tied houses. A second tie means nobody is banished.
-   - The banished house stands and says what it is. The tutor taps the truth, and the reveal plays.
-6. **Night:** the Traitors open their eyes and point at a house, avoiding the shielded one. Then they choose:
-   - **☠ Poison** (hold up 1 finger): that house can't vote at the next Round Table, then recovers.
-   - **🗡 Dagger** (make a fist): that house is murdered, which makes it ghosts for good. There's **one dagger per Traitor house** for the whole game.
-7. **Breakfast:** the victim is revealed.
-8. **👻 Ghost houses** (banished or murdered) keep answering mission questions, but never vote.
+   - A Traitor *inside* a house tries to steer their own housemates to the wrong answer.
+   - The house with the most right answers wins the **🛡 shield**: nobody in it can be attacked tonight.
+4. **Round Table:** a timed discussion. The walls show each house's ✓/✗ answers, plus sentence starters like *"In our house, ___ pushed for the wrong answer."*
+5. **The vote:** the game goes round the houses one at a time.
+   - Each house agrees on **one person** and says the name out loud. Ghosts and poisoned players don't get a say.
+   - The tutor keeps a tally, then taps the **house** of the person named most.
+   - If there's a tie, press **Tie – revote**. A second tie means nobody is banished.
+   - The banished player stands and says Traitor or Faithful. The tutor taps the truth.
+6. **Night:** the Traitors point at a victim, who can't be in the shielded house.
+   - **☠ Poison** (hold up 1 finger): the victim gets no say in their house's next vote.
+   - **🗡 Dagger** (make a fist): the victim is murdered. There's one dagger per Traitor for the whole game.
+   - The tutor taps the victim's house.
+7. **Breakfast:** the house is revealed, and the tutor points to the victim.
+8. **👻 Ghosts** (banished or murdered) still answer with their house, but never vote.
 9. **How it ends:**
-   - All Traitor houses banished means the Faithful win the pot.
-   - If the Traitor houses ever have **as many votes as the Faithful**, the Traitors take the pot.
-   - Otherwise, after the last mission comes the final Round Table, then houses vote to **end the game** or **banish again**.
-10. **Debrief:**
-    - **Most-missed questions** shows which questions houses got wrong, with the answers.
-    - **Export results** downloads a CSV with one row per house per question.
+   - Every Traitor banished: the Faithful win.
+   - Otherwise, after the last mission there's a final Round Table and vote, then the class votes to **end the game** or **banish again**.
+   - Any Traitor still hidden at the end steals the pot.
+10. **Debrief:** **Most-missed questions** and **Export results**.
 
 ### Settings sheet
 
@@ -74,6 +80,6 @@ Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-styl
 
 ## Tips for tutors
 
-- Smaller houses (2–4 students) give more houses, which means longer, more tense games.
-- The Traitor house still needs to *know* the right answer in order to lead others away from it convincingly, so they learn too.
+- About 1 Traitor per 7 students works well. Put Traitors in different houses so each one sabotages a different team.
+- Traitors still need to *know* the right answer in order to argue convincingly for a wrong one, so they learn too.
 - Use the Round Table to push for evidence-based talk: "What makes you say that?"

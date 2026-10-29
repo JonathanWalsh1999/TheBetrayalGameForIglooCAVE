@@ -1,6 +1,6 @@
 # The Betrayal: project context
 
-Read this first when picking the project back up. Last updated: 29 Oct 2026, at **Version 2 (houses play as one)**. Sections 1–3 describe v1; **section 3c (v2) overrides them where they differ.**
+Read this first when picking the project back up. Last updated: 29 Oct 2026, at **Version 3**. **Section 3d (v3) is current**; 3c (v2) is kept for history.
 Sister project: `JonathanWalsh1999/MonopolyStyleBoardGameForIglooCAVE` (Campus Tycoon), which has its own PROJECT_CONTEXT.md. This game reuses its approach (scaling, xlsx reader, audio pipeline, floor answer zones), so read that file too for the shared conventions.
 
 ## 1. What it is
@@ -77,7 +77,7 @@ A Traitors-*inspired* educational game for **further-education college students*
   - Pace 1.25×, playback rate 0.95, 1.3 s gap between segments (lessons from the Monopoly intro being too fast).
 - Controls: Pause/Skip buttons and the space bar. **Replay intro** on the back wall sets `S.paused` during playback, then restores the game.
 
-## 3c. Version 2 rules (current)
+## 3c. Version 2 rules (superseded by v3)
 
 The user decided that **houses play as one**, there is a **hidden Traitor house**, missions are answered by **all houses together**, and nights are a **mix of poison and murder**.
 
@@ -110,6 +110,24 @@ The user decided that **houses play as one**, there is a **hidden Traitor house*
   - A full 5-house game: tie → revote, poison removes a vote, banishing the Traitors → the Faithful win.
   - Dagger → Traitors take control.
   - Daggers run out → poison only.
+
+## 3d. Version 3 rules (current)
+
+The user tried v2 and found that one Traitor house made games end too quickly. A Traitor house standing on a wrong answer also only hurt itself. So the user chose **individual Traitors, no player tracking, and each house voting for a person**.
+
+- **Kept from v2:** missions where every house answers every question (lock-in, then the tutor marks the wrong houses), the shield, poison or dagger nights, and daggers equal to the number of Traitors.
+- **State:**
+  - Teams: `{ghosts, foundT, foundF, rec[], ok, att}`.
+  - `S.poisoned` = the house with a poisoned member.
+  - `S.traitors` is 1–3 (default 2).
+  - Rounds = `roundsFor(minutes)`, with no cap.
+- **Vote:**
+  - `startVote` → `nextHouseVote` (each house says a name; the tutor presses **Name given** or **Skip**).
+  - `countVotes`: the tutor taps the house of the most-named player, or **Tie – revote** (once), then **Tie again – nobody**.
+- **Night:** the tutor taps the victim's **house**, then poison or dagger.
+- **End:** the Faithful win when all Traitors are banished. Otherwise the final vote → endVote → endGame. There's no automatic "Traitors control" ending, because the game doesn't track players.
+- **Re-recorded for v3:** `intro_3`, `intro_7`, `intro_8`, `intro_9`, `host_night_traitors`, `host_poisoned(_2)`.
+- **Tested:** a full 3-round, 5-house game, including a revote, a dagger, poison, a Faithful banishment and the Faithful winning.
 
 ## 4. Files and build
 
