@@ -44,7 +44,9 @@ Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-styl
    | 45 min | 3 |
    | 60 min | 4 |
 
-2. **The Choosing:** everyone closes their eyes and the tutor taps the Traitors on the shoulder, ideally in different houses. The Traitors open their eyes and see each other. The game never knows who they are; only the tutor does.
+2. **The Choosing:** everyone **turns to face the CAVE wall and covers their eyes**. The tutor taps **every** student's shoulder: **once** for Faithful and **twice** for a Traitor (ideally in different houses). The Traitors then turn around to see each other while everyone else faces the wall.
+
+   Because everyone gets tapped, peeking gives nothing away, and a loud heartbeat covers any movement. **Anyone caught peeking is banished on the spot.** The game never knows who the Traitors are; only the tutor does.
 3. **Mission:** 3 questions, and **every house answers every question** by standing on a floor zone.
    - After a 3-2-1 lock-in the right answer lights up.
    - The tutor taps the houses that were **wrong**, then **Confirm**.
@@ -57,7 +59,7 @@ Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-styl
    - The tutor keeps a tally, then taps the **house** of the person named most.
    - If there's a tie, press **Tie – revote**. A second tie means nobody is banished.
    - The banished player stands and says Traitor or Faithful. The tutor taps the truth.
-6. **Night:** the Traitors point at a victim, who can't be in the shielded house.
+6. **Night:** everyone faces the wall again. The Traitors turn around and point at a victim's back. The victim can't be in the shielded house.
    - **☠ Poison** (hold up 1 finger): the victim gets no say in their house's next vote.
    - **🗡 Dagger** (make a fist): the victim is murdered. There's one dagger per Traitor for the whole game.
    - The tutor taps the victim's house.

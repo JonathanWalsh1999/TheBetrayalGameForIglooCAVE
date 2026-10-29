@@ -113,7 +113,7 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Inte
 #fbig .crestbig{width:1300px;height:1450px}#fbig .crestbig svg{width:100%;height:100%}
 /* night / dark overlay over the walls */
 #dark{position:absolute;left:0;top:0;width:12566px;height:4516px;background:#000;opacity:0;pointer-events:none;transition:opacity 2.5s;z-index:20}
-#dark.on{opacity:.82}
+#dark.on{opacity:.94}
 .night #card,.night .dock,.night #floor,.night #ftitle{z-index:21}
 .reveal{position:absolute;top:0;height:1080px;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:30;pointer-events:none;text-align:center}
 .reveal .big{font-size:260px;letter-spacing:10px;animation:rv 1.4s cubic-bezier(.2,.9,.3,1.1)}
@@ -226,7 +226,7 @@ const FALLBACK={sfx_gong:()=>beep([98,73],1.6,'sine',.4),sfx_bell:()=>beep([392,
 function talking(){return hostGap||(hostNow&&!hostNow.paused&&!hostNow.ended)}
 function play(k,{vol=.8,max=0}={}){if(muted)return null;if(OK[k]!==1){FALLBACK[k]&&FALLBACK[k]();return null}
   if(talking())vol*=.45;const a=AUD[k].cloneNode();a.volume=vol;a.play().catch(()=>{});if(max)setTimeout(()=>a.pause(),max*1000);return a}
-function loop(k,on,vol=.35){if(on){if(loopNow[k]||muted)return;if(OK[k]!==1){if(k==='sfx_heartbeat')loopNow[k]=setInterval(()=>beep([60,52],.18,'sine',.35),1000);return}
+function loop(k,on,vol=.6){if(on){if(loopNow[k]||muted)return;if(OK[k]!==1){if(k==='sfx_heartbeat')loopNow[k]=setInterval(()=>beep([60,52],.18,'sine',.35),1000);return}
     const a=AUD[k];a.loop=true;a.volume=vol;a.currentTime=0;a.play().catch(()=>{});loopNow[k]=a}
   else{const a=loopNow[k];if(!a)return;if(typeof a==='number')clearInterval(a);else a.pause();delete loopNow[k]}}
 function stopLoops(){Object.keys(loopNow).forEach(k=>loop(k,false))}
@@ -355,17 +355,17 @@ const tutor=t=>`<div class="sub" style="color:var(--gold2);font-size:40px;margin
 const hb=k=>`<span class="mini">${crest(S.teams[k].id)}</span>${S.teams[k].short}`;
 
 function choosing(){S.phase='choosing';
-  scene({title:'THE CHOOSING',card:`<div class="big">Close your eyes.</div><div class="mid" style="margin-top:30px">Everyone. Heads down. No peeking.</div>`,floor:`<div class="big">EYES<br>CLOSED</div>`,
+  scene({title:'THE CHOOSING',card:`<div class="big">Face the wall.</div><div class="mid" style="margin-top:24px">Everyone: turn around, face the wall and cover your eyes.</div><div class="sub" style="color:#ff6b75">🙈 Anyone caught peeking is banished on the spot.</div>`,floor:`<div class="big">FACE THE<br>WALL</div>`,
     say:'close',dark:true,mood:'night',loops:['sfx_heartbeat'],next:{label:'Next ›',fn:choose2}})}
 function choose2(){const n=S.traitors;
-  scene({title:'THE CHOOSING',card:`<div class="big" style="font-size:96px">The Traitors are being chosen…</div><div class="mid" style="margin-top:20px">Stay still. Keep your eyes closed.</div>${tutor(`walk around and tap <b>${n}</b> ${n>1?'people':'person'} on the shoulder – ideally in different houses. ${n>1?'They are':'That is'} the Traitor${n>1?'s':''}. Remember who.`)}`,
-    say:'choosing',dark:true,loops:['sfx_heartbeat'],next:{label:`Done – ${n} tapped ›`,fn:choose3}})}
+  scene({title:'THE CHOOSING',card:`<div class="big" style="font-size:96px">The Traitors are being chosen…</div><div class="mid" style="margin-top:20px">Everyone will feel a tap. Stay perfectly still.</div>${tutor(`walk behind <b>every</b> student and tap their shoulder: <b>once</b> for Faithful, <b>twice</b> for the ${n} Traitor${n>1?'s':''} (ideally in different houses). Everyone gets tapped, so peeking gives nothing away. Remember who got two.`)}`,
+    say:'choosing',dark:true,loops:['sfx_heartbeat'],next:{label:`Done – everyone tapped ›`,fn:choose3}})}
 function choose3(){let n=10;const tick=()=>{if(!S.step.startsWith('THE CHOOSING'))return;$('ccount')&&($('ccount').textContent=n);if(n-->0)setTimeout(tick,1000)};
-  scene({title:'THE CHOOSING',card:`<div class="big" style="color:#ff6b75">Traitors… open your eyes.</div><div class="mid" style="margin-top:20px">${S.traitors>1?'Look around. These are your fellow Traitors.':'You are the only Traitor. Trust no one.'}</div><div class="big" id="ccount" style="margin-top:20px">10</div>`,
+  scene({title:'THE CHOOSING',card:`<div class="big" style="color:#ff6b75">Traitors… turn around.</div><div class="mid" style="margin-top:20px">${S.traitors>1?'Look who else has turned. These are your fellow Traitors.':'You are the only Traitor. Trust no one.'}</div><div class="big" id="ccount" style="margin-top:20px">10</div>`,
     say:'topen',dark:true,auto:{ms:11000,fn:choose4},next:{label:'Skip ›',fn:choose4,cls:'alt'}});tick()}
-function choose4(){scene({title:'THE CHOOSING',card:`<div class="big">Traitors, close your eyes.</div>`,say:'tclose',dark:true,auto:{ms:5000,fn:choose5},next:{label:'Skip ›',fn:choose5,cls:'alt'}})}
+function choose4(){scene({title:'THE CHOOSING',card:`<div class="big">Traitors, face the wall again.</div>`,say:'tclose',dark:true,auto:{ms:5000,fn:choose5},next:{label:'Skip ›',fn:choose5,cls:'alt'}})}
 function choose5(){play('sfx_gong',{vol:.8});const n=S.traitors;
-  scene({title:'THE CHOOSING',card:`<div class="big">Everyone… open your eyes.</div><div class="mid" style="margin-top:30px;color:#ff6b75">${n} Traitor${n>1?'s are':' is'} among you.</div><div class="sub">They could be in your own house. Every right answer grows the prize pot. Banish the Traitors before the end – or they steal it all.</div>`,
+  scene({title:'THE CHOOSING',card:`<div class="big">Everyone… turn around.</div><div class="mid" style="margin-top:30px;color:#ff6b75">${n} Traitor${n>1?'s are':' is'} among you.</div><div class="sub">They could be in your own house. Every right answer grows the prize pot. Banish the Traitors before the end – or they steal it all.</div>`,
     floor:'',say:'allopen',dark:false,mood:'day',next:{label:'Begin the first mission ›',fn:startMission,cls:'go'}});banner(`${n} TRAITOR${n>1?'S':''}<br>AMONG YOU`)}
 /* ---------- missions: every house answers every question, standing on a floor zone ---------- */
 function startMission(){S.phase='mission';S.mq=0;S.shield=-1;S.final=S.round>=S.rounds;
@@ -425,17 +425,17 @@ function afterBanishNext(){return S.final?{label:'Next ›',fn:endVote,cls:'go'}
 
 /* ---------- night: poison (one Round Table without a vote) or the dagger (murder, one per Traitor house) ---------- */
 function night1(){S.phase='night';play('sfx_bell',{vol:.7});setTimeout(()=>play('sfx_wolf',{vol:.5}),2500);
-  scene({title:'NIGHT',card:`<div class="big">Night falls on the castle.</div><div class="mid" style="margin-top:20px">Everyone, close your eyes.</div>`,say:'night',dark:true,mood:'night',next:{label:'Next ›',fn:night2}})}
+  scene({title:'NIGHT',card:`<div class="big">Night falls on the castle.</div><div class="mid" style="margin-top:20px">Everyone: face the wall and cover your eyes.</div><div class="sub" style="color:#ff6b75">🙈 Caught peeking? Banished on the spot.</div>`,say:'night',dark:true,mood:'night',next:{label:'Next ›',fn:night2}})}
 function night2(){const sh=S.shield>=0?S.teams[S.shield]:null,targets=living().filter(k=>k!==S.shield);
-  scene({title:'NIGHT',card:`<div class="big" style="color:#ff6b75;font-size:90px">Traitors… open your eyes.</div><div class="mid" style="margin-top:10px">Point at your victim.</div>
+  scene({title:'NIGHT',card:`<div class="big" style="color:#ff6b75;font-size:90px">Traitors… turn around.</div><div class="mid" style="margin-top:10px">Point at your victim's back.</div>
     <div class="sub">☠ <b>Poison</b> (hold up 1 finger): they can't vote at the next Round Table.<br>${S.daggers>0?`🗡 <b>Dagger</b> (make a fist): they are murdered – a ghost for good. Daggers left: ${S.daggers}.`:'No daggers left – poison only.'}${sh?`<br>Nobody in ${esc(sh.name)} – they have the 🛡 shield.`:''}</div>${tutor('tap the house of the person they point at.')}`,
     say:'nighttraitors',dark:true,loops:['sfx_heartbeat'],btns:targets.map(k=>act(hb(k),()=>nightType(k),''))})}
 function nightType(k){S.nightTarget=k;
   scene({title:'NIGHT',card:`<div class="mid">Victim's house: <b>${esc(S.teams[k].name)}</b></div>${tutor(S.daggers>0?'poison (1 finger) or dagger (fist)?':'poison it is – no daggers left.')}`,dark:true,loops:['sfx_heartbeat'],
     btns:[act('☠ Poison',()=>{S.nightType='poison';night3()},'alt')].concat(S.daggers>0?[act('🗡 Dagger',()=>{S.nightType='murder';night3()},'no')]:[]).concat([act('Back',night2,'')])})}
-function night3(){scene({title:'NIGHT',card:`<div class="big">Traitors, close your eyes.</div><div class="mid" style="margin-top:20px">Sleep well… if you can.</div>`,say:'nightclose',dark:true,auto:{ms:5000,fn:breakfast},next:{label:'Morning ›',fn:breakfast,cls:'alt'}})}
+function night3(){scene({title:'NIGHT',card:`<div class="big">Traitors, face the wall again.</div><div class="mid" style="margin-top:20px">Sleep well… if you can.</div>`,say:'nightclose',dark:true,auto:{ms:5000,fn:breakfast},next:{label:'Morning ›',fn:breakfast,cls:'alt'}})}
 function breakfast(){S.phase='breakfast';play('sfx_door',{vol:.7});
-  scene({title:'BREAKFAST',card:`<div class="big">Good morning.</div><div class="mid" style="margin-top:20px">Everyone, open your eyes. Breakfast is served…</div><div class="mid" style="color:#ff6b75">but someone looks very pale.</div>`,say:'breakfast',dark:false,mood:'day',next:{label:'Reveal the victim ›',fn:nightReveal,cls:'go'}})}
+  scene({title:'BREAKFAST',card:`<div class="big">Good morning.</div><div class="mid" style="margin-top:20px">Everyone, turn around. Breakfast is served…</div><div class="mid" style="color:#ff6b75">but someone looks very pale.</div>`,say:'breakfast',dark:false,mood:'day',next:{label:'Reveal the victim ›',fn:nightReveal,cls:'go'}})}
 function nightReveal(){const k=S.nightTarget,t=S.teams[k];
   if(S.nightType==='murder'){t.ghosts++;S.daggers--;S.murdered++;play('sfx_gasp',{vol:.8});host('murdered',300);revealAll('🗡 MURDERED','traitor');chron(`Murdered in the night: a member of ${t.short}.`);
     scene({title:'MURDERED',card:`<div class="mid"><b>${esc(t.name)}</b> has lost someone.</div><div class="big traitor" style="font-size:110px;margin-top:14px">Murdered in the night.</div><div class="sub">${tutor('point to the victim.')}They are now a 👻 ghost: they still answer with their house, but can never vote.</div>`,floor:`<div class="crestbig" style="filter:grayscale(1)">${crest(t.id)}</div>`,
@@ -503,7 +503,7 @@ function renderClock(){const m=Math.floor(S.elapsed/60),s=S.elapsed%60;
     <button class="btn sm alt" onclick="toggleSound()">${muted?'Sound: off':'Sound: on'}</button><button class="btn sm alt" onclick="toggleMusic()">${MUS.on?'Music: on':'Music: off'}</button>
     <button class="btn sm" onclick="exportCSV()">Export</button>${S.phase==='setup'||S.phase==='end'?'':'<button class="btn sm alt" onclick="playIntro()">Replay intro</button>'}</div></div>`}
 function renderChron(){$('chron').innerHTML='<h2>The chronicle</h2>'+S.chron.slice(0,8).map(c=>`<div>${esc(c)}</div>`).join('')}
-function renderRules(){$('rules').innerHTML=`<h2>How to play</h2><p><b>Traitors</b> are hidden individuals – maybe in your own house.</p><p><b>Missions:</b> every house answers every question by standing on its answer. Each right house grows the pot. Traitors try to steer their house wrong.</p><p><b>Round Table:</b> use evidence. Each house agrees one name to banish.</p><p><b>Night:</b> ☠ poison = no say in the next vote. 🗡 dagger = murdered.</p><p><b>👻 Ghosts</b> still answer with their house, but never vote.</p>`}
+function renderRules(){$('rules').innerHTML=`<h2>How to play</h2><p><b>Traitors</b> are hidden individuals – maybe in your own house.</p><p><b>Missions:</b> every house answers every question by standing on its answer. Each right house grows the pot. Traitors try to steer their house wrong.</p><p><b>Round Table:</b> use evidence. Each house agrees one name to banish.</p><p><b>Night:</b> ☠ poison = no say in the next vote. 🗡 dagger = murdered.</p><p><b>👻 Ghosts</b> still answer with their house, but never vote.</p><p><b>🙈 Peeking</b> when told to face the wall = banished on the spot.</p>`}
 function renderQ(){if(!S.q||!QPH.includes(S.phase))return;const q=S.q;
   const opts=q.opts.length?`<div class="opts">${q.opts.map(o=>{let c='opt',mark='';if(S.revealed&&o.L===q.ans){c+=' right';mark=' ✓'}return `<div class="${c}"><b>${o.L}</b><span>${esc(o.text)}${mark}</span></div>`}).join('')}</div>`:'';
   const ans=S.revealed&&!q.opts.length&&q.ans?`<div class="exp"><b>Answer:</b> ${esc(q.ans)}</div>`:'';const exp=S.revealed&&q.exp?`<div class="exp">${esc(q.exp)}</div>`:'';
@@ -534,7 +534,7 @@ function renderSetup(){if(S.phase!=='setup')return;const r=roundsFor(S.minutes);
    <button class="btn alt sm" style="height:100px" onclick="$('file').click()">Load Excel questions</button>
    <button class="btn sm ${FLOORQ?'':'alt'}" style="height:100px" onclick="FLOORQ=!FLOORQ;try{localStorage.setItem('floorq',FLOORQ?'1':'0')}catch(e){};render()">${FLOORQ?'✓ ':''}Answers on floor</button></div>
    <div style="font-size:30px;color:var(--muted);margin-top:12px">${esc(BANKSRC)} · ${BANK.questions.length} questions</div>
-   <div style="position:absolute;right:30px;bottom:20px;font-size:26px;color:var(--muted)">Version 3 (individual Traitors, house votes)</div>`}
+   <div style="position:absolute;right:30px;bottom:20px;font-size:26px;color:var(--muted)">Version 3.1 (face the wall, tap everyone)</div>`}
 function render(){renderSetup();renderHouses();renderPot();renderStatus();renderClock();renderChron();renderRules();renderFloorQ();
   if(QPH.includes(S.phase))renderQ();
   if(S.phase!=='setup'&&!QPH.includes(S.phase)&&FL.mode!=='night'&&!$('fbig').innerHTML&&S.teams.length)floorBig(crestRing());

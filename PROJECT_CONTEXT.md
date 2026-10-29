@@ -129,6 +129,17 @@ The user tried v2 and found that one Traitor house made games end too quickly. A
 - **Re-recorded for v3:** `intro_3`, `intro_7`, `intro_8`, `intro_9`, `host_night_traitors`, `host_poisoned(_2)`.
 - **Tested:** a full 3-round, 5-house game, including a revote, a dagger, poison, a Faithful banishment and the Faithful winning.
 
+## 3e. Anti-peeking (v3.1)
+
+The user raised the worry that students might peek during the eyes-closed parts. The fix:
+
+- Everyone **faces the wall and covers their eyes**.
+- The tutor **taps everyone**: once for Faithful, twice for a Traitor.
+- The Traitors **turn around** to see each other, or to pick a victim at night.
+- The heartbeat loop is louder (loop volume 0.6) and the dark overlay is darker (0.94).
+- The host announces that anyone **caught peeking is banished on the spot**, and the rules panel says the same.
+- Re-recorded for this: `host_close_eyes`, `host_choosing`, `host_traitors_open/close`, `host_all_open`, `host_night`, `host_night_traitors`, `host_night_close`, `host_breakfast`.
+
 ## 4. Files and build
 
 - **Source:**
