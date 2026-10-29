@@ -191,8 +191,8 @@ const roundsFor=m=>Math.max(1,Math.round((m-6)/12));
 /* ---------- sound: ElevenLabs clips in assets/audio, with built-in fallbacks ---------- */
 const SFX=['sfx_gong','sfx_heartbeat','sfx_bell','sfx_drumroll','sfx_traitor','sfx_faithful','sfx_gasp','sfx_door','sfx_wolf','sfx_tick','sfx_correct','sfx_wrong','sfx_scroll','sfx_whoosh'];
 const V=(b,n)=>[b].concat(Array.from({length:n-1},(_,i)=>b+'_'+(i+2)));
-const HOST={welcome:['host_welcome'],close:['host_close_eyes'],choosing:['host_choosing'],topen:['host_traitors_open'],tclose:['host_traitors_close'],allopen:['host_all_open'],
-  mission:V('host_mission',2),correct:V('host_correct',3),wrong:V('host_wrong',3),shield:['host_shield'],roundtable:V('host_roundtable',2),vote:['host_vote'],point:['host_point'],
+const HOST={close:['host_close_eyes'],choosing:['host_choosing'],topen:['host_traitors_open'],tclose:['host_traitors_close'],allopen:['host_all_open'],
+  mission:V('host_mission',2),correct:V('host_correct',3),wrong:V('host_wrong',3),shield:['host_shield'],roundtable:V('host_roundtable',2),vote:['host_vote'],
   stand:['host_stand'],wastraitor:V('host_was_traitor',2),wasfaithful:V('host_was_faithful',2),night:['host_night'],nighttraitors:['host_night_traitors'],nightclose:['host_night_close'],
   recruit:['host_recruit'],breakfast:['host_breakfast'],murdered:V('host_murdered',2),nomurder:['host_no_murder'],finalrt:['host_final_rt'],endvote:['host_endvote'],
   revealyou:['host_reveal_yourselves'],faithfulwin:['host_faithful_win'],traitorwin:['host_traitor_win'],allfound:['host_all_found']};
@@ -212,7 +212,7 @@ function loop(k,on,vol=.35){if(on){if(loopNow[k]||muted)return;if(OK[k]!==1){if(
 function stopLoops(){Object.keys(loopNow).forEach(k=>loop(k,false))}
 /* the host never talks over himself: lines queue; big moments first; stale small comments are dropped */
 const RECENT=[],HQ=[];let hostGap=false;
-const PRIO={wastraitor:3,wasfaithful:3,faithfulwin:4,traitorwin:4,allfound:4,murdered:3,close:3,topen:3,tclose:3,allopen:3,night:3,nighttraitors:3,nightclose:3,breakfast:3,stand:3,vote:3,point:3,endvote:3,revealyou:3,recruit:3,shield:2,roundtable:2,finalrt:3,mission:2};
+const PRIO={wastraitor:3,wasfaithful:3,faithfulwin:4,traitorwin:4,allfound:4,murdered:3,close:3,topen:3,tclose:3,allopen:3,night:3,nighttraitors:3,nightclose:3,breakfast:3,stand:3,vote:3,point:3,endvote:3,revealyou:3,recruit:3,shield:2,roundtable:2,finalrt:3,mission:2,correct:2,wrong:2};
 function host(ev,delay=0,chance=1){const list=HOST[ev];if(!list||Math.random()>chance)return;
   setTimeout(()=>{if(muted)return;if(talking()){HQ.push({ev,p:PRIO[ev]||1,t:Date.now()});HQ.sort((a,b)=>b.p-a.p||a.t-b.t);if(HQ.length>3)HQ.length=3;return}sayNow(ev)},delay)}
 function sayNow(ev){const list=HOST[ev];let pool=list.filter(k=>OK[k]&&!RECENT.includes(k));if(!pool.length)pool=list.filter(k=>OK[k]);if(!pool.length){nextHost();return}
