@@ -1,6 +1,6 @@
 # The Betrayal: project context
 
-Read this first when picking the project back up. Last updated: 29 Oct 2026, at Version 1 (first playable build).
+Read this first when picking the project back up. Last updated: 29 Oct 2026, at **Version 2 (houses play as one)**. Sections 1–3 describe v1; **section 3c (v2) overrides them where they differ.**
 Sister project: `JonathanWalsh1999/MonopolyStyleBoardGameForIglooCAVE` (Campus Tycoon), which has its own PROJECT_CONTEXT.md. This game reuses its approach (scaling, xlsx reader, audio pipeline, floor answer zones), so read that file too for the shared conventions.
 
 ## 1. What it is
@@ -76,6 +76,40 @@ A Traitors-*inspired* educational game for **further-education college students*
   - Pause-aware `wait()`.
   - Pace 1.25×, playback rate 0.95, 1.3 s gap between segments (lessons from the Monopoly intro being too fast).
 - Controls: Pause/Skip buttons and the space bar. **Replay intro** on the back wall sets `S.paused` during playback, then restores the game.
+
+## 3c. Version 2 rules (current)
+
+The user decided that **houses play as one**, there is a **hidden Traitor house**, missions are answered by **all houses together**, and nights are a **mix of poison and murder**.
+
+- **Setup:**
+  - Traitor houses: 1, or 2 when there are 5 or more houses.
+  - Rounds = `min(roundsFor(minutes), houses-2)`.
+  - Settings: pot (£500 per right house), qper (3), secs (45), discuss (3).
+- **Choosing:** the tutor taps every member of the Traitor house(s). The game never knows which.
+- **Mission:**
+  - Phases: `question` → `lock` (the voice line "Houses, lock in…" plus a 3-2-1 countdown on the floor) → `mark` (the tutor toggles the houses that were wrong) → `mresult`.
+  - `pot += right × pot`.
+  - Shield: the living house with the most right answers this round (ties drawn at random).
+- **Vote:**
+  - `voters()` = living houses minus the poisoned house. Each casts one vote via buttons, revealed one by one with a tally.
+  - Tie → revote among the tied houses; a second tie means no banishment.
+  - Banished house → ghost, `role` traitor or faithful as tapped by the tutor. Poison is cleared after every vote.
+- **Night:**
+  - Target any living house except the shielded one.
+  - `nightType` is poison (`S.poisoned=k`) or murder (needs `S.daggers>0`, which starts equal to the number of Traitor houses; the house becomes a ghost).
+  - Revealed at breakfast via `nightReveal()`.
+- **End conditions:**
+  - `tLeft()<=0` → the Faithful win.
+  - `traitorsControl()` (Traitor houses left ≥ Faithful houses left) → the Traitors win, reason `control`.
+  - Final round → endVote → endGame → winners.
+- **New clips:**
+  - `host_poisoned(_2)`, `host_tie`, `host_lockin`.
+  - Re-recorded: `host_night_traitors`, `intro_3`, `intro_7`, `intro_8`, `intro_9`.
+  - `host_recruit` is no longer used.
+- **Tested:**
+  - A full 5-house game: tie → revote, poison removes a vote, banishing the Traitors → the Faithful win.
+  - Dagger → Traitors take control.
+  - Daggers run out → poison only.
 
 ## 4. Files and build
 
