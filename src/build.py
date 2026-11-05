@@ -52,7 +52,7 @@ st.append(["Setting", "Value", "What it does"])
 st.append(["Game name", SETTINGS["name"], "Shown on the walls"])
 st.append(["Pot per correct answer", SETTINGS["pot"], "Pounds added to the prize pot for each right answer"])
 st.append(["Questions per mission", SETTINGS["qper"], "How many questions each mission has"])
-st.append(["Seconds per question", SETTINGS["secs"], "Thinking time before houses lock in their answer"])
+st.append(["Seconds per question", SETTINGS["secs"], "Thinking time before answers lock"])
 st.append(["Discussion minutes", SETTINGS["discuss"], "Length of each Round Table discussion"])
 for c in st[1]: c.font = Font(bold=True)
 st.column_dimensions["A"].width = 26; st.column_dimensions["B"].width = 16; st.column_dimensions["C"].width = 70
