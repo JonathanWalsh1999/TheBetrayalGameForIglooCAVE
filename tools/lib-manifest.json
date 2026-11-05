@@ -1,0 +1,4 @@
+{
+ "lib/peerjs.min.js": "https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js",
+ "lib/qrcode.js": "https://unpkg.com/qrcode-generator@1.4.4/qrcode.js"
+}
