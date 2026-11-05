@@ -1,0 +1,12 @@
+name: Phone link test
+on:
+  push:
+    paths: ['tools/net-test.js','play.html','src/index.template.html']
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm i playwright@1.47.2 && npx playwright install --with-deps chromium
+      - run: (python3 -m http.server 8000 &) && sleep 1 && node tools/net-test.js
