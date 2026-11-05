@@ -7,7 +7,7 @@ from openpyxl.styles import Font, PatternFill, Alignment
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
-SETTINGS = {"name": "The Betrayal", "pot": 500, "discuss": 3, "qper": 3, "secs": 45}
+SETTINGS = {"name": "The Betrayal", "pot": 100, "discuss": 3, "qper": 3, "secs": 45}
 
 data = json.load(open(os.path.join(HERE, "sample_questions.json")))
 data["settings"] = SETTINGS
