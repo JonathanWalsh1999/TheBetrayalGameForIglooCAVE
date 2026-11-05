@@ -1,6 +1,6 @@
 # The Betrayal: project context
 
-Read this first when picking the project back up. Last updated: 29 Oct 2026, at **Version 3**. **Section 3d (v3) is current**; 3c (v2) is kept for history.
+Read this first when picking the project back up. Last updated: 5 Nov 2026, at **Version 4**. **Section 3f (v4, phones) is current.** Sections 1–3e describe the older house-based versions and are kept for history.
 Sister project: `JonathanWalsh1999/MonopolyStyleBoardGameForIglooCAVE` (Campus Tycoon), which has its own PROJECT_CONTEXT.md. This game reuses its approach (scaling, xlsx reader, audio pipeline, floor answer zones), so read that file too for the shared conventions.
 
 ## 1. What it is
@@ -19,6 +19,10 @@ A Traitors-*inspired* educational game for **further-education college students*
   - Knocked-out players become **ghosts**: they still answer with their house, but can't vote.
   - Name: **The Betrayal**.
   - Game length: picked by the tutor (20, 30, 45 or 60 minutes, which converts to 1–4 rounds via `roundsFor(m)=round((m-6)/12)`).
+
+## 1b. Version 4 in one paragraph
+
+Every student plays on **their own phone** (QR code → `play.html`, type a name). There are **no houses**. The game knows each player and their role, so roles are private on the phone (press and hold), answers, votes and the night are all done on phones, and the walls show the evidence. Pages is enabled and the game is live.
 
 ## 2. Layout (canvas 12566 × 4516; walls 1080 px high; floor x3436 y1080, 2847 × 3436)
 
@@ -140,12 +144,71 @@ The user raised the worry that students might peek during the eyes-closed parts.
 - The host announces that anyone **caught peeking is banished on the spot**, and the rules panel says the same.
 - Re-recorded for this: `host_close_eyes`, `host_choosing`, `host_traitors_open/close`, `host_all_open`, `host_night`, `host_night_traitors`, `host_night_close`, `host_breakfast`.
 
+## 3f. Version 4: phones, no houses (current)
+
+**Why:** the user said the v3 rules didn't make sense:
+- there's no real incentive;
+- houses are hard to track and pointless when everyone shares one pot;
+- Traitors had no reason to answer wrong, because they want the pot too;
+- final-round banishments should stay hidden;
+- shields were random when everyone was right.
+
+**Decisions (multiple choice):**
+- Incentive: bragging rights; the pot is pretend.
+- Students answer on their phones via QR. The user said "forget no-phone mode", so phones are **required**.
+- Shield: the most right answers in the mission, with the fastest total answer time breaking ties.
+- Daggers: +1 when **fewer than half of the living players** get a question right.
+- Phones do everything: role, answers, votes and the Traitors' night kill.
+
+**The phone link:**
+- PeerJS 1.5.4 (`lib/peerjs.min.js`), using the free public broker 0.peerjs.com with no accounts. The CAVE page is peer `btrl-<room>`, where the room is 4 consonants (or `?room=`). Phones connect to it.
+- `?local` swaps in a BroadcastChannel, for same-browser testing. `?peer=host:port` uses your own PeerJS server.
+- `lib/qrcode.js` (qrcode-generator 1.4.4) draws the join QR.
+- Both libraries were fetched by `.github/workflows/fetch-libs.yml` from `tools/lib-manifest.json`, because the container can't reach npm or CDNs.
+- Phones keep a `pid` in localStorage and re-send `hello` on reconnect, so a refreshed phone gets its screen back.
+
+**Host-side code:**
+- `S.P[pid] = {name, role 'T'|'F', out, how, poisoned, seen, rec[], online, cid, hidden}`, with `S.order` holding the join order.
+- `sync()` sends each phone `screenFor(p)` plus `me`.
+- Phone messages: hello, seen, ans, self, vote, night, end, ping.
+- `autoCheck()` moves on by itself once every *online* phone has acted. The tutor can always move on sooner.
+
+**Flow:**
+1. setup/lobby: QR plus the room code, players appear on the left wall (tap twice to remove), Traitors Auto (≈n/7, 1–3) or 1–4, minutes. Minimum 4 players.
+2. roles: each phone shows press-and-hold to see the role; Traitors also see their fellow Traitors. Then `choosing` ("Look up").
+3. mission:
+   - `question` (phones answer A–D with letter, shape and colour; answers can be changed until the clock ends) → `lock` → `mresult`, showing counts per option, X of Y right and +£.
+   - Open questions use `self`: players mark themselves on their phones.
+   - Pot = £100 (setting) × every right answer, ghosts included.
+   - Dagger if living right < living/2.
+   - `missionend`: the shield goes to the living player with the most right answers this mission, then the lowest total time.
+4. roundtable: discussion clock and starters. The left wall shows every player's ✓/✗ for this mission and their overall %.
+5. vote: phones list the living players (not themselves). Ghosts and poisoned players can't vote. → `vreveal` shows "A → B" one at a time → `vtally`; a tie leads to a revote among the tied players once, then nobody. → `banish` (the player stands and declares) → `banished`, where the role is revealed and win checks run (all Traitors out → the Faithful win; Traitors ≥ Faithful → the Traitors win, `outnumber`).
+6. **Final round:** banished roles are hidden (`p.hidden`, `S.hidden`, the host's "secret" line) and are revealed one by one at `finale`.
+7. night: every phone gets a screen.
+   - Traitors pick a victim (not a Traitor, not the shield holder) plus poison or dagger, and see each other's picks.
+   - Everyone else gets a secret "who do you suspect?" poll (hunch/sure), so nobody can spot the Traitors by who is tapping.
+   - Auto-advances once everyone has chosen and the Traitors agree, or after a 75 s timer. The most-picked choice wins.
+   - The morning shows the victim and the most-suspected player from the poll.
+8. endvote: phones vote End or Banish again. Majority (ties end the game); 2 or fewer living players end it automatically.
+9. end: roles shown on the wall. Each phone says whether you won and your score.
+
+**Export:** CSV with time, round, player, role, question, answer, correct. **Late joiners** come in as Faithful.
+
+**Voice:** all host lines and the intro were re-recorded for v4 (44 clips). HOST keys: roles, allopen, mission(2), correct(2), dagger(2), shield, roundtable(2), vote, votes, stand, wastraitor(2), wasfaithful(2), secret, night, breakfast, murdered(2), poisoned, nomurder, finalrt, endvote, revealyou, tie, lockin, faithfulwin, traitorwin, outnumber.
+
+**Tests:**
+- A local full game with 6 phones covered: roles, 2 rounds, a dagger earned, the shield, a vote reveal, a banish, a murder, a final hidden banish, the end vote, the reveal and the win. No errors.
+- `.github/workflows/net-test.yml` runs `tools/net-test.js` on GitHub over the **real internet** (4 phones join, roles, answers). It passed. It reruns on every push to the game files.
+
 ## 4. Files and build
 
 - **Source:**
   - `src/index.template.html` is the game (edit this file).
   - `src/build.py` injects `src/sample_questions.json` (120 questions copied from the Monopoly game) and writes `index.html` plus `questions.xlsx`.
   - Run `python3 src/build.py`.
+  - `play.html` is the phone page. It is hand-written, not built.
+  - `lib/`: vendored PeerJS and the QR library.
 - **questions.xlsx:**
   - Same columns as the Monopoly game: Topic, Level, Question, Option A–D, Answer, Explanation.
   - Settings sheet: Game name, Pot per correct answer, Discussion minutes.
@@ -165,7 +228,8 @@ The user raised the worry that students might peek during the eyes-closed parts.
   - Git config: `user.name Claude`, `user.email noreply@anthropic.com`.
   - Commit trailers are required.
   - Always `git pull` first, because the Action commits audio.
-- **Testing:**
+- **Testing (v4):** serve the repo, then open `/?preview&local&room=TEST` and phones at `/play.html?r=TEST&local&pid=p1` in the same browser context (BroadcastChannel). Drive phones by clicking `[data-cb=…]` buttons. The real-network check is the GitHub Action.
+- **Testing (old):**
   - Playwright headless with `python3 -m http.server`, using `?preview`. Drive the game with `S.actA[i].fn()`.
   - Find buttons by label, because scenes auto-advance (choose3 and night3 auto-advance after 11 s and 5 s).
   - The vote countdown takes about 6 s.
@@ -175,6 +239,8 @@ The user raised the worry that students might peek during the eyes-closed parts.
 ## 6. Status and ideas
 
 - **v1 status:** fully playable. A full playthrough test passed: choosing, a mission, a vote, a traitor reveal, recruiting, a mission, the final vote, and the end. All 50 clips load and none are cut off.
+- **v4 status:** fully playable on phones. The real-internet link was tested.
+- **Risk to check at college:** the college Wi-Fi might block WebRTC or 0.peerjs.com. If phones can't join, try mobile data. A self-hosted PeerJS server is an option (`?peer=`).
 - **Not yet built / possible next steps:**
   - Word-document question import (shared idea with the Monopoly game).
   - Optional student names for voting zones on the floor.

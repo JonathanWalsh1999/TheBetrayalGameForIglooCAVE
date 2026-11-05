@@ -1,87 +1,83 @@
 # The Betrayal – Igloo CAVE edition
 
-A Traitors-style learning game for the Igloo CAVE webview. Small teams ("houses") answer subject questions to grow a prize pot, while a few secret **Traitors** try to sabotage them. At the **Round Table**, students argue from evidence and vote someone out.
+A Traitors-style learning game for the Igloo CAVE webview. Every student plays on their own phone, answering subject questions to grow a prize pot, while a few secret **Traitors** try to steer them wrong. At the **Round Table**, students argue from evidence and vote someone out.
 
 It's an original game *inspired by* the reality show format. It doesn't use the show's name, logo or music.
 
 ## Set up
 
-1. On GitHub, go to **Settings → Pages → Deploy from a branch → main → / (root)** and save. After about a minute the game is live at `https://jonathanwalsh1999.github.io/TheBetrayalGameForIglooCAVE/`.
+1. The game is live at `https://jonathanwalsh1999.github.io/TheBetrayalGameForIglooCAVE/`.
 2. In Igloo, add a **WebView layer** pointing at that address. Set the webview resolution to **12566 × 4516** and turn Dynamic Browser Resolution **off**. These are the same settings as the Monopoly-style game.
-3. Run everything with the tablet's cast mouse. Tutor buttons are at the bottom of the **front wall**. Pause, End now, Sound, Music and Export are on the **back wall**.
-4. URL options:
+3. **Every student needs a phone with internet** (Wi-Fi or mobile data). There's no app to install and no accounts. They scan the QR code on the front wall, or type the address shown, then enter their first name and surname initial.
+4. Run everything with the tablet's cast mouse. Tutor buttons are at the bottom of the **front wall**. Pause, End now, Sound, Music and Export are on the **back wall**.
+5. URL options:
    - `?preview` fits the whole canvas in a laptop window.
    - `?grid` (or the G key) shows the projector alignment grid.
    - `?q=file.xlsx` loads a different question file.
+
+> If phones can't connect on the college Wi-Fi, try mobile data. Some networks block the direct phone link.
 
 ## Questions
 
 `questions.xlsx` uses **the same format as the Monopoly-style game**, so one question bank works in both. Replace it in the repo, or press **Load Excel questions** on the setup screen.
 
-- **Level** (1–3) controls difficulty. Round 1 uses level 1, and later rounds use harder questions when there are enough.
-- **How many?** Each round asks one question per house. 30 or more avoids repeats; 60 or more is ideal.
-- **Settings sheet:**
-  - Game name.
-  - **Pot per correct answer** (default £1,000).
-  - **Discussion minutes** (default 3).
+- **Level** (1–3) controls difficulty. Later rounds use harder questions when there are enough.
+- Each mission asks 3 questions, and everyone answers on their phone. 20 or more questions avoids repeats; 40 or more is ideal.
+- Questions without options A–D work too: players mark themselves right or wrong on their phone after the reveal.
 
 ## The intro
 
-Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-style opening. It explains Faithful and Traitors, missions, the Round Table, nights, ghosts and how to win, then goes straight into The Choosing.
+Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-style opening. It explains the rules, then starts the game.
 
 - **❚❚ Pause** (or the space bar) freezes it.
 - **Skip intro ›** jumps ahead.
-- **Replay intro** on the back wall plays it again mid-game. The game picks up where it left off afterwards.
+- **Replay intro** on the back wall plays it again mid-game.
 
-## How a game runs (Version 3)
+## How a game runs (Version 4: phones)
 
-1. **Setup:** choose the houses (3–6), how many Traitors (1–3, about 1 per 7 students), and the game length.
+1. **Join:** students scan the QR code. Their names appear on the left wall. Tap a name twice to remove it.
+   - Choose the number of Traitors (**Auto** is about 1 per 7 students) and the game length.
+   - You need at least 4 players.
 
-   | Game length | Rounds, plus the finale |
+   | Game length | Rounds |
    |---|---|
    | 20 min | 1 |
    | 30 min | 2 |
    | 45 min | 3 |
    | 60 min | 4 |
 
-2. **The Choosing:** everyone **turns to face the CAVE wall and covers their eyes**. The tutor taps **every** student's shoulder: **once** for Faithful and **twice** for a Traitor (ideally in different houses). The Traitors then turn around to see each other while everyone else faces the wall.
-
-   Because everyone gets tapped, peeking gives nothing away, and a loud heartbeat covers any movement. **Anyone caught peeking is banished on the spot.** The game never knows who the Traitors are; only the tutor does.
-3. **Mission:** 3 questions, and **every house answers every question** by standing on a floor zone.
-   - After a 3-2-1 lock-in the right answer lights up.
-   - The tutor taps the houses that were **wrong**, then **Confirm**.
-   - Each right house adds £500 to the pot.
-   - A Traitor *inside* a house tries to steer their own housemates to the wrong answer.
-   - The house with the most right answers wins the **🛡 shield**: nobody in it can be attacked tonight.
-4. **Round Table:** a timed discussion. The walls show each house's ✓/✗ answers, plus sentence starters like *"In our house, ___ pushed for the wrong answer."*
-5. **The vote:** the game goes round the houses one at a time.
-   - Each house agrees on **one person** and says the name out loud. Ghosts and poisoned players don't get a say.
-   - The tutor keeps a tally, then taps the **house** of the person named most.
-   - If there's a tie, press **Tie – revote**. A second tie means nobody is banished.
-   - The banished player stands and says Traitor or Faithful. The tutor taps the truth.
-6. **Night:** everyone faces the wall again. The Traitors turn around and point at a victim's back. The victim can't be in the shielded house.
-   - **☠ Poison** (hold up 1 finger): the victim gets no say in their house's next vote.
-   - **🗡 Dagger** (make a fist): the victim is murdered. There's one dagger per Traitor for the whole game.
-   - The tutor taps the victim's house.
-7. **Breakfast:** the house is revealed, and the tutor points to the victim.
-8. **👻 Ghosts** (banished or murdered) still answer with their house, but never vote.
+2. **Roles:** each phone secretly shows **Faithful** or **Traitor**. Students press and hold to see it, so nobody can read it over their shoulder. Traitors also see who the other Traitors are. Nobody has to close their eyes.
+3. **Mission:** 3 questions, answered on phones. Talking is allowed, so the Traitors can try to talk people into the wrong answer.
+   - Every right answer adds **£100** to the pot.
+   - If **fewer than half** of the players still in get a question right, the **Traitors earn a dagger**. That's why the Traitors want wrong answers, even though a wrong answer costs pot money.
+   - 🛡 **Shield:** the player with the most right answers in the mission (the fastest wins a tie) is safe tonight.
+4. **Round Table:** the left wall shows everyone's ✓/✗, which is the evidence. Students argue using the sentence starters.
+5. **Vote** on phones. The wall then reveals who voted for whom. Ties get one revote.
+   - The banished player stands up and says Traitor or Faithful, then the wall reveals the truth.
+   - **In the final round, the truth is kept secret until the very end.**
+6. **Night:** heads down, everyone on their phones.
+   - The Traitors choose a victim: ☠ **poison** (no vote next time) or 🗡 **dagger** (murdered).
+   - Everyone else answers a secret "who do you suspect?" poll, so nobody can spot the Traitors by who is tapping.
+7. **Breakfast:** the victim is revealed, along with the most-suspected player from the poll.
+8. **👻 Ghosts** (banished or murdered) still answer questions but never vote.
 9. **How it ends:**
-   - Every Traitor banished: the Faithful win.
-   - Otherwise, after the last mission there's a final Round Table and vote, then the class votes to **end the game** or **banish again**.
-   - Any Traitor still hidden at the end steals the pot.
-10. **Debrief:** **Most-missed questions** and **Export results**.
+   - Every Traitor is banished: the Faithful win.
+   - The Traitors outnumber the Faithful: the Traitors win.
+   - Otherwise, after the final vote everyone votes on their phone to **end the game** or **banish again**. Then the hidden roles are revealed, and any Traitor still in steals the pot.
+10. **Debrief:** **Most-missed questions**, and **Export results**, which gives a CSV of every student's answers.
 
 ### Settings sheet
 
 | Setting | Default | What it does |
 |---|---|---|
-| Pot per correct answer | £500 | Added for each house that's right |
+| Pot per correct answer | £100 | Added for each right answer |
 | Questions per mission | 3 | Questions in each mission |
-| Seconds per question | 45 | Thinking time before houses lock in |
+| Seconds per question | 45 | Thinking time |
 | Discussion minutes | 3 | Length of each Round Table |
 
 ## Tips for tutors
 
-- About 1 Traitor per 7 students works well. Put Traitors in different houses so each one sabotages a different team.
+- About 1 Traitor per 7 students works well. **Auto** picks this for you.
+- Late arrivals can still join by scanning the code. They come in as Faithful.
 - Traitors still need to *know* the right answer in order to argue convincingly for a wrong one, so they learn too.
 - Use the Round Table to push for evidence-based talk: "What makes you say that?"

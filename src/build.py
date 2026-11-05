@@ -29,7 +29,7 @@ rows = [
     ["Explanation: shown after the answer – keep it to one sentence."],
     [""],
     ["Settings sheet: change the numbers in the Value column."],
-    ["How many questions? Each mission asks 3 (every house answers each). 4 rounds = 12 questions, so 20+ means no repeats; 40+ is ideal."],
+    ["How many questions? Each mission asks 3 and everyone answers on their phone. 4 rounds = 12 questions, so 20+ means no repeats; 40+ is ideal."],
 ]
 for r in rows: help_.append(r)
 help_["A1"].font = Font(bold=True, size=14); help_.column_dimensions["A"].width = 120
@@ -50,8 +50,8 @@ for row in ws.iter_rows(min_row=2):
 st = wb.create_sheet("Settings")
 st.append(["Setting", "Value", "What it does"])
 st.append(["Game name", SETTINGS["name"], "Shown on the walls"])
-st.append(["Pot per correct answer", SETTINGS["pot"], "Pounds added to the prize pot for each house that answers a mission question right"])
-st.append(["Questions per mission", SETTINGS["qper"], "How many questions each mission has (every house answers each one)"])
+st.append(["Pot per correct answer", SETTINGS["pot"], "Pounds added to the prize pot for each right answer"])
+st.append(["Questions per mission", SETTINGS["qper"], "How many questions each mission has"])
 st.append(["Seconds per question", SETTINGS["secs"], "Thinking time before houses lock in their answer"])
 st.append(["Discussion minutes", SETTINGS["discuss"], "Length of each Round Table discussion"])
 for c in st[1]: c.font = Font(bold=True)
