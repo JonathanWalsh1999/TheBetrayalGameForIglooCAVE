@@ -114,6 +114,12 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Inte
 /* night / dark overlay over the walls */
 #dark{position:absolute;left:0;top:0;width:12566px;height:4516px;background:#000;opacity:0;pointer-events:none;transition:opacity 2.5s;z-index:20}
 #dark.on{opacity:.94}
+#atmos{position:absolute;left:0;top:0;width:12566px;height:4516px;pointer-events:none;z-index:19;opacity:0;transition:opacity 3s;
+  background:radial-gradient(ellipse 1500px 600px at 1718px 560px,transparent 30%,rgba(0,0,0,.8)),radial-gradient(ellipse 1300px 600px at 4860px 560px,transparent 35%,rgba(0,0,0,.75)),radial-gradient(ellipse 1500px 600px at 8001px 560px,transparent 30%,rgba(0,0,0,.8)),radial-gradient(ellipse 1300px 600px at 11142px 560px,transparent 30%,rgba(0,0,0,.8));background-size:100% 1080px;background-repeat:no-repeat}
+#atmos.tense{opacity:.85}#atmos.dim{opacity:1;transition:opacity 1.5s}
+#flash{position:absolute;left:0;top:0;width:12566px;height:4516px;pointer-events:none;z-index:45;opacity:0;background:#e6ecff}
+#flash.go{animation:flash 1.6s ease-out}#flash.red{background:#b0101e}
+@keyframes flash{0%{opacity:0}5%{opacity:.8}10%{opacity:.08}16%{opacity:.55}34%{opacity:0}100%{opacity:0}}
 .night #card,.night .dock,.night #floor,.night #ftitle{z-index:21}
 .reveal{position:absolute;top:0;height:1080px;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:30;pointer-events:none;text-align:center}
 .reveal .big{font-size:260px;letter-spacing:10px;animation:rv 1.4s cubic-bezier(.2,.9,.3,1.1)}
@@ -197,7 +203,7 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Inte
   <div class="panel" id="chron"></div>
   <div class="panel" id="rules"></div>
 
-  <div id="dark"></div>
+  <div id="atmos"></div><div id="dark"></div><div id="flash"></div>
   <div id="reveals"></div>
   <div id="banner"></div>
   <div id="intro" class="hide"><div class="iw" style="left:0;width:3436px"></div><div class="iw" style="left:3436px;width:2847px"></div><div class="iw" style="left:6283px;width:3436px"></div><div class="iw" style="left:9719px;width:2847px"></div><div id="ifloor"></div>
@@ -309,6 +315,7 @@ function botAct(p){const ph=S.phase,key=ph+':'+S.round+':'+S.mq+':'+(S.among?'r'
   else if(ph==='question'&&S.q.opts.length)later(()=>answer(p,p.role==='T'?pick(S.q.opts.filter(o=>o.L!==S.q.ans)).L:Math.random()<.6?S.q.ans:pick(S.q.opts).L),2000,9000);
   else if(ph==='self')later(()=>selfMark(p,p.role!=='T'&&Math.random()<.6));
   else if(ph==='vote'&&!p.out){const c=voteCands().filter(q=>q!==p);if(c.length)later(()=>castVote(p,pick(c).pid),1500,6000)}
+  else if(ph==='night'&&!p.out&&p.role==='T'&&S.nightD===0)later(()=>nightPick(p,{targets:[]}));
   else if(ph==='night'&&!p.out){if(p.role==='T'){const v=victims();if(v.length){const mate=living().find(q=>q.role==='T'&&q!==p&&S.night[q.pid]);
       later(()=>nightPick(p,{targets:mate?S.night[mate.pid]:[...v].sort(()=>Math.random()-.5).slice(0,S.nightD).map(q=>q.pid)}),2000,6000)}}
     else{const c=living().filter(q=>q!==p);if(c.length)later(()=>nightPick(p,{target:pick(c).pid}),1500,6000)}}
@@ -324,6 +331,7 @@ function screenFor(p){const ph=S.phase,W=(title,msg)=>({s:'wait',title,msg});
   if(ph==='vote'){if(p.out)return W('👻 You are a ghost','Ghosts never vote. Watch the walls…');
     return {s:'vote',cands:voteCands().filter(q=>q!==p).map(q=>({pid:q.pid,name:q.name})),picked:S.votes[p.pid]||null,revote:!!S.among}}
   if(ph==='night'){if(p.out)return W('👻 Sleep, ghost','Heads down. The night belongs to the living.');
+    if(p.role==='T'&&S.nightD===0)return {s:'recruit',done:!!S.night[p.pid]};
     if(p.role==='T')return {s:'nightT',cands:victims().map(q=>({pid:q.pid,name:q.name})),n:S.nightD,mine:S.night[p.pid]||[],shield:S.shield&&S.P[S.shield]?S.P[S.shield].name:null,
       mates:living().filter(q=>q.role==='T'&&q!==p).map(q=>({name:q.name,picks:(S.night[q.pid]||[]).map(id=>S.P[id]?S.P[id].name:'?')}))};
     return {s:'nightF',cands:living().filter(q=>q!==p).map(q=>({pid:q.pid,name:q.name})),picked:S.sus[p.pid]||null}}
@@ -335,12 +343,12 @@ function screenFor(p){const ph=S.phase,W=(title,msg)=>({s:'wait',title,msg});
     vreveal:['The votes','Look at the walls.'],vtally:['The votes','Look at the walls.'],banish:['Banished…','Look at the centre.'],banished:['Banished…','Look at the walls.'],breakfast:['Good morning','Look at the walls. Who made it through the night?'],finale:['The truth','Look at the walls.']}[ph];
   return W(L?L[0]:'Look up',L?L[1]:'Watch the walls.')}
 /* ---------- sound: ElevenLabs clips in assets/audio, with built-in fallbacks ---------- */
-const SFX=['sfx_gong','sfx_heartbeat','sfx_bell','sfx_drumroll','sfx_traitor','sfx_faithful','sfx_gasp','sfx_door','sfx_wolf','sfx_tick','sfx_correct','sfx_wrong','sfx_scroll','sfx_whoosh'];
+const SFX=['sfx_gong','sfx_heartbeat','sfx_bell','sfx_drumroll','sfx_traitor','sfx_faithful','sfx_gasp','sfx_door','sfx_wolf','sfx_tick','sfx_correct','sfx_wrong','sfx_scroll','sfx_whoosh','sfx_thunder','sfx_wind','sfx_drone','sfx_whispers','sfx_crow','sfx_sting'];
 const V=(b,n)=>[b].concat(Array.from({length:n-1},(_,i)=>b+'_'+(i+2)));
 const HOST={roles:['host_roles'],allopen:['host_all_open'],mission:V('host_mission',2),correct:V('host_correct',2),dagger:['host_dagger_2'],dagger3:['host_dagger'],shield:['host_shield'],roundtable:V('host_roundtable',2),
   vote:['host_vote'],votes:['host_votes_in'],stand:['host_stand'],wastraitor:V('host_was_traitor',2),wasfaithful:V('host_was_faithful',2),secret:['host_secret'],night:['host_night'],breakfast:['host_breakfast'],
   murdered:V('host_murdered',2),nomurder:['host_no_murder'],finalrt:['host_final_rt'],endvote:['host_endvote'],revealyou:['host_reveal_yourselves'],tie:['host_tie'],lockin:['host_lockin'],
-  faithfulwin:['host_faithful_win'],traitorwin:['host_traitor_win'],outnumber:['host_outnumber']};
+  faithfulwin:['host_faithful_win'],traitorwin:['host_traitor_win'],outnumber:['host_outnumber'],notover:['host_not_over']};
 const AUD={},OK={};let muted=false,hostNow=null,loopNow={},actx=null;
 const INTRO=Array.from({length:11},(_,i)=>'intro_'+(i+1));
 [...SFX,...Object.values(HOST).flat(),...INTRO].forEach(k=>{const a=new Audio();a.preload='auto';a.oncanplaythrough=()=>OK[k]=1;a.onerror=()=>OK[k]=0;a.src=`assets/audio/${k}.mp3`;AUD[k]=a});
@@ -358,7 +366,7 @@ function loop(k,on,vol=.6){if(on){if(loopNow[k]||muted)return;if(OK[k]!==1){if(k
 function stopLoops(){Object.keys(loopNow).forEach(k=>loop(k,false))}
 /* the host never talks over himself: lines queue; big moments first; stale small comments are dropped */
 const RECENT=[],HQ=[];let hostGap=false;
-const PRIO={wastraitor:3,wasfaithful:3,faithfulwin:4,traitorwin:4,outnumber:4,murdered:3,roles:3,allopen:3,night:3,breakfast:3,stand:3,vote:3,votes:3,secret:3,endvote:3,revealyou:3,shield:2,roundtable:2,finalrt:3,mission:2,correct:2,dagger:3,dagger3:3,nomurder:3,tie:3,lockin:3};
+const PRIO={wastraitor:3,wasfaithful:3,faithfulwin:4,traitorwin:4,outnumber:4,murdered:3,roles:3,allopen:3,night:3,breakfast:3,stand:3,vote:3,votes:3,secret:3,endvote:3,revealyou:3,shield:2,roundtable:2,finalrt:3,mission:2,correct:2,dagger:3,dagger3:3,notover:4,nomurder:3,tie:3,lockin:3};
 function host(ev,delay=0,chance=1){const list=HOST[ev];if(!list||Math.random()>chance)return;
   setTimeout(()=>{if(muted)return;if(talking()){HQ.push({ev,p:PRIO[ev]||1,t:Date.now()});HQ.sort((a,b)=>b.p-a.p||a.t-b.t);if(HQ.length>3)HQ.length=3;return}sayNow(ev)},delay)}
 function sayNow(ev){const list=HOST[ev];let pool=list.filter(k=>OK[k]&&!RECENT.includes(k));if(!pool.length)pool=list.filter(k=>OK[k]);if(!pool.length){nextHost();return}
@@ -377,7 +385,7 @@ function startMusic(){if(!MUS.on||muted||MUS.gain||!ac())return;
   MUS.gain.gain.setTargetAtTime(MUS.base,actx.currentTime,2);MUS.next=actx.currentTime+.2;MUS.step=0;MUS.timer=setInterval(schedMusic,60)}
 function stopMusic(){if(!MUS.gain)return;clearInterval(MUS.timer);const g=MUS.gain;g.gain.setTargetAtTime(.0001,actx.currentTime,.4);setTimeout(()=>g.disconnect(),2000);MUS.gain=null}
 function duck(on){if(MUS.gain)MUS.gain.gain.setTargetAtTime(on?MUS.base*.15:MUS.base,actx.currentTime,.4)}
-function mood(m){MUS.mood=m;if(MUS.bus)MUS.bus.frequency.setTargetAtTime(m==='tense'?2200:m==='night'?700:1400,actx.currentTime,1)}
+function mood(m){MUS.mood=m;amb(m);atmos(m==='tense'?'tense':'');if(MUS.bus)MUS.bus.frequency.setTargetAtTime(m==='tense'?2200:m==='night'?700:1400,actx.currentTime,1)}
 function schedMusic(){const beat=1;while(MUS.next<actx.currentTime+.4){musStep(MUS.step,MUS.next);MUS.next+=beat/2;MUS.step++}}
 function pad(f,t,dur,vol,type='sawtooth'){const o=actx.createOscillator(),o2=actx.createOscillator(),g=actx.createGain();o.type=type;o2.type=type;o.frequency.value=f;o2.frequency.value=f;o2.detune.value=9;
   g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+dur*.35);g.gain.setTargetAtTime(.0001,t+dur*.7,dur*.25);o.connect(g);o2.connect(g);g.connect(MUS.bus);o.start(t);o2.start(t);o.stop(t+dur*1.6);o2.stop(t+dur*1.6)}
@@ -388,7 +396,17 @@ function musStep(s,t){const b=s%16,ch=PROG[Math.floor(s/16)%4],m=MUS.mood;
   if(m==='tense'&&(b%2===0)){thud(t,.45,62,40,.22);thud(t+.22,.3,58,38,.2)}
   if(m==='day'&&(b===6||b===12)&&Math.random()<.6)pad(mtof(ch[3]+12+[0,2,3][rnd(3)]),t,1.8,.012,'sine');
   if(m==='night'&&b===8&&Math.random()<.5)pad(mtof(ch[0]+36),t,3,.008,'sine')}
-addEventListener('pointerdown',()=>{ac();startMusic()},{once:true});
+addEventListener('pointerdown',()=>{ac();startMusic();amb(MUS.mood)},{once:true});
+/* ---------- atmosphere: wind + drone beds that follow the mood, random eerie sounds, lightning ---------- */
+const AMB={vol:{sfx_wind:0,sfx_drone:0},timer:0};
+function amb(m){const T=m==='off'||muted||!MUS.on?{sfx_wind:0,sfx_drone:0}:m==='night'?{sfx_wind:.32,sfx_drone:.22}:m==='tense'?{sfx_wind:.08,sfx_drone:.3}:{sfx_wind:.1,sfx_drone:0};
+  Object.keys(T).forEach(k=>{const a=AUD[k];if(!a||OK[k]!==1)return;if(T[k]>0&&a.paused){a.loop=true;a.volume=0;a.play().catch(()=>{})}AMB.vol[k]=T[k]});
+  clearInterval(AMB.timer);AMB.timer=setInterval(()=>{let busy=false;Object.keys(AMB.vol).forEach(k=>{const a=AUD[k];if(!a||OK[k]!==1)return;const want=AMB.vol[k]*(talking()?.5:1),v=a.volume+Math.sign(want-a.volume)*Math.min(.02,Math.abs(want-a.volume));a.volume=Math.max(0,Math.min(1,v));
+    if(Math.abs(a.volume-want)>.005)busy=true;else if(want===0&&!a.paused)a.pause()});if(!busy)clearInterval(AMB.timer)},120)}
+setInterval(()=>{if(muted||!MUS.on||S.introOn||talking()||S.paused)return;const m=MUS.mood,r=Math.random();
+  if(m==='night'&&r<.45)play(r<.25?'sfx_whispers':'sfx_crow',{vol:.3});else if(m==='tense'&&r<.2)play('sfx_whispers',{vol:.18})},14000);
+function atmos(c){const el=$('atmos');if(el)el.className=c||''}
+function lightning(red){const f=$('flash');if(!f)return;f.className='';void f.offsetWidth;f.className=red?'go red':'go';play('sfx_thunder',{vol:red?.6:.75})}
 
 /* ---------- the hall (walls) and the round table (floor) ---------- */
 (function drawHall(){const c=$('hall').getContext('2d');const g=c.createLinearGradient(0,0,0,270);g.addColorStop(0,'#0c0a10');g.addColorStop(1,'#1b1418');c.fillStyle=g;c.fillRect(0,0,3142,270);
@@ -418,7 +436,7 @@ function banner(t){$('banner').innerHTML=`<div>${t}</div>`;setTimeout(()=>{$('ba
 function revealAll(html,cls){$('reveals').innerHTML=WALLS.map(w=>`<div class="reveal" style="left:${w.x}px;width:${w.w}px;background:rgba(0,0,0,.8)"><div class="big ${cls}">${html}</div></div>`).join('');setTimeout(()=>{$('reveals').innerHTML=''},5200)}
 
 /* ---------- trailer intro: pausable, skippable, replayable mid-game ---------- */
-const INTRO_PACE=1.25,INTRO_RATE=.95,INTRO_GAP=1300;
+const INTRO_PACE=1.6,INTRO_RATE=.9,INTRO_GAP=2400;
 const wait=ms=>new Promise(r=>{let left=ms;const tick=()=>{if(!S.introOn||left<=0){r();return}if(!S.introPaused)left-=50;setTimeout(tick,50)};tick()});
 function clip(k){return new Promise(res=>{if(muted||OK[k]!==1){wait(2600).then(res);return}hush();const a=AUD[k];hostNow=a;a.currentTime=0;a.volume=1;a.playbackRate=INTRO_RATE;duck(true);
   let done=false;const fin=()=>{if(!done){done=true;duck(false);res()}};a.onended=fin;a.play().catch(fin);wait(24000).then(fin)})}
@@ -434,7 +452,7 @@ async function playIntro(){ac();startMusic();hush();stopLoops();S.replay=S.phase
   play('sfx_bell',{vol:.7});await wait(1600);if(!on())return;
   await seq('intro_1',[[0,T('SOMEWHERE IN<br>THIS CASTLE…')],[2600,T('A SECRET<br>IS BEING KEPT','gold')]]);if(!on())return;
   await seq('intro_2',[[0,T('MOST OF YOU ARE…')],[1400,T('🛡 FAITHFUL','faithful'),T('FAITHFUL','faithful'),()=>play('sfx_faithful',{vol:.6})],[1600,T('🛡 FAITHFUL','faithful')+sub('loyal · honest · here to win')]]);if(!on())return;
-  await seq('intro_3',[[0,T('BUT SOME<br>OF YOU…'),''],[2300,T('ARE NOT WHAT<br>YOU SEEM')],[1900,T('🗡 TRAITORS','traitor'),T('TRAITORS','traitor'),()=>{play('sfx_traitor',{vol:.8});play('sfx_gasp',{vol:.5})}]]);if(!on())return;
+  await seq('intro_3',[[0,T('BUT SOME<br>OF YOU…'),''],[2300,T('ARE NOT WHAT<br>YOU SEEM')],[1900,T('🗡 TRAITORS','traitor'),T('TRAITORS','traitor'),()=>{play('sfx_traitor',{vol:.8});play('sfx_gasp',{vol:.5});lightning(true)}]]);if(!on())return;
   mood('day');
   await seq('intro_4',[[0,T('YOUR PHONE<br>KNOWS WHO YOU ARE'),ICON('📱'),()=>play('sfx_gong',{vol:.6})],[2600,T('KEEP IT<br>HIDDEN','gold')+sub('press and hold to see your role')],[2200,T('SHOW NO ONE')]]);if(!on())return;
   await seq('intro_5',[[0,T('BY DAY…'),''],[1200,T('MISSIONS','gold')],[1300,T('✓ RIGHT ANSWERS')+sub('answer on your phone · climb the leaderboard'),T('🏆','gold'),()=>play('sfx_correct',{vol:.6})],
@@ -474,8 +492,9 @@ const andList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.leng
 const online=list=>list.filter(p=>p.online);
 const allDone=(list,f)=>{const L=online(list);return L.length>0&&L.every(f)};
 /* when every phone that's connected has answered/voted, move on by itself (the tutor can always move on sooner) */
+function whenQuiet(f,extra=2500){const t=()=>{if(talking())setTimeout(t,500);else setTimeout(f,extra)};t()}
 function autoCheck(){clearTimeout(acT);acT=setTimeout(()=>{const ph=S.phase;
-  if(ph==='roles'&&allDone(players(),p=>p.seen))rolesDone();
+  if(ph==='roles'&&allDone(players(),p=>p.seen))whenQuiet(rolesDone,3000);
   else if(ph==='question'&&allDone(players(),p=>S.ans[p.pid]))lockIn();
   else if(ph==='self'&&allDone(players(),p=>S.ans[p.pid]))scoreQ();
   else if(ph==='vote'&&allDone(voters(),p=>S.votes[p.pid]))closeVote();
@@ -484,7 +503,7 @@ function autoCheck(){clearTimeout(acT);acT=setTimeout(()=>{const ph=S.phase;
 const ph2delay=()=>S.phase==='question'?900:S.phase==='night'?2500:1500;
 
 /* ---------- start: roles go to each phone in secret ---------- */
-function startGame(){ac();startMusic();hush();const n=S.order.length;
+function startGame(){ac();startMusic();hush();S.recruitNext=false;players().forEach(p=>p.recruited=false);const n=S.order.length;
   if(n<MIN_PLAYERS){banner(`NEED ${MIN_PLAYERS}+<br>PLAYERS`);if(S.phase!=='setup')newGame();return}
   const T=Math.max(1,Math.min(tCount(),Math.floor((n-1)/3)));const ids=[...S.order].sort(()=>Math.random()-.5),tids=new Set(ids.slice(0,T));
   players().forEach(p=>Object.assign(p,{role:tids.has(p.pid)?'T':'F',out:false,how:'',seen:false,rec:[]}));
@@ -493,10 +512,9 @@ function startGame(){ac();startMusic();hush();const n=S.order.length;
   scene({title:'WHO ARE YOU?',cardFn:()=>`<div class="big" style="font-size:100px">Look at your phone.</div><div class="mid" style="margin-top:24px">Hide the screen from everyone around you.<br><b style="color:var(--gold2)">Press and hold</b> to discover who you really are.</div>
       <div class="prog">Seen: ${players().filter(p=>p.seen).length} of ${n}</div>`,floor:`<div class="big">EYES ON<br>YOUR PHONE</div><div class="mid" style="margin-top:80px">📱 keep it hidden</div>`,
     say:'roles',dark:true,mood:'night',loops:['sfx_heartbeat'],next:{label:'Everyone has seen it ›',fn:rolesDone,cls:'go'}})}
-function rolesDone(){if(S.phase!=='roles')return;S.phase='choosing';play('sfx_gong',{vol:.8});const n=S.traitors;
-  scene({title:'THE GAME BEGINS',card:`<div class="big">Look up.</div><div class="mid" style="margin-top:30px;color:#ff6b75">${n} Traitor${n>1?'s are':' is'} among you.</div><div class="sub">Faithful: answer well, find the Traitors and vote them out.<br>Traitors: get answers wrong and trick the Faithful into getting them wrong too.<br>Forgot your role? <b>Press and hold</b> the button at the bottom of your phone.</div>`,
-    say:'allopen',dark:false,mood:'day',next:{label:'Begin the first mission ›',fn:startMission,cls:'go'}});banner(`${n} TRAITOR${n>1?'S':''}<br>AMONG YOU`)}
-/* ---------- missions: everyone answers on their phone ---------- */
+function rolesDone(){if(S.phase!=='roles')return;S.phase='choosing';play('sfx_gong',{vol:.8});lightning();
+  scene({title:'THE GAME BEGINS',card:`<div class="big">Phones down. Look up.</div><div class="mid" style="margin-top:30px;color:#ff6b75">The Traitors are among you.</div><div class="sub">How many? Nobody knows…<br>Faithful: answer well, find the Traitors and vote them out.<br>Traitors: get answers wrong and trick the Faithful into getting them wrong too.<br>Forgot your role? <b>Press and hold</b> the button at the bottom of your phone.</div>`,
+    say:'allopen',dark:false,mood:'day',next:{label:'Begin the first mission ›',fn:startMission,cls:'go'}});banner('THE TRAITORS<br>ARE AMONG YOU')}
 function startMission(){S.phase='mission';S.mq=0;S.shield=null;S.dUnder=false;S.dNone=false;S.final=S.round>=S.rounds;
   scene({title:`MISSION · ROUND ${S.round}${S.final?' (FINAL)':''}`,card:`<div class="big" style="font-size:100px">Mission ${S.round}</div><div class="mid" style="margin-top:20px">${QPER()} questions. <b>Answer on your phone.</b> Talk it through first if you like… but who can you trust?</div>
     <div class="sub">✓ Right answers move you up the <b style="color:var(--gold2)">leaderboard</b> (fastest wins a tie).<br>🛡 Most right this mission wins the <b>shield</b> – safe tonight.${S.final?'':'<br>🗡 If <b>fewer than half</b> get a question right, the Traitors get an extra dagger tonight.'+(S.cfg.d3?' If <b>nobody</b> gets one right: another!':'')}</div>`,say:'mission',mood:'day',next:{label:'First question ›',fn:askMission,cls:'go'}})}
@@ -512,7 +530,7 @@ function selfMark(p,ok){if(S.phase!=='self')return;S.ans[p.pid]={ok,t:Date.now()
 function scoreQ(){if(S.phase!=='self'&&S.phase!=='lock')return;const qn=S.mq+1,open=!S.q.opts.length,counts={};let right=0,lr=0,ln=0;
   players().forEach(p=>{const a=S.ans[p.pid],ok=open?!!(a&&a.ok):!!(a&&a.L===S.q.ans);if(a&&a.L)counts[a.L]=(counts[a.L]||0)+1;
     p.rec.push({r:S.round,q:qn,ok,t:a&&a.t!=null?a.t:QSECS()*1000,ghost:p.out});if(ok)right++;if(!p.out){ln++;if(ok)lr++}
-    S.log.push({time:new Date().toLocaleTimeString('en-GB'),round:S.round,player:p.name,role:p.role==='T'?'Traitor':'Faithful',question:S.q.q,answer:a?(a.L||(a.ok?'self: right':'self: wrong')):'(no answer)',correct:ok?'Yes':'No',qid:S.q.id})});
+    S.log.push({time:new Date().toLocaleTimeString('en-GB'),round:S.round,player:p.name,role:p.role==='T'?(p.recruited?'Traitor (recruited)':'Traitor'):'Faithful',question:S.q.q,answer:a?(a.L||(a.ok?'self: right':'self: wrong')):'(no answer)',correct:ok?'Yes':'No',qid:S.q.id})});
   /* +1 dagger if fewer than half get a question right (once per round); +1 more if nobody does (small-class toggle). Max 3. */
   S.daggerNow='';if(!S.final&&ln>0){if(lr===0&&S.cfg.d3&&!S.dNone){S.dNone=true;S.daggerNow=S.dUnder?'none':'both';S.dUnder=true}else if(lr<ln/2&&!S.dUnder){S.dUnder=true;S.daggerNow='under'}}
   S.lastRes={right,n:players().length,lr,ln,counts};S.revealed=true;S.phase='mresult';S.mq++;mood('day');
@@ -559,7 +577,7 @@ function tally(list){if(S.phase!=='vreveal')return;S.phase='vtally';stopLoops();
 function clearPoison(){players().forEach(p=>p.poisoned=false)}
 function noBanish(){clearPoison();S.revote=false;S.among=null;chron('No one was banished.');
   scene({title:'THE VOTE',card:`<div class="big" style="font-size:100px">No decision.</div><div class="mid">Nobody is banished this time.</div>`,mood:'day',next:afterBanishNext()})}
-function banish(pid){S.ban=pid;S.phase='banish';const p=S.P[pid];
+function banish(pid){S.ban=pid;S.phase='banish';const p=S.P[pid];setTimeout(()=>atmos('dim'),400);
   if(S.final){scene({title:'BANISHED',card:`<div class="big" style="font-size:110px">${nm(p)}</div><div class="mid" style="margin-top:20px">You have been banished… but this is the final round.</div><div class="sub"><b>Don't say if you are a Traitor or Faithful.</b> The castle keeps your secret until the very end.</div>`,
       floor:`<div class="big">${nm(p)}</div>`,say:'secret',mood:'tense',loops:['sfx_drumroll'],next:{label:'Next ›',fn:revealBan,cls:'go'}});return}
   scene({title:'BANISHED',card:`<div class="big" style="font-size:110px">${nm(p)}</div><div class="mid" style="margin-top:20px">Stand up. Tell everyone… are you a <span style="color:#ff6b75">Traitor</span>… or <span style="color:#f4f7ff">Faithful</span>?</div>`,
@@ -568,23 +586,26 @@ function revealBan(){if(S.phase!=='banish')return;const p=S.P[S.ban];S.phase='ba
   if(S.final){p.hidden=true;S.hidden.push(p.pid);chron(`Banished: ${p.name} – role kept secret.`);
     scene({title:'BANISHED',card:`<div class="big" style="font-size:110px">${nm(p)} leaves the castle…</div><div class="mid" style="margin-top:20px">…and takes their secret with them.</div><div class="sub">Traitor or Faithful? You will find out at the very end.</div>`,
       floor:'<div class="big">?</div>',mood:'tense',next:afterBanishNext()});return}
-  const isT=p.role==='T';
-  if(isT){play('sfx_traitor',{vol:.9});play('sfx_gasp',{vol:.6});host('wastraitor',600);revealAll('🗡 TRAITOR','traitor');chron(`Banished: ${p.name} – a TRAITOR!`)}
+  const isT=p.role==='T';lightning(isT);
+  if(isT){play('sfx_sting',{vol:.8});play('sfx_gasp',{vol:.6});host('wastraitor',600);revealAll('🗡 TRAITOR','traitor');chron(`Banished: ${p.name} – a TRAITOR!`)}
   else{play('sfx_faithful',{vol:.9});play('sfx_gasp',{vol:.6});host('wasfaithful',600);revealAll('🛡 FAITHFUL','faithful');chron(`Banished: ${p.name} – Faithful.`)}
-  const left=tLeft(),over=left<=0,outn=!over&&left>=fLeft();
-  scene({title:isT?'A TRAITOR!':'FAITHFUL…',card:`<div class="big ${isT?'traitor':'faithful'}">${isT?'🗡 TRAITOR':'🛡 FAITHFUL'}</div><div class="mid" style="margin-top:20px">${nm(p)} ${isT?`was a Traitor. ${over?'That was the last one!':`${left} Traitor${left>1?'s':''} still hide${left>1?'':'s'} among you.`}`:'was Faithful. The Traitors are still out there.'}</div><div class="sub">${nm(p)} becomes a 👻 ghost: they still answer questions, but can never vote.</div>`,
+  const left=tLeft(),none=left<=0,canRecruit=none&&fLeft()>=3,outn=!none&&left>=fLeft();
+  if(none&&canRecruit){S.recruitNext=true;host('notover',3500)}
+  scene({title:isT?'A TRAITOR!':'FAITHFUL…',card:`<div class="big ${isT?'traitor':'faithful'}">${isT?'🗡 TRAITOR':'🛡 FAITHFUL'}</div><div class="mid" style="margin-top:20px">${nm(p)} ${isT?'was a Traitor. But was it the last one? Nobody knows…':'was Faithful. The Traitors are still out there.'}</div><div class="sub">${nm(p)} becomes a 👻 ghost: they still answer questions, but can never vote.</div>`,
     floor:`<div class="big ${isT?'traitor':'faithful'}">${isT?'TRAITOR':'FAITHFUL'}</div>`,mood:'day',
-    next:over?{label:'The Traitors are gone ›',fn:()=>winners(true),cls:'go'}:outn?{label:'Next ›',fn:()=>winners(false,'outnumber'),cls:'no'}:afterBanishNext()})}
+    next:none&&!canRecruit?{label:'Next ›',fn:()=>winners(true),cls:'go'}:outn?{label:'Next ›',fn:()=>winners(false,'outnumber'),cls:'no'}:afterBanishNext()})}
 function afterBanishNext(){return S.final?{label:'Next ›',fn:endVote,cls:'go'}:{label:'Night falls ›',fn:night1,cls:'alt'}}
 
 /* ---------- night: every phone gets a screen, so nobody can spot the Traitors by who is tapping ---------- */
 const victims=()=>living().filter(p=>p.role!=='T'&&p.pid!==S.shield);
 function traitorsAgree(){const k=living().filter(p=>p.role==='T').map(p=>S.night[p.pid]).filter(Boolean).map(x=>[...x].sort().join('|'));return new Set(k).size<=1}
-function night1(){S.phase='night';S.night={};S.sus={};S.nLeft=75;S.nightD=Math.min(S.nightD||1,victims().length)||1;play('sfx_bell',{vol:.7});setTimeout(()=>play('sfx_wolf',{vol:.5}),2500);
+function night1(){S.phase='night';S.night={};S.sus={};S.nLeft=75;S.nightD=Math.min(S.nightD||1,victims().length)||1;
+  if(S.recruitNext&&tLeft()===0){const F=living().filter(q=>q.role==='F'),r=F[rnd(F.length)];r.role='T';r.recruited=true;S.nightD=0;S.recruitNext=false}play('sfx_bell',{vol:.7});setTimeout(()=>play('sfx_wolf',{vol:.5}),2500);
   scene({title:'NIGHT',cardFn:()=>{const L=living(),n=L.filter(p=>p.role==='T'?(S.night[p.pid]||[]).length:S.sus[p.pid]).length;
-      return `<div class="big">Night falls on the castle.</div><div class="mid" style="margin-top:20px">Heads down. Eyes on your phone.<br>Traitors… choose your victim${S.nightD>1?'s':''}.</div><div class="sub">🗡 The Traitors have <b>${S.nightD}</b> dagger${S.nightD>1?'s':''} tonight. Everyone else: a secret poll – who do you suspect?</div><div class="prog">Choices in: ${n} of ${L.length} · <span id="nclock">${S.nLeft}</span>s</div>`},
+      return `<div class="big">Night falls on the castle.</div><div class="mid" style="margin-top:20px">Heads down. Eyes on your phone.<br>Traitors… make your move.</div><div class="sub">Everyone else: a secret poll – who do you suspect?</div><div class="prog">Choices in: ${n} of ${L.length} · <span id="nclock">${S.nLeft}</span>s</div>`},
     floor:'',say:'night',dark:true,mood:'night',loops:['sfx_heartbeat'],btns:[act('Morning ›',dawn,'alt')]})}
 function nightPick(p,d){if(S.phase!=='night'||p.out)return;
+  if(p.role==='T'&&S.nightD===0){S.night[p.pid]=[];render();autoCheck();return}
   if(p.role==='T'){const ok=new Set(victims().map(q=>q.pid));const t=[...new Set((Array.isArray(d.targets)?d.targets:[d.target]).filter(id=>ok.has(id)))].slice(0,S.nightD);
     if(t.length)S.night[p.pid]=t;else delete S.night[p.pid];living().filter(q=>q.role==='T').forEach(q=>sync(q))}
   else{const t=S.P[d.target];if(!t||t.out||t===p)return;S.sus[p.pid]=t.pid}
@@ -599,7 +620,7 @@ function nightReveal(){const V2=(S.nightRes||[]).map(id=>S.P[id]).filter(p=>p&&!
   const sus=S.suspect&&S.P[S.suspect.pid]?`<div class="sub">Last night's secret poll – most suspected: <b style="color:var(--gold2)">${nm(S.P[S.suspect.pid])}</b> (${S.suspect.n} vote${S.suspect.n>1?'s':''}).</div>`:'';
   if(!V2.length){host('nomurder');chron('Nobody was murdered in the night.');
     scene({title:'A QUIET NIGHT',card:`<div class="big" style="font-size:110px">Everyone survived.</div><div class="mid">The Traitors did not strike… this time.</div>${sus}`,next:{label:'Next mission ›',fn:nextRound,cls:'go'}});return}
-  V2.forEach(p=>{p.out=true;p.how='murdered'});play('sfx_gasp',{vol:.8});host('murdered',300);revealAll('🗡 MURDERED','traitor');chron(`Murdered in the night: ${andList(V2.map(p=>p.name))}.`);
+  V2.forEach(p=>{p.out=true;p.how='murdered'});lightning(true);play('sfx_gasp',{vol:.8});host('murdered',300);revealAll('🗡 MURDERED','traitor');chron(`Murdered in the night: ${andList(V2.map(p=>p.name))}.`);
   const outn=tLeft()>=fLeft(),names=andList(V2.map(nm));
   scene({title:'MURDERED',card:`<div class="big traitor" style="font-size:${V2.length>2?80:V2.length>1?100:120}px">${names}</div><div class="mid" style="margin-top:14px">${V2.length>1?'were':'was'} murdered in the night.</div><div class="sub">${V2.length>1?'They are':'They are'} now 👻 ghost${V2.length>1?'s':''}: still answering questions, but never voting.</div>${sus}`,floor:`<div class="big traitor">${V2.map(nm).join('<br>')}</div>`,
     next:outn?{label:'Next ›',fn:()=>winners(false,'outnumber'),cls:'no'}:{label:'Next mission ›',fn:nextRound,cls:'go'}})}
@@ -618,7 +639,7 @@ function endGame(){S.phase='finale';stopLoops();S.revi=0;host('revealyou');
   if(H.length){const step=()=>{if(S.phase!=='finale')return;const p=H[S.revi];S.revi++;play(p.role==='T'?'sfx_traitor':'sfx_faithful',{vol:.8});render();
     if(S.revi<H.length)setTimeout(step,3200);else{stopLoops();setActs([act('Reveal the winners ›',()=>winners(tLeft()<=0),'go')],[]);render()}};setTimeout(step,3000)}}
 function winners(faithful,reason){stopLoops();setDark(false);S.phase='end';S.winner=faithful?'faithful':'traitor';const T=players().filter(p=>p.role==='T'),left=tLeft();
-  play(faithful?'sfx_faithful':'sfx_traitor',{vol:.9});play('sfx_gong',{vol:.8});host(reason==='outnumber'?'outnumber':faithful?'faithfulwin':'traitorwin',700);
+  play(faithful?'sfx_faithful':'sfx_sting',{vol:.9});play('sfx_gong',{vol:.8});lightning(!faithful);host(reason==='outnumber'?'outnumber':faithful?'faithfulwin':'traitorwin',700);
   revealAll(faithful?'THE FAITHFUL WIN':'THE TRAITORS WIN',faithful?'faithful':'traitor');
   chron(faithful?'The Faithful win!':'The Traitors win!');
   const why=faithful?'Every Traitor was found.':reason==='outnumber'?'The Traitors now outnumber the Faithful. The castle is theirs.':`${left} Traitor${left>1?'s':''} stayed hidden to the end.`;
@@ -683,7 +704,7 @@ function renderStatus(){const steps=['Mission','Round Table','Night','Breakfast'
   if(S.phase==='setup'){$('status').innerHTML=`<h2>The game</h2><div class="stat">1. <b>Your phone</b> secretly tells you your role.</div><div class="stat">2. <b>Mission</b> – answer on your phone.</div><div class="stat">3. <b>Round Table</b> – argue, then vote on your phone.</div><div class="stat">4. <b>Night</b> – the Traitors murder.</div><div class="stat">5. Repeat… then the <b>final reveal</b>.</div>`;return}
   const revealedT=players().filter(p=>p.role==='T'&&p.how==='banished'&&!p.hidden).length;
   $('status').innerHTML=`<h2>Round ${Math.min(S.round,S.rounds)} of ${S.rounds}${S.final?' · FINAL':''}</h2><div class="steps">${steps.map((s,i)=>`<div class="${i===cur?'on':''}">${s}</div>`).join('')}</div>
-    <div class="stat">🗡 Traitors caught: <b>${revealedT} of ${S.traitors||'?'}</b></div><div class="stat">👻 Ghosts: <b>${players().filter(p=>p.out).length}</b> · Players left: <b>${living().length}</b></div>${S.final?'':`<div class="stat">🗡 Daggers tonight: <b>${daggersTonight()}</b></div>`}`}
+    <div class="stat">🗡 Traitors caught: <b>${revealedT}</b></div><div class="stat">👻 Ghosts: <b>${players().filter(p=>p.out).length}</b> · Players left: <b>${living().length}</b></div>${S.final?'':`<div class="stat">🗡 Daggers tonight: <b>${S.recruitNext?'?':daggersTonight()}</b></div>`}`}
 function renderClock(){const m=Math.floor(S.elapsed/60),s=S.elapsed%60;
   $('clock').innerHTML=`<div style="display:flex;gap:30px;align-items:center"><div><h2 style="margin:0">Time played</h2><div class="t">${m}:${String(s).padStart(2,'0')}</div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-left:auto">
@@ -727,15 +748,15 @@ function renderSetup(){if(S.phase!=='setup')return;autoCfg();const n=S.order.len
     </div></div>
    <div style="display:flex;gap:20px;margin-top:18px;align-items:center"><button class="btn alt" style="height:110px;font-size:48px" onclick="playIntro()">▶ Play intro</button><button class="btn go" style="height:110px;font-size:48px" ${n<MIN_PLAYERS?'disabled':''} onclick="startGame()">Start the game ›</button>
    <button class="btn alt sm" style="height:90px" onclick="$('file').click()">Load Excel questions</button>${TESTMODE?`<button class="btn sm" style="height:90px;background:#6b4fa0" onclick="addBots(3)">+ 3 test bots 🤖</button>`:''}<span style="font-size:30px;color:var(--muted)">${esc(BANKSRC)} · ${BANK.questions.length} questions</span></div>
-   <div style="position:absolute;left:30px;bottom:16px;font-size:26px;color:var(--muted)">🔒 Names stay on this computer only and are deleted with <b>Finish &amp; delete names</b> (or by closing this page).</div><div style="position:absolute;right:30px;bottom:16px;font-size:26px;color:var(--muted)">Version 5.1</div>`;
+   <div style="position:absolute;right:30px;bottom:16px;font-size:26px;color:var(--muted)">Version 5.2</div>`;
   if(n>=MIN_PLAYERS||!url||!(NET.ok||LOCAL))floorBig('');else floorBig(`<div class="qrbox" style="width:1500px;height:1500px">${qrSVG(url)}</div><div class="code" style="font-size:260px;margin-top:80px">${esc(S.room)}</div><div class="mid" style="margin-top:40px">📱 Scan to join</div>`)}
 function render(){renderSetup();renderPlayers();renderPot();renderStatus();renderClock();renderChron();renderRules();renderFloorQ();
   if(QPH.includes(S.phase))renderQ();else if(S.cardFn)$('card').innerHTML=S.cardFn();
   if(S.phase==='roundtable')renderDisc();
   if(S.phase!=='setup'&&!QPH.includes(S.phase)&&FL.mode!=='night'&&(!$('fbig').innerHTML||$('fbig').innerHTML.includes('data-ring')))floorBig(nameRing());
   renderDock('dockA',S.actA);renderDock('dockB',S.actB);['card','dockA','dockB'].forEach(id=>$(id).classList.toggle('hide',S.phase==='setup'))}
-function toggleSound(){muted=!muted;if(muted){hush();stopLoops();stopMusic()}else startMusic();render()}
-function toggleMusic(){MUS.on=!MUS.on;if(MUS.on)startMusic();else stopMusic();render()}
+function toggleSound(){muted=!muted;if(muted){hush();stopLoops();stopMusic();amb('off')}else{startMusic();amb(MUS.mood)}render()}
+function toggleMusic(){MUS.on=!MUS.on;if(MUS.on){startMusic();amb(MUS.mood)}else{stopMusic();amb('off')}render()}
 
 /* ---------- Excel loading (same format as the Monopoly-style game) ---------- */
 async function unzip(buf){const d=new DataView(buf),u8=new Uint8Array(buf),files={};let e=buf.byteLength-22;

@@ -132,7 +132,7 @@ function render(){const m=$('m');const me=V&&V.me;
   $('rolebar').classList.toggle('hide',!(me&&me.role&&V.s!=='role'&&V.s!=='end'));
   if(!ROOM){m.innerHTML=`<h1>Join the game</h1><p>Type the room code shown on the wall.</p><input id="code" maxlength="4" autocapitalize="characters" placeholder="CODE"><button class="gold" id="go">Next ›</button>`;
     $('go').onclick=()=>{const c=$('code').value.toUpperCase().replace(/[^A-Z]/g,'');if(c.length===4)location.search='?r='+c+(LOCAL?'&local':'')};return}
-  if(!NAME){m.innerHTML=`<h1>Welcome to the castle</h1><p>Type your <b>real first name</b> and the first letter of your surname, so everyone knows who you are.</p><input id="nm" maxlength="16" placeholder="e.g. Sam K" autocomplete="off"><button class="gold" id="go">Join the game ›</button><p class="small">🔒 Your name is only used during this game. It is not saved online and is deleted when the game ends.</p><p class="small">Room ${ROOM}</p>`;
+  if(!NAME){m.innerHTML=`<h1>Welcome to the castle</h1><p>Type your <b>real first name</b> and the first letter of your surname, so everyone knows who you are.</p><input id="nm" maxlength="16" placeholder="e.g. Sam K" autocomplete="off"><button class="gold" id="go">Join the game ›</button><p class="small">🔒 Only used for this game.</p><p class="small">Room ${ROOM}</p>`;
     const go=()=>{const n=$('nm').value.replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,16);if(n.length<2){$('nm').focus();return}NAME=n;LS.set(NKEY,JSON.stringify({n,t:Date.now()}));try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(e){}hello()};
     $('go').onclick=go;$('nm').onkeydown=e=>{if(e.key==='Enter')go()};return}
   if(!joined||!V){m.innerHTML=`<h1>Joining…</h1><p>Hang on, ${esc(NAME)}.</p>`;return}
@@ -152,6 +152,7 @@ function render(){const m=$('m');const me=V&&V.me;
       ${V.mates.length?`<div class="box">${V.mates.map(t=>`${esc(t.name)}: ${t.picks.length?'🗡 '+t.picks.map(esc).join(', '):'choosing…'}`).join('<br>')}<br><span class="small">Agree on the same victim${V.n>1?'s':''}. If you disagree, the most-picked wins.</span></div>`:''}`}
   else if(s==='nightF'){
     h=`<h1>Night falls</h1><p>Secret poll: who do you suspect?</p><p class="small">Nobody can see your choice. Keep your head down.</p>${names(V.cands,V.picked,'sus')}`}
+  else if(s==='recruit')h=V.done?`<h1>Night falls</h1><p>Keep your head down…</p>`:`<div class="big traitor" style="font-size:44px">🗡 You have been recruited</div><p style="color:#fff;font-size:20px">The castle has chosen you. <b class="traitor">You are now a Traitor.</b></p><div class="box">From now on: get answers <b>wrong</b>, trick the Faithful, and survive to the end. Tell nobody.</div><button class="no" data-cb="recruitok" style="justify-content:center">I understand</button>`;
   else if(s==='endvote')h=`<h1>Is it over?</h1><p>Do you believe every Traitor has gone?</p><button class="go ${V.picked==='end'?'on':''}" data-cb="end" data-v="end">End the game</button><button class="no ${V.picked==='again'?'on':''}" data-cb="end" data-v="again">Banish again</button>`;
   else if(s==='end'){const T=me.role==='T';h=`<div class="big ${V.winner==='faithful'?'faithful':'traitor'}" style="font-size:44px">${V.winner==='faithful'?'🛡 The Faithful win':'🗡 The Traitors win'}</div>
       <p style="color:#fff;font-size:22px">You were ${T?'a <b class="traitor">Traitor</b>':'<b class="faithful">Faithful</b>'} – <b>${V.won?'you WON':'you lost'}</b>.</p><div class="box" style="text-align:center">You answered <b>${V.right} of ${V.total}</b> questions right.</div>${V.rank?`<p>Faithful leaderboard: <b style="color:var(--gold2)">${V.rank} of ${V.of}</b></p>`:''}`}
@@ -167,6 +168,7 @@ function cb(k,v){if(k==='ans'){V.picked=v;act({t:'ans',L:v})}
   else if(k==='night'){let m=[...(V.mine||[])];if(m.includes(v))m=m.filter(x=>x!==v);else{m.push(v);if(m.length>V.n)m=m.slice(-V.n)}V.mine=m;act({t:'night',targets:m})}
   else if(k==='sus'){V.picked=v;act({t:'night',target:v})}
   else if(k==='end'){V.picked=v;act({t:'end',v})}
+  else if(k==='recruitok'){V.done=true;act({t:'night',targets:[]})}
   else if(k==='rename'){NAME='';LS.del(NKEY)}
   render()}
 setInterval(()=>{const c=$('clock');if(c&&V&&V.s==='q'&&!V.locked){const left=Math.max(0,Math.ceil((qEnd-Date.now())/1000));c.textContent=left+'s';c.classList.toggle('low',left<=10)}},250);

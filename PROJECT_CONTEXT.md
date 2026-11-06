@@ -248,6 +248,22 @@ The user raised the worry that students might peek during the eyes-closed parts.
 - intro_6 re-recorded: "When fewer than half of you get it right… they earn another dagger."
 - **Tests:** 8 phones, everyone wrong with the toggle on → 3 daggers, 3 murders. 5 of 8 wrong with the toggle off → 2 daggers, 2 murders.
 
+## 3j. v5.2: hidden count, recruitment, atmosphere
+
+- **Traitor count hidden** from students: "The Traitors are among you", "Traitors caught: N" with no total, and no "X still hide". The tutor still sees Auto (n) on setup.
+- **Recruitment:** in `revealBan`, if `tLeft()==0` and not the final round and at least 3 Faithful are left, set `S.recruitNext` and play host `notover`.
+  - In `night1`, a random living Faithful becomes `role 'T'` with `recruited:true`, and `nightD=0`.
+  - That phone gets an `{s:'recruit'}` screen; "I understand" sends `night {targets:[]}`.
+  - No murder that night ("quiet night"). Export marks them "Traitor (recruited)".
+- **Look up timing:** `rolesDone` now waits until the host has stopped talking, plus 3 s (`whenQuiet`). Card: "Phones down. Look up."
+- **Intro slowed:** `INTRO_PACE` 1.6, `INTRO_RATE` .9, `INTRO_GAP` 2400.
+- **Setup clean-up:** the privacy footnote that overlapped the buttons was removed; the phone note is now just "🔒 Only used for this game."
+- **Atmosphere:**
+  - `amb(mood)` crossfades looping `sfx_wind` and `sfx_drone` (20 s seamless loops). Random whispers and crow play at night (and quieter in tense moments) every 14 s.
+  - `#atmos` gives per-wall vignettes (tense / dim); `lightning(red)` flashes `#flash` and plays `sfx_thunder`.
+  - `sfx_sting` plays on Traitor reveals and a Traitor win.
+  - The Music toggle controls the ambience beds too.
+
 ## 4. Files and build
 
 - **Source:**

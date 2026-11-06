@@ -45,7 +45,7 @@ It's **Faithful vs Traitors**: no money, just a leaderboard and a winning side.
 
 1. **Join:** students scan the QR code, and their names appear on the left wall. Tap a name twice to remove it. You need at least 4 players.
 2. **Set the length** on the setup screen. The estimated time updates as you change these:
-   - **Traitors:** *Auto* gives about 1 per 7 students.
+   - **Traitors:** *Auto* gives about 1 per 7 students. **Students are never told how many there are.**
    - **3rd dagger if nobody's right:** On or Off (see Night below).
    - **Rounds**, **Questions per round** and **Round Table minutes:** these start at a suggestion for your class size. Small classes get more questions and shorter Round Tables. Use **− / +** to change them.
 
@@ -59,6 +59,7 @@ It's **Faithful vs Traitors**: no money, just a leaderboard and a winning side.
 5. **Round Table:** the players wall shows everyone's ✓/✗. That's the evidence.
 6. **Vote** on phones. The wall reveals who voted for whom, and a tie gets one revote.
    - The banished player says Traitor or Faithful, then the wall reveals the truth.
+   - **Recruitment:** if the last Traitor is banished before the final round, the game doesn't end. That night, a random Faithful's phone secretly tells them they've been recruited as a new Traitor. Nobody is murdered that night, so the morning is "quiet", and nobody knows why…
    - **In the final round, banished players keep their secret.** All roles are revealed at the very end.
 7. **Night:** the Traitors always get **1 dagger** (1 murder). They can earn more during the mission:
    - **Fewer than half** get a question right: **+1 dagger**, once per round.
@@ -79,6 +80,13 @@ It's **Faithful vs Traitors**: no money, just a leaderboard and a winning side.
 |---|---|---|
 | Game name | The Betrayal | Shown on the walls |
 | Seconds per question | 45 | Thinking time |
+
+## Atmosphere
+
+- **Sound:** a cold wind plays during the day, and a low drone during tense moments. At night, whispers and a distant crow come and go.
+- **Lighting:** the walls darken around the edges during votes and Round Tables, and dim fully just before a banished player's truth is revealed.
+- **Lightning and thunder:** these come at big moments: the start of the game, every banishment reveal, murders (in red) and the ending.
+- **Turning it off:** the **Music** button on the back wall turns the music and background sounds off, and **Sound** mutes everything.
 
 ## Student data (summary for a data-protection check)
 
