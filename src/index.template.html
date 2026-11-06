@@ -114,9 +114,13 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Inte
 /* night / dark overlay over the walls */
 #dark{position:absolute;left:0;top:0;width:12566px;height:4516px;background:#000;opacity:0;pointer-events:none;transition:opacity 2.5s;z-index:20}
 #dark.on{opacity:.94}
-#atmos{position:absolute;left:0;top:0;width:12566px;height:4516px;pointer-events:none;z-index:19;opacity:0;transition:opacity 3s;
+#atmos{position:absolute;left:0;top:0;width:12566px;height:4516px;pointer-events:none;z-index:2;opacity:0;transition:opacity 3s;
   background:radial-gradient(ellipse 1500px 600px at 1718px 560px,transparent 30%,rgba(0,0,0,.8)),radial-gradient(ellipse 1300px 600px at 4860px 560px,transparent 35%,rgba(0,0,0,.75)),radial-gradient(ellipse 1500px 600px at 8001px 560px,transparent 30%,rgba(0,0,0,.8)),radial-gradient(ellipse 1300px 600px at 11142px 560px,transparent 30%,rgba(0,0,0,.8));background-size:100% 1080px;background-repeat:no-repeat}
 #atmos.tense{opacity:.85}#atmos.dim{opacity:1;transition:opacity 1.5s}
+#stage.dim .panel:not(#card):not(#setup),#stage.dim .walltitle,#stage.dim #players{opacity:.3;transition:opacity 1.5s}
+#stage .panel,#stage .walltitle,#stage #players{transition:opacity 1.5s}
+#adv{position:absolute;left:6143px;top:986px;width:120px;height:80px;z-index:60;border:2px solid rgba(217,180,90,.35);border-radius:16px;background:rgba(20,15,22,.5);color:rgba(243,217,139,.5);font:800 50px Inter,Arial;cursor:pointer;opacity:.45}
+#adv:hover{opacity:1;color:#F3D98B}
 #flash{position:absolute;left:0;top:0;width:12566px;height:4516px;pointer-events:none;z-index:45;opacity:0;background:#e6ecff}
 #flash.go{animation:flash 1.6s ease-out}#flash.red{background:#b0101e}
 @keyframes flash{0%{opacity:0}5%{opacity:.8}10%{opacity:.08}16%{opacity:.55}34%{opacity:0}100%{opacity:0}}
@@ -204,6 +208,7 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Inte
   <div class="panel" id="rules"></div>
 
   <div id="atmos"></div><div id="dark"></div><div id="flash"></div>
+  <button id="adv" title="Tutor: move the game on" onclick="advance()">›</button>
   <div id="reveals"></div>
   <div id="banner"></div>
   <div id="intro" class="hide"><div class="iw" style="left:0;width:3436px"></div><div class="iw" style="left:3436px;width:2847px"></div><div class="iw" style="left:6283px;width:3436px"></div><div class="iw" style="left:9719px;width:2847px"></div><div id="ifloor"></div>
@@ -405,7 +410,7 @@ function amb(m){const T=m==='off'||muted||!MUS.on?{sfx_wind:0,sfx_drone:0}:m==='
     if(Math.abs(a.volume-want)>.005)busy=true;else if(want===0&&!a.paused)a.pause()});if(!busy)clearInterval(AMB.timer)},120)}
 setInterval(()=>{if(muted||!MUS.on||S.introOn||talking()||S.paused)return;const m=MUS.mood,r=Math.random();
   if(m==='night'&&r<.45)play(r<.25?'sfx_whispers':'sfx_crow',{vol:.3});else if(m==='tense'&&r<.2)play('sfx_whispers',{vol:.18})},14000);
-function atmos(c){const el=$('atmos');if(el)el.className=c||''}
+function atmos(c){const el=$('atmos');if(el)el.className=c||'';$('stage').classList.toggle('dim',c==='dim')}
 function lightning(red){const f=$('flash');if(!f)return;f.className='';void f.offsetWidth;f.className=red?'go red':'go';play('sfx_thunder',{vol:red?.6:.75})}
 
 /* ---------- the hall (walls) and the round table (floor) ---------- */
@@ -492,6 +497,10 @@ const andList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.leng
 const online=list=>list.filter(p=>p.online);
 const allDone=(list,f)=>{const L=online(list);return L.length>0&&L.every(f)};
 /* when every phone that's connected has answered/voted, move on by itself (the tutor can always move on sooner) */
+/* faint › button (bottom-right of the front wall): moves the game on if something is stuck */
+function advance(){if(S.introOn){endIntro(true);return}const A=[...S.actA,...S.actB];const a=A.find(x=>/go|no/.test(x.cls))||A[A.length-1];
+  if(a&&a.fn){play('sfx_whoosh',{vol:.25});a.fn();return}
+  const f={roles:rolesDone,question:lockIn,self:scoreQ,vote:closeVote,night:dawn,endvote:resolveEnd}[S.phase];if(f)f()}
 function whenQuiet(f,extra=2500){const t=()=>{if(talking())setTimeout(t,500);else setTimeout(f,extra)};t()}
 function autoCheck(){clearTimeout(acT);acT=setTimeout(()=>{const ph=S.phase;
   if(ph==='roles'&&allDone(players(),p=>p.seen))whenQuiet(rolesDone,3000);
@@ -582,7 +591,7 @@ function banish(pid){S.ban=pid;S.phase='banish';const p=S.P[pid];setTimeout(()=>
       floor:`<div class="big">${nm(p)}</div>`,say:'secret',mood:'tense',loops:['sfx_drumroll'],next:{label:'Next ›',fn:revealBan,cls:'go'}});return}
   scene({title:'BANISHED',card:`<div class="big" style="font-size:110px">${nm(p)}</div><div class="mid" style="margin-top:20px">Stand up. Tell everyone… are you a <span style="color:#ff6b75">Traitor</span>… or <span style="color:#f4f7ff">Faithful</span>?</div>`,
     floor:`<div class="big">${nm(p)}</div>`,say:'stand',mood:'tense',loops:['sfx_drumroll'],next:{label:'Reveal the truth ›',fn:revealBan,cls:'go'}})}
-function revealBan(){if(S.phase!=='banish')return;const p=S.P[S.ban];S.phase='banished';p.out=true;p.how='banished';S.revote=false;S.among=null;stopLoops();
+function revealBan(){if(S.phase!=='banish')return;atmos('');const p=S.P[S.ban];S.phase='banished';p.out=true;p.how='banished';S.revote=false;S.among=null;stopLoops();
   if(S.final){p.hidden=true;S.hidden.push(p.pid);chron(`Banished: ${p.name} – role kept secret.`);
     scene({title:'BANISHED',card:`<div class="big" style="font-size:110px">${nm(p)} leaves the castle…</div><div class="mid" style="margin-top:20px">…and takes their secret with them.</div><div class="sub">Traitor or Faithful? You will find out at the very end.</div>`,
       floor:'<div class="big">?</div>',mood:'tense',next:afterBanishNext()});return}
@@ -748,7 +757,7 @@ function renderSetup(){if(S.phase!=='setup')return;autoCfg();const n=S.order.len
     </div></div>
    <div style="display:flex;gap:20px;margin-top:18px;align-items:center"><button class="btn alt" style="height:110px;font-size:48px" onclick="playIntro()">▶ Play intro</button><button class="btn go" style="height:110px;font-size:48px" ${n<MIN_PLAYERS?'disabled':''} onclick="startGame()">Start the game ›</button>
    <button class="btn alt sm" style="height:90px" onclick="$('file').click()">Load Excel questions</button>${TESTMODE?`<button class="btn sm" style="height:90px;background:#6b4fa0" onclick="addBots(3)">+ 3 test bots 🤖</button>`:''}<span style="font-size:30px;color:var(--muted)">${esc(BANKSRC)} · ${BANK.questions.length} questions</span></div>
-   <div style="position:absolute;right:30px;bottom:16px;font-size:26px;color:var(--muted)">Version 5.2</div>`;
+   <div style="position:absolute;right:30px;bottom:16px;font-size:26px;color:var(--muted)">Version 5.3</div>`;
   if(n>=MIN_PLAYERS||!url||!(NET.ok||LOCAL))floorBig('');else floorBig(`<div class="qrbox" style="width:1500px;height:1500px">${qrSVG(url)}</div><div class="code" style="font-size:260px;margin-top:80px">${esc(S.room)}</div><div class="mid" style="margin-top:40px">📱 Scan to join</div>`)}
 function render(){renderSetup();renderPlayers();renderPot();renderStatus();renderClock();renderChron();renderRules();renderFloorQ();
   if(QPH.includes(S.phase))renderQ();else if(S.cardFn)$('card').innerHTML=S.cardFn();

@@ -264,6 +264,11 @@ The user raised the worry that students might peek during the eyes-closed parts.
   - `sfx_sting` plays on Traitor reveals and a Traitor win.
   - The Music toggle controls the ambience beds too.
 
+## 3k. v5.3
+
+- **Fix:** `#atmos` was at z-index 19, above the card and docks, so the question and Round Table were unreadable and the banish Reveal button was hidden. It's now at z-index 2 (behind the panels). For `'dim'`, `#stage.dim` fades only the side panels, titles and players to .3.
+- **Faint advance button:** `#adv` › at the bottom-right of the front wall calls `advance()`. It presses the go/no action, or the last action; otherwise it forces the waited-on step (rolesDone / lockIn / scoreQ / closeVote / dawn / resolveEnd). During the intro it skips.
+
 ## 4. Files and build
 
 - **Source:**

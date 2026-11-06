@@ -83,8 +83,10 @@ It's **Faithful vs Traitors**: no money, just a leaderboard and a winning side.
 
 ## Atmosphere
 
+- **The faint › button** (bottom-right corner of the front wall) moves the game on if anything gets stuck. For example, a bot or an absent student can't stand up when banished, or a phone has dropped out. It presses the main button on screen, or skips the wait if there isn't one.
+
 - **Sound:** a cold wind plays during the day, and a low drone during tense moments. At night, whispers and a distant crow come and go.
-- **Lighting:** the walls darken around the edges during votes and Round Tables, and dim fully just before a banished player's truth is revealed.
+- **Lighting:** the castle walls darken around the edges during votes and Round Tables, and the side walls dim just before a banished player's truth is revealed. Questions, the main card and the tutor buttons always stay bright.
 - **Lightning and thunder:** these come at big moments: the start of the game, every banishment reveal, murders (in red) and the ending.
 - **Turning it off:** the **Music** button on the back wall turns the music and background sounds off, and **Sound** mutes everything.
 
