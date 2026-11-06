@@ -45,7 +45,7 @@ It's **Faithful vs Traitors**: no money, just a leaderboard and a winning side.
 
 1. **Join:** students scan the QR code, and their names appear on the left wall. Tap a name twice to remove it. You need at least 4 players.
 2. **Set the length** on the setup screen. The estimated time updates as you change these:
-   - **Traitors:** *Auto* gives about 1 per 7 students. **Students are never told how many there are.**
+   - **Traitors:** picked **at random and kept secret**, between 1 and (players ÷ 6, rounded up). For example: 6 players gives 1, 12 gives 1–2, 18 gives 1–3, and 30 gives 1–5. Nobody, not even the setup screen, shows how many.
    - **3rd dagger if nobody's right:** On or Off (see Night below).
    - **Rounds**, **Questions per round** and **Round Table minutes:** these start at a suggestion for your class size. Small classes get more questions and shorter Round Tables. Use **− / +** to change them.
 
@@ -59,7 +59,7 @@ It's **Faithful vs Traitors**: no money, just a leaderboard and a winning side.
 5. **Round Table:** the players wall shows everyone's ✓/✗. That's the evidence.
 6. **Vote** on phones. The wall reveals who voted for whom, and a tie gets one revote.
    - The banished player says Traitor or Faithful, then the wall reveals the truth.
-   - **Recruitment:** if the last Traitor is banished before the final round, the game doesn't end. That night, a random Faithful's phone secretly tells them they've been recruited as a new Traitor. Nobody is murdered that night, so the morning is "quiet", and nobody knows why…
+   - **Recruitment:** if the last Traitor is banished before the final round, the game doesn't end. That night, a random Faithful's phone secretly tells them they've been recruited as a new Traitor, and they then choose that night's victim. The night looks exactly like any other. The host asks "was it the last?" after **every** Traitor is caught, so that gives nothing away either.
    - **In the final round, banished players keep their secret.** All roles are revealed at the very end.
 7. **Night:** the Traitors always get **1 dagger** (1 murder). They can earn more during the mission:
    - **Fewer than half** get a question right: **+1 dagger**, once per round.

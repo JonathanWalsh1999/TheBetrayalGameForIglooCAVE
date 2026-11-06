@@ -269,6 +269,17 @@ The user raised the worry that students might peek during the eyes-closed parts.
 - **Fix:** `#atmos` was at z-index 19, above the card and docks, so the question and Round Table were unreadable and the banish Reveal button was hidden. It's now at z-index 2 (behind the panels). For `'dim'`, `#stage.dim` fades only the side panels, titles and players to .3.
 - **Faint advance button:** `#adv` › at the bottom-right of the front wall calls `advance()`. It presses the go/no action, or the last action; otherwise it forces the waited-on step (rolesDone / lockIn / scoreQ / closeVote / dawn / resolveEnd). During the intro it skips.
 
+## 3l. v5.4
+
+- **Flicker fix:** `floorBig` skips identical HTML (the name ring was being rebuilt on every render, which restarted its animations), and the floor canvas is drawn at about 20 fps with a calmer candle flicker.
+- **Floor fills more:** table radius 640 / 380 inner on the 1424×1718 canvas; 10 candles at r510; brighter flagstones and gradient; name ring at R 1300–1360.
+- **Traitors:** `T = 1 + rnd(maxT)`, where `maxT = max(1, min(ceil(n/6), floor((n-1)/3)))`. The setup picker was removed ("🎲 Random & secret"), and the chronicle no longer states the count. `S.tPick`, `autoT` and `tCount` are unused.
+- **Recruit night = normal night:**
+  - The recruit (not the shield holder) gets the `{s:'recruit'}` screen. "I understand" sends `{t:'night', ack:true}`, which sets `p.ack`, and they then get `nightT` and pick a victim.
+  - `nightD` is unchanged, so there's a murder as usual.
+  - `notover` ("was it the last?") now plays after **every** non-final Traitor reveal.
+  - The status line always shows the dagger number.
+
 ## 4. Files and build
 
 - **Source:**
