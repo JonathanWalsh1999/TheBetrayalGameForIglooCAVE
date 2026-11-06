@@ -213,6 +213,7 @@ The user raised the worry that students might peek during the eyes-closed parts.
   - The **Finish & delete names** button (tap twice if not exported) sends phones `{s:'cleared'}` and wipes `S.P`, `S.log` and the chronicle.
   - Phones keep the name in localStorage for 4 h at most.
   - The README has a "Student data" summary for a data-protection check.
+- **v4.3 door lock:** after setup, an unknown pid goes into `S.pending` (max 10) and the phone sees "The doors are locked". A `#pending` bar on the left wall offers Let in (`admit`, joins as Faithful) or No (`refuse`).
 - **Status at 6 Nov:** waiting for the user to create a Cloudflare account and add the two secrets. Then trigger deploy-relay (workflow_dispatch) and the net test.
 
 ## 4. Files and build

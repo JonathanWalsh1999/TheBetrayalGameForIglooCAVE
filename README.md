@@ -79,6 +79,7 @@ Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-styl
 
 - **What is collected:** the first name a student types, plus their answers, votes and night choices during one game. No emails, accounts, logins or contact details.
 - **Where it is held:** only in the memory of the browser on the CAVE computer. There is no database. The game website (GitHub Pages) only serves the page files and receives no game data.
+- **Who can join:** only phones in the lobby before the game starts. After that, the doors are locked and the tutor must let each late arrival in. The room code changes every game.
 - **How it travels:** phones send their moves to the CAVE through a small relay (a Cloudflare Worker, in `relay/`). The relay forwards each message as it arrives and **writes nothing to storage**. It only accepts connections from this game's site.
 - **How long it lasts:** until the tutor presses **Finish & delete names**, or closes or refreshes the game page. At that point every phone is also told to delete the name it remembered. Phones forget the name after 4 hours anyway.
 - **The only copy that can last:** the optional **Export results** CSV, which saves to the CAVE computer only. Handle it like any other class record.
@@ -87,6 +88,6 @@ Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-styl
 ## Tips for tutors
 
 - About 1 Traitor per 7 students works well. **Auto** picks this for you.
-- Late arrivals can still join by scanning the code. They come in as Faithful.
+- **The doors lock when the game starts.** A phone that joins late waits at the bottom of the players wall until you tap **Let in** (it joins as Faithful) or **No**. This stops anyone outside the room from joining with the code.
 - Traitors still need to *know* the right answer in order to argue convincingly for a wrong one, so they learn too.
 - Use the Round Table to push for evidence-based talk: "What makes you say that?"
