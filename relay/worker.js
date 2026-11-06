@@ -56,6 +56,8 @@ export default {
     if (!m) return new Response('The Betrayal relay. It passes game messages between the CAVE and phones, and stores nothing.', { headers: { 'content-type': 'text/plain' } });
     const origin = req.headers.get('Origin') || '';
     if (!ALLOWED.some(r => r.test(origin))) return new Response('Forbidden', { status: 403 });
-    return env.ROOMS.get(env.ROOMS.idFromName(m[1])).fetch(req);
+    // Keep each room's relay inside the EU (Cloudflare "jurisdiction" restriction). Falls back if unavailable.
+    let ns = env.ROOMS; try { if (typeof ns.jurisdiction === 'function') ns = ns.jurisdiction('eu') } catch (e) {}
+    return ns.get(ns.idFromName(m[1])).fetch(req);
   }
 };
