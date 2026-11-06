@@ -17,6 +17,12 @@ It's an original game *inspired by* the reality show format. It doesn't use the 
 
 > If phones can't connect on the college Wi-Fi, try mobile data. Some networks block the direct phone link.
 
+## Testing on your own
+
+Add `?test` to the end of the game address, for example `https://jonathanwalsh1999.github.io/TheBetrayalGameForIglooCAVE/?test`. The setup screen then shows a **+ 3 test bots 🤖** button.
+
+Bots are pretend players. They see their role, answer questions (about 60% right), vote and take part at night by themselves. Add bots, join with your own phone, and press Start to play a full game alone. Add `&preview` to fit it on a laptop screen.
+
 ## Questions
 
 `questions.xlsx` uses **the same format as the Monopoly-style game**, so one question bank works in both. Replace it in the repo, or press **Load Excel questions** on the setup screen.
