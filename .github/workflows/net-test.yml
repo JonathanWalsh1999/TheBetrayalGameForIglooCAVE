@@ -1,12 +1,21 @@
 name: Phone link test
 on:
   push:
-    paths: ['tools/net-test.js','play.html','src/index.template.html']
+    paths: ['tools/net-test.js','play.html','src/index.template.html','relay/**','lib/relay.js']
   workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm i playwright@1.47.2 && npx playwright install --with-deps chromium
-      - run: (python3 -m http.server 8000 &) && sleep 1 && node tools/net-test.js
+      - run: npm i playwright@1.47.2 wrangler@3 && npx playwright install --with-deps chromium
+      - name: Start the site
+        run: (python3 -m http.server 8000 > /dev/null 2>&1 &) && sleep 1
+      - name: Test the relay (Cloudflare local runtime, same code as the live relay)
+        run: |
+          (cd relay && npx wrangler dev --port 8787 --ip 127.0.0.1 > ../wrangler.log 2>&1 &)
+          for i in $(seq 1 60); do curl -s localhost:8787 >/dev/null && break; sleep 1; done
+          QX='&relay=ws://localhost:8787' node tools/net-test.js || (tail -30 wrangler.log; exit 1)
+      - name: Test the live relay (once it is deployed)
+        run: |
+          if grep -q "wss://" lib/relay.js; then node tools/net-test.js; else echo "Live relay not deployed yet"; fi

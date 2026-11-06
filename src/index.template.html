@@ -198,6 +198,7 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Inte
     <button id="ipause" class="btn sm" onclick="pauseIntro()">❚❚ Pause</button><button id="iskip" class="btn sm alt" onclick="endIntro(true)">Skip intro ›</button><div id="ipaused" class="hide">PAUSED<div>Press ▶ Play to carry on</div></div></div>
 </div>
 <input type="file" id="file" accept=".xlsx" class="hide">
+<script src="lib/relay.js"></script>
 <script src="lib/peerjs.min.js"></script>
 <script src="lib/qrcode.js"></script>
 <script>
@@ -229,21 +230,29 @@ const MIN_PLAYERS=4;
 
 /* ---------- the phone link: PeerJS (free public broker, no accounts). ?local = same-browser test link ---------- */
 const QSP=new URLSearchParams(location.search),LOCAL=QSP.has('local');
-const NET={conns:{},peer:null,bc:null,ok:false,err:''};
+const NET={conns:{},peer:null,bc:null,ws:null,ok:false,err:''};
+/* default link = our private relay (normal web traffic, works on college Wi-Fi); ?p2p forces the old direct link */
+const RELAY=(QSP.get('relay')||window.RELAY||'').replace(/\/$/,''),USE_RELAY=!!RELAY&&!QSP.has('p2p')&&!LOCAL;
 const ALPH='BCDFGHJKLMNPQRSTVWXZ';
 function peerOpts(){const p=QSP.get('peer');if(!p)return {debug:0};const [host,port]=p.split(':');return {host,port:+port||443,path:'/',secure:!/^(localhost|127\.)/.test(host),debug:0}}
 function netStart(){S.room=QSP.get('room')||Array.from({length:4},()=>ALPH[rnd(ALPH.length)]).join('');NET.ok=false;
   if(LOCAL){NET.bc=new BroadcastChannel('betrayal-'+S.room);NET.bc.onmessage=e=>{const m=e.data;if(m&&m.to==='host')onNet(m.from,m.data)};NET.ok=true;render();return}
+  if(USE_RELAY){relayStart();return}
   if(!window.Peer){NET.err='The phone link file (lib/peerjs.min.js) is missing.';render();return}
   const peer=new Peer('btrl-'+S.room.toLowerCase(),peerOpts());NET.peer=peer;
   peer.on('open',()=>{NET.ok=true;NET.err='';render()});
   peer.on('connection',c=>{c.on('open',()=>{NET.conns[c.peer]=c});c.on('data',d=>{NET.conns[c.peer]=c;onNet(c.peer,d)});c.on('close',()=>offNet(c.peer,c));c.on('error',()=>offNet(c.peer,c))});
   peer.on('error',e=>{if(e.type==='unavailable-id'){try{peer.destroy()}catch(x){}netStart();return}if(e.type==='peer-unavailable')return;NET.err='Phone link problem ('+e.type+'). Check the internet connection.';render()});
   peer.on('disconnected',()=>{NET.ok=false;render();setTimeout(()=>{try{peer.reconnect()}catch(x){}},1500)})}
-function joinURL(){const u=new URL('play.html',location.href);u.search='?r='+S.room+(LOCAL?'&local':'')+(QSP.get('peer')?'&peer='+QSP.get('peer'):'');return u.href}
+function relayStart(){const open=()=>{const ws=new WebSocket(RELAY+'/room/'+S.room+'?role=host');NET.ws=ws;
+    ws.onopen=()=>{NET.ok=true;NET.err='';render();sync()};
+    ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(x){return}if(!m||!m.from)return;if(m.closed)offNet(m.from);else onNet(m.from,m.data)};
+    ws.onclose=ev=>{if(NET.ws!==ws)return;NET.ok=false;if(ev.code===4000)return;NET.err='Reconnecting the phone link…';render();setTimeout(open,2000)};ws.onerror=()=>{}};open()}
+function joinURL(){const u=new URL('play.html',location.href);u.search='?r='+S.room+(LOCAL?'&local':'')+(QSP.get('peer')?'&peer='+QSP.get('peer'):'')+(QSP.get('relay')?'&relay='+encodeURIComponent(QSP.get('relay')):'')+(QSP.has('p2p')?'&p2p':'');return u.href}
 function qrSVG(text){try{const q=qrcode(0,'M');q.addData(text);q.make();let s=q.createSvgTag({cellSize:4,margin:0});const n=q.getModuleCount()*4;
   if(!/viewBox/.test(s))s=s.replace('<svg','<svg viewBox="0 0 '+n+' '+n+'"');return s.replace(/ width="[^"]*"/,'').replace(/ height="[^"]*"/,'')}catch(e){return ''}}
-function send(cid,data){if(!cid)return;if(LOCAL){NET.bc&&NET.bc.postMessage({to:cid,from:'host',data});return}const c=NET.conns[cid];if(c&&c.open)try{c.send(data)}catch(e){}}
+function send(cid,data){if(!cid)return;if(LOCAL){NET.bc&&NET.bc.postMessage({to:cid,from:'host',data});return}
+  if(USE_RELAY){const w=NET.ws;if(w&&w.readyState===1)try{w.send(JSON.stringify({to:cid,data}))}catch(e){}return}const c=NET.conns[cid];if(c&&c.open)try{c.send(data)}catch(e){}}
 const byCid=cid=>players().find(p=>p.cid===cid);
 function onNet(cid,d){if(!d||typeof d!=='object')return;
   if(d.t==='hello'){join(cid,d);return}
@@ -264,7 +273,7 @@ function join(cid,d){const pid=String(d.pid||'').slice(0,60);if(!pid)return;let 
     p={pid,name:uniqueName(name),role:S.phase==='setup'?'':'F',out:false,how:'',poisoned:false,seen:S.phase!=='setup'&&S.phase!=='roles',rec:[],online:true,cid};S.P[pid]=p;S.order.push(pid);
     if(S.phase!=='setup')chron(`${p.name} joined the game late.`);play('sfx_whoosh',{vol:.35})}
   else if(S.phase==='setup'&&name!==p.name)p.name=uniqueName(name,p);
-  if(p.cid&&p.cid!==cid&&!LOCAL){const old=NET.conns[p.cid];if(old)try{old.close()}catch(e){}}
+  if(p.cid&&p.cid!==cid&&!LOCAL&&!USE_RELAY){const old=NET.conns[p.cid];if(old)try{old.close()}catch(e){}}
   p.cid=cid;p.online=true;render();if(S.phase==='setup')sync();else sync(p)}
 function kick(pid){const p=S.P[pid];if(!p||S.phase!=='setup')return;send(p.cid,{s:'kicked'});delete S.P[pid];S.order=S.order.filter(x=>x!==pid);render();sync()}
 
@@ -671,7 +680,7 @@ function renderSetup(){if(S.phase!=='setup')return;const r=roundsFor(S.minutes),
     </div></div>
    <div style="display:flex;gap:20px;margin-top:18px;align-items:center"><button class="btn alt" style="height:110px;font-size:48px" onclick="playIntro()">▶ Play intro</button><button class="btn go" style="height:110px;font-size:48px" ${n<MIN_PLAYERS?'disabled':''} onclick="startGame()">Start the game ›</button>
    <button class="btn alt sm" style="height:90px" onclick="$('file').click()">Load Excel questions</button><span style="font-size:30px;color:var(--muted)">${esc(BANKSRC)} · ${BANK.questions.length} questions</span></div>
-   <div style="position:absolute;right:30px;bottom:16px;font-size:26px;color:var(--muted)">Version 4.0 (phones)</div>`;
+   <div style="position:absolute;right:30px;bottom:16px;font-size:26px;color:var(--muted)">Version 4.1 (phones · relay)</div>`;
   if(n>=MIN_PLAYERS||!url||!(NET.ok||LOCAL))floorBig('');else floorBig(`<div class="qrbox" style="width:1500px;height:1500px">${qrSVG(url)}</div><div class="code" style="font-size:260px;margin-top:80px">${esc(S.room)}</div><div class="mid" style="margin-top:40px">📱 Scan to join</div>`)}
 function render(){renderSetup();renderPlayers();renderPot();renderStatus();renderClock();renderChron();renderRules();renderFloorQ();
   if(QPH.includes(S.phase))renderQ();else if(S.cardFn)$('card').innerHTML=S.cardFn();

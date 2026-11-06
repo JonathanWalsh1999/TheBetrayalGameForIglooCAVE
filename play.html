@@ -56,6 +56,7 @@ input{font:700 22px Inter;width:100%;padding:16px;border-radius:14px;border:3px 
 <main id="m"></main>
 <div id="rolebar" class="hide"><button id="rolebtn">👁 Press and hold to see your role</button></div>
 <div id="peek"></div>
+<script src="lib/relay.js"></script>
 <script src="lib/peerjs.min.js"></script>
 <script>
 /* The phone: joins the CAVE game over a direct peer link (PeerJS), shows the player's secret role, takes answers, votes and night choices.
@@ -63,6 +64,7 @@ input{font:700 22px Inter;width:100%;padding:16px;border-radius:14px;border:3px 
 const QS=new URLSearchParams(location.search);
 const ROOM=(QS.get('r')||'').toUpperCase().replace(/[^A-Z]/g,'').slice(0,4);
 const LOCAL=QS.has('local');
+const RELAY=(QS.get('relay')||window.RELAY||'').replace(/\/$/,''),USE_RELAY=!!RELAY&&!QS.has('p2p')&&!LOCAL;
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let PID=QS.get('pid')||LS.get('btrl_pid');if(!PID){PID='p'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);LS.set('btrl_pid',PID)}
 const NKEY='btrl_name_'+ROOM+'_'+PID;
@@ -77,6 +79,7 @@ function peerOpts(){const p=QS.get('peer');if(!p)return {debug:0};const [host,po
 function setNet(t){$('net').textContent=t||'';$('net').classList.toggle('hide',!t)}
 function connect(){if(!ROOM){render();return}
   if(LOCAL){bc=new BroadcastChannel('betrayal-'+ROOM);bc.onmessage=e=>{const m=e.data;if(m&&m.to===PID)onMsg(m.data)};linked=true;hello();return}
+  if(USE_RELAY){relayConnect();return}
   if(!window.Peer){setNet('Could not load the game link. Refresh the page.');return}
   setNet('Connecting to the castle…');
   peer=new Peer(peerOpts());
@@ -89,9 +92,18 @@ function openConn(){try{conn&&conn.close()}catch(e){}
   conn.on('data',onMsg);
   conn.on('close',()=>{linked=false;setNet('Reconnecting…');retry(1500)});
   conn.on('error',()=>{linked=false;retry(2000)})}
-let rT=0;function retry(ms){clearTimeout(rT);rT=setTimeout(()=>{if(linked)return;
+let ws=null,nhT=0;
+function relayConnect(){const cid=PID+'.'+Math.random().toString(36).slice(2,7);setNet('Connecting to the castle…');
+  const w=new WebSocket(RELAY+'/room/'+ROOM+'?role=phone&id='+encodeURIComponent(cid));ws=w;
+  w.onopen=()=>{linked=true;setNet('');hello()};
+  w.onmessage=e=>{let d;try{d=JSON.parse(e.data)}catch(x){return}
+    if(d&&d.sys){if(d.sys==='nohost'||d.sys==='hostgone'){setNet(`Waiting for the CAVE… (room ${ROOM} – check the code on the wall)`);clearTimeout(nhT);nhT=setTimeout(hello,3000)}return}
+    clearTimeout(nhT);setNet('');onMsg(d)};
+  w.onclose=()=>{if(ws!==w)return;linked=false;setNet('Reconnecting…');retry(1500)};w.onerror=()=>{}}
+let rT=0;function retry(ms){clearTimeout(rT);rT=setTimeout(()=>{if(linked)return;if(USE_RELAY){relayConnect();return}
   if(peer&&!peer.destroyed&&!peer.disconnected&&peer.open)openConn();else{try{peer&&peer.destroy()}catch(e){}peer=null;connect()}},ms)}
-function send(d){if(LOCAL){bc&&bc.postMessage({to:'host',from:PID,data:d});return}if(conn&&conn.open)try{conn.send(d)}catch(e){}}
+function send(d){if(LOCAL){bc&&bc.postMessage({to:'host',from:PID,data:d});return}
+  if(USE_RELAY){if(ws&&ws.readyState===1)try{ws.send(JSON.stringify(d))}catch(e){}return}if(conn&&conn.open)try{conn.send(d)}catch(e){}}
 function hello(){if(NAME)send({t:'hello',pid:PID,name:NAME});render()}
 setInterval(()=>{if(linked&&joined)send({t:'ping',pid:PID})},8000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!LOCAL&&!linked)retry(100)});

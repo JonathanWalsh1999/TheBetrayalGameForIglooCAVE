@@ -1,0 +1,28 @@
+name: Deploy relay
+on:
+  push:
+    paths: ['relay/**']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy the relay to Cloudflare
+        working-directory: relay
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then echo "No CLOUDFLARE_API_TOKEN secret yet - skipping"; exit 0; fi
+          npx --yes wrangler@3 deploy 2>&1 | tee ../deploy.txt
+      - name: Save the relay address for the game
+        run: |
+          U=$(grep -o 'https://[a-z0-9.-]*\.workers\.dev' deploy.txt 2>/dev/null | head -1 || true)
+          if [ -z "$U" ]; then echo "No address found"; exit 0; fi
+          echo "window.RELAY='${U/https:/wss:}';" > lib/relay.js
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/relay.js && git commit -m "Relay address" && git push || echo "unchanged"
