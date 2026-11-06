@@ -1,6 +1,6 @@
 # The Betrayal – Igloo CAVE edition
 
-A Traitors-style learning game for the Igloo CAVE webview. Every student plays on their own phone, answering subject questions to grow a prize pot, while a few secret **Traitors** try to steer them wrong. At the **Round Table**, students argue from evidence and vote someone out.
+A Traitors-style learning game for the Igloo CAVE webview. Every student plays on their own phone, answering subject questions, while a few secret **Traitors** try to steer them wrong. At the **Round Table**, students argue from evidence and vote someone out.
 
 It's an original game *inspired by* the reality show format. It doesn't use the show's name, logo or music.
 
@@ -39,47 +39,42 @@ Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-styl
 - **Skip intro ›** jumps ahead.
 - **Replay intro** on the back wall plays it again mid-game.
 
-## How a game runs (Version 4: phones)
+## How a game runs (Version 5)
 
-1. **Join:** students scan the QR code. Their names appear on the left wall. Tap a name twice to remove it.
-   - Choose the number of Traitors (**Auto** is about 1 per 7 students) and the game length.
-   - You need at least 4 players.
+It's **Faithful vs Traitors**: no money, just a leaderboard and a winning side.
 
-   | Game length | Rounds |
-   |---|---|
-   | 20 min | 1 |
-   | 30 min | 2 |
-   | 45 min | 3 |
-   | 60 min | 4 |
+1. **Join:** students scan the QR code, and their names appear on the left wall. Tap a name twice to remove it. You need at least 4 players.
+2. **Set the length** on the setup screen. The estimated time updates as you change these:
+   - **Traitors:** *Auto* gives about 1 per 7 students.
+   - **Rounds**, **Questions per round** and **Round Table minutes:** these start at a suggestion for your class size. Small classes get more questions and shorter Round Tables. Use **− / +** to change them.
 
-2. **Roles:** each phone secretly shows **Faithful** or **Traitor**. Students press and hold to see it, so nobody can read it over their shoulder. Traitors also see who the other Traitors are. Nobody has to close their eyes.
-3. **Mission:** 3 questions, answered on phones. Talking is allowed, so the Traitors can try to talk people into the wrong answer.
-   - Every right answer adds **£100** to the pot.
-   - If **fewer than half** of the players still in get a question right, the **Traitors earn a dagger**. That's why the Traitors want wrong answers, even though a wrong answer costs pot money.
-   - 🛡 **Shield:** the player with the most right answers in the mission (the fastest wins a tie) is safe tonight.
-4. **Round Table:** the left wall shows everyone's ✓/✗, which is the evidence. Students argue using the sentence starters.
-5. **Vote** on phones. The wall then reveals who voted for whom. Ties get one revote.
-   - The banished player stands up and says Traitor or Faithful, then the wall reveals the truth.
-   - **In the final round, the truth is kept secret until the very end.**
-6. **Night:** heads down, everyone on their phones.
-   - The Traitors choose a victim: ☠ **poison** (no vote next time) or 🗡 **dagger** (murdered).
+   During a Round Table, **+1 min** adds time if the talk is going well.
+3. **Roles:** each phone secretly shows **Faithful** or **Traitor** (press and hold). Traitors also see who the other Traitors are.
+4. **Mission:** everyone answers on their phone. Talking is allowed.
+   - **Faithful** try to get it right.
+   - **Traitors** try to get it **wrong**, and to talk the Faithful into wrong answers too.
+   - The **🏆 leaderboard** ranks players by most right answers, with the fastest winning a tie.
+   - The **🛡 shield** goes to whoever got the most right in the mission (fastest wins a tie). They're safe tonight.
+5. **Round Table:** the players wall shows everyone's ✓/✗. That's the evidence.
+6. **Vote** on phones. The wall reveals who voted for whom, and a tie gets one revote.
+   - The banished player says Traitor or Faithful, then the wall reveals the truth.
+   - **In the final round, banished players keep their secret.** All roles are revealed at the very end.
+7. **Night:** the Traitors have **1 dagger** (1 murder). If **nobody** gets one of the mission's questions right, they get a **2nd dagger**. The maximum is 2 per night.
    - Everyone else answers a secret "who do you suspect?" poll, so nobody can spot the Traitors by who is tapping.
-7. **Breakfast:** the victim is revealed, along with the most-suspected player from the poll.
 8. **👻 Ghosts** (banished or murdered) still answer questions but never vote.
 9. **How it ends:**
    - Every Traitor is banished: the Faithful win.
    - The Traitors outnumber the Faithful: the Traitors win.
-   - Otherwise, after the final vote everyone votes on their phone to **end the game** or **banish again**. Then the hidden roles are revealed, and any Traitor still in steals the pot.
-10. **Debrief:** **Most-missed questions**, and **Export results**, which gives a CSV of every student's answers. Then press **Finish & delete names**. If you haven't exported yet, it asks you to tap twice.
+   - Otherwise, after the final vote everyone votes to **end the game** or **banish again**. Then the secrets are revealed.
+   - The **Faithful leaderboard** shows the top answerers.
+10. **Debrief:** **Most-missed questions** and **Export results**, then **Finish & delete names**.
 
 ### Settings sheet
 
 | Setting | Default | What it does |
 |---|---|---|
-| Pot per correct answer | £100 | Added for each right answer |
-| Questions per mission | 3 | Questions in each mission |
+| Game name | The Betrayal | Shown on the walls |
 | Seconds per question | 45 | Thinking time |
-| Discussion minutes | 3 | Length of each Round Table |
 
 ## Student data (summary for a data-protection check)
 

@@ -217,6 +217,27 @@ The user raised the worry that students might peek during the eyes-closed parts.
 - **v4.4 test bots:** with `?test`, the setup shows **+ 3 test bots**. Bot players have `bot:true` and no cid. `sync()` calls `botAct(p)`, which acts once per phase/question (`botKey`) after a random delay, using the normal handlers. Night bots copy a fellow Traitor's pick.
 - **Status at 6 Nov:** the relay is LIVE at `wss://betrayal-relay.jonathan-walsh.workers.dev`, deployed from the user's Cloudflare account through the repo secrets. The live net test passed over the real internet. To redeploy after changes in `relay/`, push or dispatch `deploy-relay.yml`.
 
+## 3h. Version 5 (current): after the user's test run
+
+**What the user asked for after the test run:**
+- remove poison (too complex);
+- fix the final round, which asked the banished player to reveal and then said it was hidden;
+- no money: Faithful vs Traitors, with a leaderboard of correct answers plus speed, Faithful-only at the end;
+- 45 min finished in under 15, so timing should be customisable;
+- daggers: an extra one if everyone gets a question wrong, maximum 2 per round;
+- more questions per round for small classes.
+
+**What changed:**
+- **No pot.** The right wall is now THE LEADERBOARD (`board()`, `scoreOf`: correct answers, then total time on correct answers). All players are shown during the game; the end screen shows **Faithful only**. Phones show "N right · place X of Y".
+- **Traitors' instructions:** told to answer WRONG and trick the others. Bots playing as Traitors answer wrong.
+- **Daggers:** `S.nightD` = 1 + `S.extraD`. `extraD` is set when **no living player** gets a mission question right (not in the final round, since there is no night). Maximum 2. Unused daggers don't carry over.
+- **Night with 2 daggers:** Traitors pick up to 2 victims (phone toggles; `nightPick({targets})`). Agreement compares sorted sets; `dawn` takes the top `nightD` targets.
+- **No poison anywhere.** Some unused `poisoned` fields remain, always false.
+- **Final round:** `banish()` uses a different card ("Don't say if you are a Traitor or Faithful") and the host's `secret` line, and the phone says "Keep your secret".
+- **Length:** `S.cfg = {rounds, qper, disc, auto}`, with −/+ steppers on the setup screen and `estMins()`. `autoCfg()` follows class size until the tutor touches a stepper: qper is 5 for 8 or fewer players, 4 for up to 15, otherwise 3; disc = clamp(round(n/5)+1, 2, 6). The Excel sheet now only holds Game name and Seconds per question.
+- **Re-recorded:** intro_5, intro_6, intro_8, host_mission, host_correct, host_dagger. host_poisoned was removed.
+- **Tests:** a full 6-phone game; an 8-phone game where nobody got Q1 right, giving 2 daggers and 2 murders; bot games. No errors.
+
 ## 4. Files and build
 
 - **Source:**

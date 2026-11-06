@@ -117,7 +117,7 @@ function act(d){send(Object.assign({pid:PID},d));if(navigator.vibrate)try{naviga
 /* ---------- role peek (press and hold, so a neighbour can't read it over your shoulder) ---------- */
 function roleHTML(){const m=V&&V.me;if(!m||!m.role)return '<h1>No role yet</h1>';const T=m.role==='T';
   return `<div class="big ${T?'traitor':'faithful'}" style="font-size:56px">${T?'🗡 TRAITOR':'🛡 FAITHFUL'}</div>
-    <p style="color:#fff;font-size:20px">${T?'Keep your secret. Steer people to wrong answers – every question that fewer than half get right earns you a dagger. Survive to the end to steal the pot.':'Find the Traitors. Answer well, use the evidence, and vote them out.'}</p>
+    <p style="color:#fff;font-size:20px">${T?'Keep your secret. Get questions WRONG – and trick the Faithful into getting them wrong too. If nobody gets a question right, you get an extra dagger. Survive to the end to win.':'Get questions right, find the Traitors, and vote them out.'}</p>
     ${T?`<div class="box">${m.mates.length?'Your fellow Traitors: <b>'+m.mates.map(esc).join(', ')+'</b>':'You are the only Traitor.'}</div>`:''}<p class="small">Let go to hide this.</p>`}
 function holdable(el,onDown,onUp){const dn=e=>{e.preventDefault();onDown()},up=e=>{e.preventDefault();onUp()};
   el.addEventListener('pointerdown',dn);['pointerup','pointercancel','pointerleave'].forEach(t=>el.addEventListener(t,up));el.addEventListener('contextmenu',e=>e.preventDefault())}
@@ -143,32 +143,29 @@ function render(){const m=$('m');const me=V&&V.me;
     h=`<div class="qh"><span>Question ${V.qn} of ${V.of}</span><span id="clock" class="${left<=10?'low':''}">${V.locked?'🔒':left+'s'}</span></div><div class="q">${esc(V.text)}</div>${V.opts.map(o=>opt(o,V.picked,'ans',V.locked)).join('')}
       <p class="small">${V.locked?'Answers locked.':V.picked?'Answer saved – you can change it until the clock runs out.':'Talk it through… but who can you trust?'}</p>${me.out?'<p class="small">👻 Ghost answers still grow the pot.</p>':''}`}
   else if(s==='self')h=`<h1>The answer</h1><div class="q">${esc(V.text)}</div><div class="box"><b class="ok">✓ ${esc(V.ans)}</b>${V.exp?'<br>'+esc(V.exp):''}</div>`+(V.done==null?`<p>Did you get it right? Be honest.</p><div class="two"><button class="go" data-cb="self" data-v="1">✓ I got it</button><button class="no" data-cb="self" data-v="0">✗ I didn't</button></div>`:`<p>Thanks – marked ${V.done?'✓':'✗'}.</p>`);
-  else if(s==='qres')h=(V.ok==null?'<h1>Answer revealed</h1>':`<div class="big ${V.ok?'ok':'bad'}">${V.ok?'✓ Right':'✗ Wrong'}</div><p style="color:#fff">${V.ok?`+${money(V.step)} to the pot`:'Nothing added this time.'}</p>`)+
-      `<div class="box"><b class="ok">Answer: ${esc(V.ans)}</b>${V.exp?'<br>'+esc(V.exp):''}</div><p>Pot: <b style="color:var(--gold2)">${money(V.pot)}</b></p>${V.dagger?'<div class="box bad">🗡 Fewer than half got it right. The Traitors earn a dagger.</div>':''}`;
+  else if(s==='qres')h=(V.ok==null?'<h1>Answer revealed</h1>':`<div class="big ${V.ok?'ok':'bad'}">${V.ok?'✓ Right':'✗ Wrong'}</div>`)+
+      `<div class="box"><b class="ok">Answer: ${esc(V.ans)}</b>${V.exp?'<br>'+esc(V.exp):''}</div><p>You have <b style="color:var(--gold2)">${V.score} right</b> · leaderboard place <b style="color:var(--gold2)">${V.rank} of ${V.of}</b></p>${V.dagger?'<div class="box bad">🗡 Nobody got it right. The Traitors get an extra dagger tonight.</div>':''}`;
   else if(s==='vote')h=`<h1>${V.revote?'Revote':'Vote to banish'}</h1><p>${V.revote?'Only the tied players can be chosen.':'Who do you think is a Traitor?'} You can change your vote until it closes.</p>${names(V.cands,V.picked,'vote')}`;
-  else if(s==='nightT'){const k=V.mine?V.mine.kind:NK;
-    h=`<h1>Night falls</h1><p>Choose your victim.${V.shield?` ${esc(V.shield)} has the 🛡 shield.`:''}</p><div class="two"><button class="${k==='poison'?'on ':''}alt" data-cb="kind" data-v="poison">☠ Poison</button><button class="${k==='dagger'?'on ':''}no" data-cb="kind" data-v="dagger" ${V.daggers>0?'':'disabled'}>🗡 Dagger (${V.daggers})</button></div>
-      <p class="small">☠ Poison: no vote next time. 🗡 Dagger: murdered for good.</p>${names(V.cands,V.mine?V.mine.target:null,'night')}
-      ${V.mates.length?`<div class="box">${V.mates.map(t=>`${esc(t.name)}: ${t.pick?`${t.kind==='dagger'?'🗡':'☠'} ${esc(t.pick)}`:'choosing…'}`).join('<br>')}<br><span class="small">Agree on the same victim. If you disagree, the most-picked wins.</span></div>`:''}`}
-  else if(s==='nightF'){const k=FK;
-    h=`<h1>Night falls</h1><p>Secret poll: who do you suspect?</p><div class="two"><button class="${k==='hunch'?'on ':''}alt" data-cb="fkind" data-v="hunch">🤔 A hunch</button><button class="${k==='sure'?'on ':''}no" data-cb="fkind" data-v="sure">😠 I'm sure</button></div>
-      <p class="small">Nobody can see your choice. Keep your head down.</p>${names(V.cands,V.picked,'sus')}`}
+  else if(s==='nightT'){const mine=V.mine||[];
+    h=`<h1>Night falls</h1><p>Choose <b style="color:#fff">${V.n>1?V.n+' victims':'your victim'}</b> to murder.${V.shield?` ${esc(V.shield)} has the 🛡 shield.`:''}</p>
+      <p class="small">🗡 You have ${V.n} dagger${V.n>1?'s':''} tonight. Tap a name to choose${V.n>1?' – tap again to undo':''}.</p>${V.cands.map(c=>`<button class="${mine.includes(c.pid)?'on':''}" data-cb="night" data-v="${esc(c.pid)}">${mine.includes(c.pid)?'🗡 ':''}${esc(c.name)}</button>`).join('')||'<p>Nobody to choose.</p>'}
+      ${V.mates.length?`<div class="box">${V.mates.map(t=>`${esc(t.name)}: ${t.picks.length?'🗡 '+t.picks.map(esc).join(', '):'choosing…'}`).join('<br>')}<br><span class="small">Agree on the same victim${V.n>1?'s':''}. If you disagree, the most-picked wins.</span></div>`:''}`}
+  else if(s==='nightF'){
+    h=`<h1>Night falls</h1><p>Secret poll: who do you suspect?</p><p class="small">Nobody can see your choice. Keep your head down.</p>${names(V.cands,V.picked,'sus')}`}
   else if(s==='endvote')h=`<h1>Is it over?</h1><p>Do you believe every Traitor has gone?</p><button class="go ${V.picked==='end'?'on':''}" data-cb="end" data-v="end">End the game</button><button class="no ${V.picked==='again'?'on':''}" data-cb="end" data-v="again">Banish again</button>`;
   else if(s==='end'){const T=me.role==='T';h=`<div class="big ${V.winner==='faithful'?'faithful':'traitor'}" style="font-size:44px">${V.winner==='faithful'?'🛡 The Faithful win':'🗡 The Traitors win'}</div>
-      <p style="color:#fff;font-size:22px">You were ${T?'a <b class="traitor">Traitor</b>':'<b class="faithful">Faithful</b>'} – <b>${V.won?'you WON':'you lost'}</b>.</p><div class="box" style="text-align:center">You answered <b>${V.right} of ${V.total}</b> questions right.</div><p>Pot: <b style="color:var(--gold2)">${money(V.pot)}</b></p>`}
+      <p style="color:#fff;font-size:22px">You were ${T?'a <b class="traitor">Traitor</b>':'<b class="faithful">Faithful</b>'} – <b>${V.won?'you WON':'you lost'}</b>.</p><div class="box" style="text-align:center">You answered <b>${V.right} of ${V.total}</b> questions right.</div>${V.rank?`<p>Faithful leaderboard: <b style="color:var(--gold2)">${V.rank} of ${V.of}</b></p>`:''}`}
   else h=`<h1>${esc(V.title||'Look up')}</h1><p>${esc(V.msg||'Watch the walls.')}</p>`;
   m.innerHTML=h;
   m.querySelectorAll('[data-cb]').forEach(b=>b.onclick=()=>cb(b.dataset.cb,b.dataset.v));
   const hd=$('hold');if(hd)holdable(hd,()=>{hd.classList.add('down');hd.innerHTML=roleHTML();heldRole=true},()=>{hd.classList.remove('down');hd.innerHTML='👁<br>Press and hold here';const b=m.querySelector('[data-cb="seen"]');if(b)b.disabled=false})}
-let NK='poison',FK='hunch';
+let NK=null;
 function cb(k,v){if(k==='ans'){V.picked=v;act({t:'ans',L:v})}
   else if(k==='seen')act({t:'seen'});
   else if(k==='self'){act({t:'self',ok:v==='1'});V.done=v==='1'}
   else if(k==='vote'){V.picked=v;act({t:'vote',target:v})}
-  else if(k==='kind'){NK=v;if(V.mine){V.mine.kind=v;act({t:'night',target:V.mine.target,kind:v})}}
-  else if(k==='night'){V.mine={target:v,kind:NK};act({t:'night',target:v,kind:NK})}
-  else if(k==='fkind'){FK=v;if(V.picked)act({t:'night',target:V.picked,kind:v})}
-  else if(k==='sus'){V.picked=v;act({t:'night',target:v,kind:FK})}
+  else if(k==='night'){let m=[...(V.mine||[])];if(m.includes(v))m=m.filter(x=>x!==v);else{m.push(v);if(m.length>V.n)m=m.slice(-V.n)}V.mine=m;act({t:'night',targets:m})}
+  else if(k==='sus'){V.picked=v;act({t:'night',target:v})}
   else if(k==='end'){V.picked=v;act({t:'end',v})}
   else if(k==='rename'){NAME='';LS.del(NKEY)}
   render()}
