@@ -46,6 +46,7 @@ It's **Faithful vs Traitors**: no money, just a leaderboard and a winning side.
 1. **Join:** students scan the QR code, and their names appear on the left wall. Tap a name twice to remove it. You need at least 4 players.
 2. **Set the length** on the setup screen. The estimated time updates as you change these:
    - **Traitors:** *Auto* gives about 1 per 7 students.
+   - **3rd dagger if nobody's right:** On or Off (see Night below).
    - **Rounds**, **Questions per round** and **Round Table minutes:** these start at a suggestion for your class size. Small classes get more questions and shorter Round Tables. Use **− / +** to change them.
 
    During a Round Table, **+1 min** adds time if the talk is going well.
@@ -59,7 +60,10 @@ It's **Faithful vs Traitors**: no money, just a leaderboard and a winning side.
 6. **Vote** on phones. The wall reveals who voted for whom, and a tie gets one revote.
    - The banished player says Traitor or Faithful, then the wall reveals the truth.
    - **In the final round, banished players keep their secret.** All roles are revealed at the very end.
-7. **Night:** the Traitors have **1 dagger** (1 murder). If **nobody** gets one of the mission's questions right, they get a **2nd dagger**. The maximum is 2 per night.
+7. **Night:** the Traitors always get **1 dagger** (1 murder). They can earn more during the mission:
+   - **Fewer than half** get a question right: **+1 dagger**, once per round.
+   - **Nobody** gets a question right: **+1 more**. This is the **"3rd dagger" toggle** on the setup screen. It switches on automatically for 10 or fewer players, and you can turn it off.
+   - That makes up to **3 murders** a night. Spare daggers don't carry over, and there's no night after the final round.
    - Everyone else answers a secret "who do you suspect?" poll, so nobody can spot the Traitors by who is tapping.
 8. **👻 Ghosts** (banished or murdered) still answer questions but never vote.
 9. **How it ends:**

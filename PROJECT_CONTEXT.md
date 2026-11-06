@@ -238,6 +238,16 @@ The user raised the worry that students might peek during the eyes-closed parts.
 - **Re-recorded:** intro_5, intro_6, intro_8, host_mission, host_correct, host_dagger. host_poisoned was removed.
 - **Tests:** a full 6-phone game; an 8-phone game where nobody got Q1 right, giving 2 daggers and 2 murders; bot games. No errors.
 
+## 3i. v5.1 dagger rule (current)
+
+- `daggersTonight()` = 1 + `S.dUnder` + `S.dNone`.
+  - `dUnder`: any question this mission had living right < living/2 (once per round).
+  - `dNone`: any question had 0 living right **and** `S.cfg.d3` is on. When nobody is right, both are set, so it can jump straight to 3.
+- `S.cfg.d3` is a setup toggle. It defaults on for 10 or fewer players (`d3auto`) until the tutor touches it.
+- Host lines: `dagger` → host_dagger_2 ("Not good enough… another dagger is theirs"); `dagger3` → host_dagger ("Nobody got that right…").
+- intro_6 re-recorded: "When fewer than half of you get it right… they earn another dagger."
+- **Tests:** 8 phones, everyone wrong with the toggle on → 3 daggers, 3 murders. 5 of 8 wrong with the toggle off → 2 daggers, 2 murders.
+
 ## 4. Files and build
 
 - **Source:**

@@ -117,7 +117,7 @@ function act(d){send(Object.assign({pid:PID},d));if(navigator.vibrate)try{naviga
 /* ---------- role peek (press and hold, so a neighbour can't read it over your shoulder) ---------- */
 function roleHTML(){const m=V&&V.me;if(!m||!m.role)return '<h1>No role yet</h1>';const T=m.role==='T';
   return `<div class="big ${T?'traitor':'faithful'}" style="font-size:56px">${T?'🗡 TRAITOR':'🛡 FAITHFUL'}</div>
-    <p style="color:#fff;font-size:20px">${T?'Keep your secret. Get questions WRONG – and trick the Faithful into getting them wrong too. If nobody gets a question right, you get an extra dagger. Survive to the end to win.':'Get questions right, find the Traitors, and vote them out.'}</p>
+    <p style="color:#fff;font-size:20px">${T?'Keep your secret. Get questions WRONG – and trick the Faithful into getting them wrong too. If fewer than half get a question right, you get an extra dagger. Survive to the end to win.':'Get questions right, find the Traitors, and vote them out.'}</p>
     ${T?`<div class="box">${m.mates.length?'Your fellow Traitors: <b>'+m.mates.map(esc).join(', ')+'</b>':'You are the only Traitor.'}</div>`:''}<p class="small">Let go to hide this.</p>`}
 function holdable(el,onDown,onUp){const dn=e=>{e.preventDefault();onDown()},up=e=>{e.preventDefault();onUp()};
   el.addEventListener('pointerdown',dn);['pointerup','pointercancel','pointerleave'].forEach(t=>el.addEventListener(t,up));el.addEventListener('contextmenu',e=>e.preventDefault())}
@@ -144,7 +144,7 @@ function render(){const m=$('m');const me=V&&V.me;
       <p class="small">${V.locked?'Answers locked.':V.picked?'Answer saved – you can change it until the clock runs out.':'Talk it through… but who can you trust?'}</p>${me.out?'<p class="small">👻 Ghost answers still grow the pot.</p>':''}`}
   else if(s==='self')h=`<h1>The answer</h1><div class="q">${esc(V.text)}</div><div class="box"><b class="ok">✓ ${esc(V.ans)}</b>${V.exp?'<br>'+esc(V.exp):''}</div>`+(V.done==null?`<p>Did you get it right? Be honest.</p><div class="two"><button class="go" data-cb="self" data-v="1">✓ I got it</button><button class="no" data-cb="self" data-v="0">✗ I didn't</button></div>`:`<p>Thanks – marked ${V.done?'✓':'✗'}.</p>`);
   else if(s==='qres')h=(V.ok==null?'<h1>Answer revealed</h1>':`<div class="big ${V.ok?'ok':'bad'}">${V.ok?'✓ Right':'✗ Wrong'}</div>`)+
-      `<div class="box"><b class="ok">Answer: ${esc(V.ans)}</b>${V.exp?'<br>'+esc(V.exp):''}</div><p>You have <b style="color:var(--gold2)">${V.score} right</b> · leaderboard place <b style="color:var(--gold2)">${V.rank} of ${V.of}</b></p>${V.dagger?'<div class="box bad">🗡 Nobody got it right. The Traitors get an extra dagger tonight.</div>':''}`;
+      `<div class="box"><b class="ok">Answer: ${esc(V.ans)}</b>${V.exp?'<br>'+esc(V.exp):''}</div><p>You have <b style="color:var(--gold2)">${V.score} right</b> · leaderboard place <b style="color:var(--gold2)">${V.rank} of ${V.of}</b></p>${V.dagger?`<div class="box bad">🗡 ${esc(V.dagger)}</div>`:''}`;
   else if(s==='vote')h=`<h1>${V.revote?'Revote':'Vote to banish'}</h1><p>${V.revote?'Only the tied players can be chosen.':'Who do you think is a Traitor?'} You can change your vote until it closes.</p>${names(V.cands,V.picked,'vote')}`;
   else if(s==='nightT'){const mine=V.mine||[];
     h=`<h1>Night falls</h1><p>Choose <b style="color:#fff">${V.n>1?V.n+' victims':'your victim'}</b> to murder.${V.shield?` ${esc(V.shield)} has the 🛡 shield.`:''}</p>
