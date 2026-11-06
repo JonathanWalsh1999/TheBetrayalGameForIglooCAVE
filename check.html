@@ -13,6 +13,7 @@ p{color:#A79F93;margin:6px 0 14px}
 <h1>Network check</h1>
 <p>Open this on a phone connected to the network you want to use (e.g. college Wi-Fi). It takes about 15 seconds. Then screenshot the results.</p>
 <div id="list"></div><div id="sum">Checking…</div>
+<script src="lib/relay.js"></script>
 <script>
 /* Checks what this network allows. Nothing is sent or saved anywhere – it only tries to reach a few services. */
 const T=[
@@ -23,6 +24,7 @@ const T=[
  ['Cloudflare (workers.dev relay)', ()=>reach('https://www.cloudflare.com/favicon.ico')],
  ['Google Firebase', ()=>reach('https://www.gstatic.com/firebasejs/favicon.ico',true)],
 ];
+if(window.RELAY)T.unshift(['⭐ Game relay (what the game uses)', ()=>ws(window.RELAY.replace(/\/$/,'')+'/room/ZZZZ?role=phone&id=check')]);
 const timeout=(p,ms)=>Promise.race([p,new Promise(r=>setTimeout(()=>r(false),ms))]);
 function reach(u,anyReply){return timeout(fetch(u,{mode:'no-cors',cache:'no-store'}).then(()=>true).catch(()=>false),8000)}
 function ws(u){return timeout(new Promise(r=>{try{const s=new WebSocket(u);s.onmessage=()=>{r(true);s.close()};s.onopen=()=>setTimeout(()=>{r(true);s.close()},500);s.onerror=()=>r(false)}catch(e){r(false)}}),8000)}
@@ -32,6 +34,6 @@ function ice(servers,type){return timeout(new Promise(r=>{try{const pc=new RTCPe
 (async()=>{const L=document.getElementById('list');const res={};
   for(const [name,fn] of T){const d=document.createElement('div');d.className='row';d.innerHTML=`<b>${name}</b><span>…</span>`;L.appendChild(d);
     const ok=await fn();res[name]=ok;d.classList.add(ok?'ok':'bad');d.querySelector('span').textContent=ok?'✓ allowed':'✗ blocked'}
-  const v=Object.values(res);const peer=v[1],direct=v[2],turn=v[3];
-  document.getElementById('sum').textContent=!peer?'The phone link server is blocked on this network.':(!direct&&!turn)?'Direct phone links are blocked on this network – the game needs a relay.':'This network looks OK for the current phone link.';})();
+  const k=Object.keys(res),v=Object.values(res);const R=window.RELAY?v[0]:null,o=window.RELAY?1:0,peer=v[1+o],direct=v[2+o],turn=v[3+o];
+  document.getElementById('sum').textContent=R===true?'✓ The game relay works on this network. Phones can join.':R===false?'✗ The game relay is blocked on this network.':!peer?'The phone link server is blocked on this network.':(!direct&&!turn)?'Direct phone links are blocked on this network – the game needs a relay.':'This network looks OK for the current phone link.';})();
 </script></body></html>
