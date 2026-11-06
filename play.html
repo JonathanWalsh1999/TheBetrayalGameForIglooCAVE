@@ -68,7 +68,8 @@ const RELAY=(QS.get('relay')||window.RELAY||'').replace(/\/$/,''),USE_RELAY=!!RE
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let PID=QS.get('pid')||LS.get('btrl_pid');if(!PID){PID='p'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);LS.set('btrl_pid',PID)}
 const NKEY='btrl_name_'+ROOM+'_'+PID;
-let NAME=LS.get(NKEY)||'',V=null,joined=false,linked=false,conn=null,peer=null,bc=null,qEnd=0,heldRole=false;
+const saved=(()=>{try{const o=JSON.parse(LS.get(NKEY)||'null');return o&&Date.now()-o.t<4*3600e3?o.n:''}catch(e){return ''}})();if(!saved)LS.del(NKEY);
+let NAME=saved,V=null,joined=false,linked=false,conn=null,peer=null,bc=null,qEnd=0,heldRole=false;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const money=v=>'£'+Math.round(v||0).toLocaleString('en-GB');
@@ -108,7 +109,8 @@ function hello(){if(NAME)send({t:'hello',pid:PID,name:NAME});render()}
 setInterval(()=>{if(linked&&joined)send({t:'ping',pid:PID})},8000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!LOCAL&&!linked)retry(100)});
 function onMsg(d){if(!d||typeof d!=='object')return;
-  if(d.s==='kicked'){NAME='';LS.del(NKEY);joined=false;V={s:'msg',title:'Removed',msg:'The tutor removed you. Join again with your real name.'};render();return}
+  if(d.s==='cleared'){NAME='';LS.del(NKEY);joined=false;V={s:'msg',title:'Game over',msg:'Thanks for playing. Your name has been deleted from this game. You can close this page.'};$('hdr').textContent='';render();return}
+  if(d.s==='kicked'){NAME='';LS.del(NKEY);joined=false;V={s:'msg',title:'Removed',msg:'The tutor removed you. Join again with your first name.'};render();return}
   joined=true;V=d;if(d.s==='q'&&!d.locked)qEnd=Date.now()+(d.left||0)*1000;render()}
 function act(d){send(Object.assign({pid:PID},d));if(navigator.vibrate)try{navigator.vibrate(25)}catch(e){}}
 
@@ -130,8 +132,8 @@ function render(){const m=$('m');const me=V&&V.me;
   $('rolebar').classList.toggle('hide',!(me&&me.role&&V.s!=='role'&&V.s!=='end'));
   if(!ROOM){m.innerHTML=`<h1>Join the game</h1><p>Type the room code shown on the wall.</p><input id="code" maxlength="4" autocapitalize="characters" placeholder="CODE"><button class="gold" id="go">Next ›</button>`;
     $('go').onclick=()=>{const c=$('code').value.toUpperCase().replace(/[^A-Z]/g,'');if(c.length===4)location.search='?r='+c+(LOCAL?'&local':'')};return}
-  if(!NAME){m.innerHTML=`<h1>Welcome to the castle</h1><p>Type your <b>real first name</b> and the first letter of your surname, so everyone knows who you are.</p><input id="nm" maxlength="16" placeholder="e.g. Sam K" autocomplete="off"><button class="gold" id="go">Join the game ›</button><p class="small">Room ${ROOM}</p>`;
-    const go=()=>{const n=$('nm').value.replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,16);if(n.length<2){$('nm').focus();return}NAME=n;LS.set(NKEY,n);try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(e){}hello()};
+  if(!NAME){m.innerHTML=`<h1>Welcome to the castle</h1><p>Type your <b>real first name</b> and the first letter of your surname, so everyone knows who you are.</p><input id="nm" maxlength="16" placeholder="e.g. Sam K" autocomplete="off"><button class="gold" id="go">Join the game ›</button><p class="small">🔒 Your name is only used during this game. It is not saved online and is deleted when the game ends.</p><p class="small">Room ${ROOM}</p>`;
+    const go=()=>{const n=$('nm').value.replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,16);if(n.length<2){$('nm').focus();return}NAME=n;LS.set(NKEY,JSON.stringify({n,t:Date.now()}));try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(e){}hello()};
     $('go').onclick=go;$('nm').onkeydown=e=>{if(e.key==='Enter')go()};return}
   if(!joined||!V){m.innerHTML=`<h1>Joining…</h1><p>Hang on, ${esc(NAME)}.</p>`;return}
   const s=V.s;let h='';

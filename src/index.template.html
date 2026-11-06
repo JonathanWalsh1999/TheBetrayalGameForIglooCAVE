@@ -593,7 +593,10 @@ function winners(faithful,reason){stopLoops();setDark(false);S.phase='end';S.win
   scene({title:faithful?'THE FAITHFUL WIN':'THE TRAITORS WIN',card:`<div class="big ${faithful?'faithful':'traitor'}" style="font-size:110px">${faithful?'🛡 The Faithful win':'🗡 The Traitors win'}</div><div class="big" style="color:var(--gold2);font-size:140px">${money(S.pot)}</div>
     <div class="sub">${why}<br>The Traitors were: <b style="color:#ff6b75">${T.map(nm).join(', ')}</b>.<br>Answers: ${S.log.filter(l=>l.correct==='Yes').length} right out of ${S.log.length}.</div>`,
     floor:`<div class="big ${faithful?'faithful':'traitor'}" style="font-size:260px">${faithful?'FAITHFUL':'TRAITORS'}<br>WIN</div>`,mood:'day',
-    btns:[act('Most-missed questions',toggleReview,'alt'),act('Export results',exportCSV,'alt'),act('New game',newGame,'')]})}
+    btns:[act('Most-missed questions',toggleReview,'alt'),act('Export results',exportCSV,'alt'),act('Play again',newGame,''),act('Finish & delete names',finishClear,'no')]})}
+/* end of session: tell every phone to forget its name, then wipe all players, answers and the log from this page */
+function finishClear(){if(S.log.length&&!S.exported&&!S.clearArm){S.clearArm=true;banner('NOT EXPORTED<br>TAP AGAIN TO DELETE');setTimeout(()=>S.clearArm=false,6000);return}
+  players().forEach(p=>send(p.cid,{s:'cleared'}));S.P={};S.order=[];S.log=[];S.chron=[];S.hidden=[];S.exported=false;S.clearArm=false;newGame();chron('Names and answers deleted.');render()}
 function missedList(){const n={};S.log.forEach(r=>{if(r.correct==='No'&&r.qid!=='none')n[r.qid]=(n[r.qid]||0)+1});
   return Object.entries(n).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([id,c])=>({q:BANK.questions.find(x=>x.id===id),c})).filter(r=>r.q)}
 function toggleReview(){const L=missedList();S.cardFn=null;
@@ -603,7 +606,7 @@ function newGame(){hush();stopLoops();setDark(false);floorBig('');FL.mode='table
   $('setup').classList.remove('hide');$('ftitle').innerHTML=esc(BANK.settings.name||'THE BETRAYAL').toUpperCase();setActs([],[]);render();sync()}
 function exportCSV(){const cols=['time','round','player','role','question','answer','correct'];
   const csv=[cols.join(',')].concat(S.log.map(r=>cols.map(c=>`"${String(r[c]).replace(/"/g,'""')}"`).join(','))).join('\r\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`betrayal-results-${new Date().toISOString().slice(0,10)}.csv`;a.click()}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`betrayal-results-${new Date().toISOString().slice(0,10)}.csv`;a.click();S.exported=true}
 function endNow(){if(['setup','end','finale','roles'].includes(S.phase))return;hush();stopLoops();setDark(false);S.final=true;S.rounds=S.round;startRT()}
 
 /* ---------- timers ---------- */
@@ -680,7 +683,7 @@ function renderSetup(){if(S.phase!=='setup')return;const r=roundsFor(S.minutes),
     </div></div>
    <div style="display:flex;gap:20px;margin-top:18px;align-items:center"><button class="btn alt" style="height:110px;font-size:48px" onclick="playIntro()">▶ Play intro</button><button class="btn go" style="height:110px;font-size:48px" ${n<MIN_PLAYERS?'disabled':''} onclick="startGame()">Start the game ›</button>
    <button class="btn alt sm" style="height:90px" onclick="$('file').click()">Load Excel questions</button><span style="font-size:30px;color:var(--muted)">${esc(BANKSRC)} · ${BANK.questions.length} questions</span></div>
-   <div style="position:absolute;right:30px;bottom:16px;font-size:26px;color:var(--muted)">Version 4.1 (phones · relay)</div>`;
+   <div style="position:absolute;left:30px;bottom:16px;font-size:26px;color:var(--muted)">🔒 Names stay on this computer only and are deleted with <b>Finish &amp; delete names</b> (or by closing this page).</div><div style="position:absolute;right:30px;bottom:16px;font-size:26px;color:var(--muted)">Version 4.2</div>`;
   if(n>=MIN_PLAYERS||!url||!(NET.ok||LOCAL))floorBig('');else floorBig(`<div class="qrbox" style="width:1500px;height:1500px">${qrSVG(url)}</div><div class="code" style="font-size:260px;margin-top:80px">${esc(S.room)}</div><div class="mid" style="margin-top:40px">📱 Scan to join</div>`)}
 function render(){renderSetup();renderPlayers();renderPot();renderStatus();renderClock();renderChron();renderRules();renderFloorQ();
   if(QPH.includes(S.phase))renderQ();else if(S.cardFn)$('card').innerHTML=S.cardFn();

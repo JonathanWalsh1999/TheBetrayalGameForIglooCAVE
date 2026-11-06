@@ -201,6 +201,20 @@ The user raised the worry that students might peek during the eyes-closed parts.
 - A local full game with 6 phones covered: roles, 2 rounds, a dagger earned, the shield, a vote reveal, a banish, a murder, a final hidden banish, the end vote, the reveal and the win. No errors.
 - `.github/workflows/net-test.yml` runs `tools/net-test.js` on GitHub over the **real internet** (4 phones join, roles, answers). It passed. It reruns on every push to the game files.
 
+## 3g. v4.1–4.2: relay and data handling
+
+- **Network check:** on the college Wi-Fi, TURN (port 3478) is blocked, while STUN, peerjs.com and Cloudflare are allowed. The CAVE PC is on the Igloo network, so direct links failed. Only the phone on the Igloo Wi-Fi joined.
+- **v4.1 relay:** `relay/worker.js` is a Cloudflare Worker with a Durable Object per room (`/room/ABCD?role=host|phone&id=`). It forwards messages in memory only, with no storage. Origin is limited to the github.io site and localhost.
+  - Deployed by `.github/workflows/deploy-relay.yml` using the repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. The Action writes `lib/relay.js` (`window.RELAY='wss://…workers.dev'`).
+  - When the relay is set, both pages use it by default. `?p2p` switches back to PeerJS; `?relay=` overrides the address.
+  - The net-test Action tests the relay with `wrangler dev` (passed), and tests the live relay once it's deployed.
+- **The user's data concern:** IT are strict about compliance. The user chose real first names, deleted after the game.
+  - v4.2 adds a 🔒 note on the join screen and setup panel.
+  - The **Finish & delete names** button (tap twice if not exported) sends phones `{s:'cleared'}` and wipes `S.P`, `S.log` and the chronicle.
+  - Phones keep the name in localStorage for 4 h at most.
+  - The README has a "Student data" summary for a data-protection check.
+- **Status at 6 Nov:** waiting for the user to create a Cloudflare account and add the two secrets. Then trigger deploy-relay (workflow_dispatch) and the net test.
+
 ## 4. Files and build
 
 - **Source:**

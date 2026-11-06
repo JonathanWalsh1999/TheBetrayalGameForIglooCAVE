@@ -64,7 +64,7 @@ Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-styl
    - Every Traitor is banished: the Faithful win.
    - The Traitors outnumber the Faithful: the Traitors win.
    - Otherwise, after the final vote everyone votes on their phone to **end the game** or **banish again**. Then the hidden roles are revealed, and any Traitor still in steals the pot.
-10. **Debrief:** **Most-missed questions**, and **Export results**, which gives a CSV of every student's answers.
+10. **Debrief:** **Most-missed questions**, and **Export results**, which gives a CSV of every student's answers. Then press **Finish & delete names**. If you haven't exported yet, it asks you to tap twice.
 
 ### Settings sheet
 
@@ -74,6 +74,15 @@ Press **▶ Play intro** on the setup screen for a 90-second, movie-trailer-styl
 | Questions per mission | 3 | Questions in each mission |
 | Seconds per question | 45 | Thinking time |
 | Discussion minutes | 3 | Length of each Round Table |
+
+## Student data (summary for a data-protection check)
+
+- **What is collected:** the first name a student types, plus their answers, votes and night choices during one game. No emails, accounts, logins or contact details.
+- **Where it is held:** only in the memory of the browser on the CAVE computer. There is no database. The game website (GitHub Pages) only serves the page files and receives no game data.
+- **How it travels:** phones send their moves to the CAVE through a small relay (a Cloudflare Worker, in `relay/`). The relay forwards each message as it arrives and **writes nothing to storage**. It only accepts connections from this game's site.
+- **How long it lasts:** until the tutor presses **Finish & delete names**, or closes or refreshes the game page. At that point every phone is also told to delete the name it remembered. Phones forget the name after 4 hours anyway.
+- **The only copy that can last:** the optional **Export results** CSV, which saves to the CAVE computer only. Handle it like any other class record.
+- **Like any website,** the services involved (GitHub Pages, Cloudflare) see phones' internet addresses while the page is in use.
 
 ## Tips for tutors
 
